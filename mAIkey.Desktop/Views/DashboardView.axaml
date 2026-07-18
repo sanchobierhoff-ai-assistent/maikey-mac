@@ -1,0 +1,191 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="mAIkey.Desktop.Views.DashboardView">
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Margin="28,8,28,28" Spacing="24">
+
+      <!-- ═══ HEADER ═══ -->
+      <StackPanel Spacing="4">
+        <TextBlock Classes="eyebrow" Text="DASHBOARD"/>
+        <StackPanel Orientation="Horizontal" Spacing="16">
+          <TextBlock Classes="title" Text="Welkom terug."/>
+          <Button Classes="accent" Content="+ Nieuwe hotkey" Name="NewHotkeyBtn"
+                  VerticalAlignment="Center" Padding="14,8" FontSize="12"/>
+        </StackPanel>
+      </StackPanel>
+
+      <!-- ═══ STAT CARDS ═══ -->
+      <Grid ColumnDefinitions="*,*,*,*" Margin="0,4,0,0">
+        <Grid.Styles>
+          <Style Selector="Border.stat-card">
+            <Setter Property="CornerRadius" Value="14"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Margin" Value="0,0,12,0"/>
+          </Style>
+        </Grid.Styles>
+
+        <!-- Hotkeys -->
+        <Border Grid.Column="0" Classes="stat-card"
+                Background="#18181C" BorderBrush="#26262C" BorderThickness="1">
+          <StackPanel Spacing="6">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+              <Border Background="#1E3A5F" CornerRadius="6" Padding="4">
+                <TextBlock Text="⚡" FontSize="12"/>
+              </Border>
+              <TextBlock Text="Hotkeys" FontSize="11" Foreground="#9A9AA3"
+                         VerticalAlignment="Center"/>
+            </StackPanel>
+            <TextBlock Name="HotkeyCountText" Text="0" FontSize="28" FontWeight="Bold"
+                       Foreground="#60A5FA"/>
+            <TextBlock Text="actief" FontSize="11" Foreground="#5E5E66"/>
+          </StackPanel>
+        </Border>
+
+        <!-- Vandaag -->
+        <Border Grid.Column="1" Classes="stat-card"
+                Background="#18181C" BorderBrush="#26262C" BorderThickness="1">
+          <StackPanel Spacing="6">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+              <Border Background="#1E3F3A" CornerRadius="6" Padding="4">
+                <TextBlock Text="📊" FontSize="12"/>
+              </Border>
+              <TextBlock Text="Vandaag" FontSize="11" Foreground="#9A9AA3"
+                         VerticalAlignment="Center"/>
+            </StackPanel>
+            <TextBlock Name="TodayCountText" Text="0" FontSize="28" FontWeight="Bold"
+                       Foreground="#10B981"/>
+            <TextBlock Text="verzoeken" FontSize="11" Foreground="#5E5E66"/>
+          </StackPanel>
+        </Border>
+
+        <!-- Stijlen -->
+        <Border Grid.Column="2" Classes="stat-card"
+                Background="#18181C" BorderBrush="#26262C" BorderThickness="1">
+          <StackPanel Spacing="6">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+              <Border Background="#2D1E5F" CornerRadius="6" Padding="4">
+                <TextBlock Text="✍️" FontSize="12"/>
+              </Border>
+              <TextBlock Text="Stijlen" FontSize="11" Foreground="#9A9AA3"
+                         VerticalAlignment="Center"/>
+            </StackPanel>
+            <TextBlock Name="StyleCountText" Text="0" FontSize="28" FontWeight="Bold"
+                       Foreground="#A78BFA"/>
+            <TextBlock Text="opgeslagen" FontSize="11" Foreground="#5E5E66"/>
+          </StackPanel>
+        </Border>
+
+        <!-- Abonnement -->
+        <Border Grid.Column="3" Classes="stat-card"
+                Background="#18181C" BorderBrush="#26262C" BorderThickness="1"
+                Margin="0">
+          <StackPanel Spacing="6">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+              <Border Background="#3F3A1E" CornerRadius="6" Padding="4">
+                <TextBlock Text="👑" FontSize="12"/>
+              </Border>
+              <TextBlock Text="Abonnement" FontSize="11" Foreground="#9A9AA3"
+                         VerticalAlignment="Center"/>
+            </StackPanel>
+            <TextBlock Name="TierText" Text="Free" FontSize="28" FontWeight="Bold"
+                       Foreground="#F5A524"/>
+            <TextBlock Name="UsageText" Text="0 / 0 verzoeken" FontSize="11"
+                       Foreground="#5E5E66"/>
+          </StackPanel>
+        </Border>
+      </Grid>
+
+      <!-- ═══ MAIN CONTENT (2 columns) ═══ -->
+      <Grid ColumnDefinitions="*,280">
+
+        <!-- Left: Hotkeys list -->
+        <Border Grid.Column="0" Classes="card" Margin="0,0,16,0">
+          <DockPanel>
+            <StackPanel DockPanel.Dock="Top" Spacing="12" Margin="0,0,0,12">
+              <TextBlock Text="Jouw hotkeys" FontSize="13" FontWeight="SemiBold"
+                         Foreground="#F2F2F5"/>
+              <Separator Background="#26262C" Height="1" Margin="0"/>
+            </StackPanel>
+
+            <!-- Hotkey items -->
+            <StackPanel Name="HotkeyListPanel" Spacing="2">
+              <!-- Empty state -->
+              <Border Name="EmptyHotkeyState" Padding="24"
+                      HorizontalAlignment="Center">
+                <StackPanel Spacing="12" HorizontalAlignment="Center">
+                  <TextBlock Text="⚡" FontSize="32" HorizontalAlignment="Center"
+                             Foreground="#5E5E66"/>
+                  <TextBlock Text="Nog geen hotkeys" FontSize="14"
+                             Foreground="#9A9AA3" HorizontalAlignment="Center"/>
+                  <TextBlock Text="Maak je eerste AI-sneltoets aan"
+                             FontSize="12" Foreground="#5E5E66"
+                             HorizontalAlignment="Center"/>
+                  <Button Classes="accent" Content="+ Eerste hotkey maken"
+                          HorizontalAlignment="Center" Padding="16,8"
+                          FontSize="12" Name="FirstHotkeyBtn"/>
+                </StackPanel>
+              </Border>
+            </StackPanel>
+          </DockPanel>
+        </Border>
+
+        <!-- Right: Plan + Tips -->
+        <StackPanel Grid.Column="1" Spacing="12">
+
+          <!-- Usage warning (hidden by default) -->
+          <Border Name="UsageWarningCard" IsVisible="False"
+                  Background="#1F1A10" BorderBrush="#F5A52459"
+                  BorderThickness="1" CornerRadius="14" Padding="16">
+            <StackPanel Spacing="8">
+              <TextBlock Text="⚠️ Limiet bijna bereikt" FontSize="12"
+                         FontWeight="SemiBold" Foreground="#F5A524"/>
+              <TextBlock Name="UsageWarningText"
+                         Text="Je hebt 80% van je maandlimiet gebruikt."
+                         FontSize="11" Foreground="#9A9AA3" TextWrapping="Wrap"/>
+              <Button Classes="accent" Content="Upgrade plan"
+                      FontSize="11" Padding="12,6" HorizontalAlignment="Left"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Tips card -->
+          <Border Classes="card">
+            <StackPanel Spacing="12">
+              <TextBlock Text="Tips" FontSize="13" FontWeight="SemiBold"
+                         Foreground="#F2F2F5"/>
+              <Separator Background="#26262C" Height="1" Margin="0"/>
+
+              <StackPanel Spacing="12">
+                <StackPanel Spacing="4">
+                  <Border Background="#F5A52418" CornerRadius="4" Padding="4,2"
+                          HorizontalAlignment="Left">
+                    <TextBlock Text="TIP" FontSize="9" FontWeight="Bold"
+                               Foreground="#F5A524"/>
+                  </Border>
+                  <TextBlock Text="Sneltoets instellen" FontSize="12"
+                             FontWeight="Medium" Foreground="#F2F2F5"/>
+                  <TextBlock FontSize="11" Foreground="#9A9AA3" TextWrapping="Wrap"
+                             Text="Ga naar Hotkeys en maak je eerste AI-sneltoets. Selecteer tekst, druk de toets, en mAIkey doet de rest."/>
+                </StackPanel>
+
+                <Separator Background="#26262C" Height="1" Margin="0"/>
+
+                <StackPanel Spacing="4">
+                  <Border Background="#60A5FA18" CornerRadius="4" Padding="4,2"
+                          HorizontalAlignment="Left">
+                    <TextBlock Text="FEATURE" FontSize="9" FontWeight="Bold"
+                               Foreground="#60A5FA"/>
+                  </Border>
+                  <TextBlock Text="Schrijfstijl" FontSize="12"
+                             FontWeight="Medium" Foreground="#F2F2F5"/>
+                  <TextBlock FontSize="11" Foreground="#9A9AA3" TextWrapping="Wrap"
+                             Text="Voeg voorbeeldteksten toe en mAIkey leert automatisch je stijl. AI-antwoorden klinken dan als jij."/>
+                </StackPanel>
+              </StackPanel>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Grid>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

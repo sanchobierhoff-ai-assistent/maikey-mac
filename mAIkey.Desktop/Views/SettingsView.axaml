@@ -1,0 +1,95 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="mAIkey.Desktop.Views.SettingsView">
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Margin="28,8,28,28" Spacing="24" MaxWidth="680">
+
+      <!-- Header -->
+      <StackPanel Spacing="4">
+        <TextBlock Classes="eyebrow" Text="INSTELLINGEN"/>
+        <TextBlock Classes="title" Text="Voorkeursinstellingen"/>
+      </StackPanel>
+
+      <!-- Taal -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <TextBlock Text="Taal" FontSize="13" FontWeight="SemiBold"
+                     Foreground="#F2F2F5"/>
+          <ComboBox Name="LanguageComboBox" HorizontalAlignment="Stretch" FontSize="13">
+            <ComboBoxItem Content="Nederlands" Tag="nl"/>
+            <ComboBoxItem Content="English" Tag="en"/>
+            <ComboBoxItem Content="Deutsch" Tag="de"/>
+          </ComboBox>
+        </StackPanel>
+      </Border>
+
+      <!-- Gedrag -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <TextBlock Text="Gedrag" FontSize="13" FontWeight="SemiBold"
+                     Foreground="#F2F2F5"/>
+          <CheckBox Name="MinimizeToTrayCheck" Content="Minimaliseren naar system tray"
+                    FontSize="12"/>
+          <CheckBox Name="ShowIndicatorCheck" Content="Toon AI-indicator bij verwerking"
+                    FontSize="12"/>
+          <CheckBox Name="SoundCheck" Content="Geluid bij voltooiing"
+                    FontSize="12"/>
+        </StackPanel>
+      </Border>
+
+      <!-- Content limieten -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <TextBlock Text="Content limieten" FontSize="13" FontWeight="SemiBold"
+                     Foreground="#F2F2F5"/>
+
+          <StackPanel Spacing="6">
+            <TextBlock Text="Max afbeeldingen per verzoek" FontSize="11"
+                       Foreground="#9A9AA3"/>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <Button Content="-" Width="32" Height="32" Classes="ghost"
+                      Padding="0" HorizontalContentAlignment="Center"
+                      Name="ImgMinusBtn" Click="ImgMinus_Click"/>
+              <TextBlock Name="MaxImagesText" Text="3" FontSize="14"
+                         FontWeight="SemiBold" VerticalAlignment="Center"
+                         Width="30" TextAlignment="Center"/>
+              <Button Content="+" Width="32" Height="32" Classes="ghost"
+                      Padding="0" HorizontalContentAlignment="Center"
+                      Name="ImgPlusBtn" Click="ImgPlus_Click"/>
+            </StackPanel>
+          </StackPanel>
+
+          <StackPanel Spacing="6">
+            <TextBlock Text="Max tekens per verzoek" FontSize="11"
+                       Foreground="#9A9AA3"/>
+            <TextBox Name="MaxCharsBox" Width="120" HorizontalAlignment="Left"
+                     FontSize="13"/>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- Account info -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <TextBlock Text="Account" FontSize="13" FontWeight="SemiBold"
+                     Foreground="#F2F2F5"/>
+          <StackPanel Spacing="4">
+            <TextBlock FontSize="12" Foreground="#9A9AA3">
+              <Run Text="E-mail: "/>
+              <Run Name="AccountEmailRun" Text="laden..." Foreground="#F2F2F5"/>
+            </TextBlock>
+            <TextBlock FontSize="12" Foreground="#9A9AA3">
+              <Run Text="Abonnement: "/>
+              <Run Name="AccountTierRun" Text="laden..." Foreground="#F5A524"/>
+            </TextBlock>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- Version -->
+      <TextBlock Text="mAIkey Beta-v1.4-mac" FontSize="10" Foreground="#5E5E66"
+                 HorizontalAlignment="Center" Margin="0,8"/>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

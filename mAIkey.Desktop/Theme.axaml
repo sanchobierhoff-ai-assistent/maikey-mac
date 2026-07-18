@@ -1,0 +1,326 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- mAIkey Theme — Avalonia-port van frontend/Resources/Styles.xaml   -->
+  <!-- De WPF-ControlTemplates worden niet 1:1 gekopieerd; de look wordt -->
+  <!-- gereproduceerd via class-selectors + DynamicResource-tokens       -->
+  <!-- bovenop FluentTheme. Classes dekken zowel de bestaande lowercase- -->
+  <!-- namen als de WPF x:Key-namen (voor het porten van views).         -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- ═══ Globale defaults ═══ -->
+  <Style Selector="Window">
+    <Setter Property="Background" Value="{DynamicResource Bg1}" />
+    <Setter Property="Foreground" Value="{DynamicResource Text1}" />
+    <Setter Property="FontFamily" Value="{DynamicResource FontUi}" />
+  </Style>
+  <Style Selector="UserControl">
+    <Setter Property="FontFamily" Value="{DynamicResource FontUi}" />
+  </Style>
+  <Style Selector="TextBlock">
+    <Setter Property="FontFamily" Value="{DynamicResource FontUi}" />
+    <Setter Property="Foreground" Value="{DynamicResource Text1}" />
+  </Style>
+
+  <!-- ═══════════════════ KNOPPEN ═══════════════════ -->
+
+  <!-- Accent (amber) — WPF: AccentButton / GradientAccentButton -->
+  <Style Selector="Button.accent, Button.AccentButton, Button.ModernGradientButton">
+    <Setter Property="Background" Value="{DynamicResource Accent}" />
+    <Setter Property="Foreground" Value="{DynamicResource AccentForeground}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="20,10" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="FontFamily" Value="{DynamicResource FontUi}" />
+  </Style>
+  <Style Selector="Button.accent:pointerover /template/ ContentPresenter#PART_ContentPresenter, Button.AccentButton:pointerover /template/ ContentPresenter#PART_ContentPresenter, Button.ModernGradientButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource AccentDim}" />
+    <Setter Property="Foreground" Value="{DynamicResource AccentForeground}" />
+  </Style>
+
+  <!-- Ghost / secundair — WPF: GhostButton / MkSecondaryButton / ModernSecondaryButton / ModernPurpleButton -->
+  <Style Selector="Button.ghost, Button.GhostButton, Button.MkSecondaryButton, Button.ModernSecondaryButton, Button.ModernPurpleButton">
+    <Setter Property="Background" Value="{DynamicResource Bg2}" />
+    <Setter Property="Foreground" Value="{DynamicResource Text1}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Border1}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="20,10" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="FontFamily" Value="{DynamicResource FontUi}" />
+  </Style>
+  <Style Selector="Button.ghost:pointerover /template/ ContentPresenter#PART_ContentPresenter, Button.GhostButton:pointerover /template/ ContentPresenter#PART_ContentPresenter, Button.MkSecondaryButton:pointerover /template/ ContentPresenter#PART_ContentPresenter, Button.ModernSecondaryButton:pointerover /template/ ContentPresenter#PART_ContentPresenter, Button.ModernPurpleButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource BackgroundHover}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderLight}" />
+  </Style>
+
+  <!-- Primary action (paarse gradient) — WPF: PrimaryActionButton -->
+  <Style Selector="Button.PrimaryActionButton">
+    <Setter Property="Foreground" Value="White" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="Padding" Value="20,12" />
+    <Setter Property="Background">
+      <Setter.Value>
+        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+          <GradientStop Color="#6B5BA6" Offset="0.0" />
+          <GradientStop Color="#8B7BC6" Offset="1.0" />
+        </LinearGradientBrush>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style Selector="Button.PrimaryActionButton:pointerover">
+    <Setter Property="Opacity" Value="0.9" />
+  </Style>
+
+  <!-- Danger -->
+  <Style Selector="Button.danger">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource Error}" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.danger:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+
+  <!-- Menu/sidebar knop — WPF: MenuButton -->
+  <Style Selector="Button.MenuButton">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource Text2}" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="16,12" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+  </Style>
+  <Style Selector="Button.MenuButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource BackgroundHover}" />
+    <Setter Property="Foreground" Value="{DynamicResource Text1}" />
+  </Style>
+
+  <!-- Nav-knop (zijbalk) — WPF: NavButton -->
+  <Style Selector="Button.nav, Button.NavButton">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource Text2}" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="Padding" Value="20,10" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="Margin" Value="8,1" />
+  </Style>
+  <Style Selector="Button.nav:pointerover /template/ ContentPresenter#PART_ContentPresenter, Button.NavButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource BackgroundHover}" />
+    <Setter Property="Foreground" Value="{DynamicResource Text1}" />
+  </Style>
+  <Style Selector="Button.nav.active /template/ ContentPresenter#PART_ContentPresenter, Button.NavButton.active /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource BackgroundHover}" />
+    <Setter Property="Foreground" Value="{DynamicResource Text1}" />
+  </Style>
+
+  <!-- Nav-logout — WPF: NavLogoutButton -->
+  <Style Selector="Button.NavLogoutButton">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource Error}" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="Padding" Value="20,10" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Margin" Value="8,1" />
+  </Style>
+  <Style Selector="Button.NavLogoutButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource AccentSoft}" />
+  </Style>
+
+  <!-- Window-control knoppen (min/max/close) — WPF: WinControlButton(+Close) -->
+  <Style Selector="Button.WinControlButton, Button.WinControlCloseButton">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource Text2}" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="0" />
+    <Setter Property="Width" Value="42" />
+    <Setter Property="Height" Value="40" />
+  </Style>
+  <Style Selector="Button.WinControlButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource BackgroundHover}" />
+  </Style>
+  <Style Selector="Button.WinControlCloseButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#E81123" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+
+  <!-- ═══════════════════ INVOER ═══════════════════ -->
+
+  <!-- TextBox — WPF: ModernTextBox / MkTextBox -->
+  <Style Selector="TextBox, TextBox.ModernTextBox, TextBox.MkTextBox">
+    <Setter Property="Background" Value="{DynamicResource InputBackground}" />
+    <Setter Property="Foreground" Value="{DynamicResource Text1}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Border1}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="12,10" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="FontFamily" Value="{DynamicResource FontUi}" />
+    <Setter Property="CaretBrush" Value="{DynamicResource Accent}" />
+  </Style>
+  <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderLight}" />
+    <Setter Property="Background" Value="{DynamicResource InputBackground}" />
+  </Style>
+  <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderLight}" />
+    <Setter Property="Background" Value="{DynamicResource InputBackground}" />
+  </Style>
+
+  <!-- ComboBox — WPF: ModernComboBox / MkComboBox / HotkeyEditorComboBox -->
+  <Style Selector="ComboBox, ComboBox.ModernComboBox, ComboBox.MkComboBox, ComboBox.HotkeyEditorComboBox">
+    <Setter Property="Background" Value="{DynamicResource InputBackground}" />
+    <Setter Property="Foreground" Value="{DynamicResource Text1}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Border1}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="12,8" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="FontFamily" Value="{DynamicResource FontUi}" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="ComboBox:pointerover /template/ Border#Background">
+    <Setter Property="Background" Value="{DynamicResource InputBackground}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderLight}" />
+  </Style>
+  <Style Selector="ComboBoxItem">
+    <Setter Property="Foreground" Value="{DynamicResource Text1}" />
+    <Setter Property="Padding" Value="12,10" />
+    <Setter Property="CornerRadius" Value="8" />
+  </Style>
+  <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource BackgroundHover}" />
+  </Style>
+  <Style Selector="ComboBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource BackgroundActive}" />
+  </Style>
+
+  <!-- CheckBox -->
+  <Style Selector="CheckBox">
+    <Setter Property="Foreground" Value="{DynamicResource Text1}" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="FontFamily" Value="{DynamicResource FontUi}" />
+  </Style>
+
+  <!-- Expander — WPF: ModernExpander / MkExpander -->
+  <Style Selector="Expander, Expander.ModernExpander, Expander.MkExpander">
+    <Setter Property="Background" Value="{DynamicResource Bg2}" />
+    <Setter Property="Foreground" Value="{DynamicResource Text1}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Border1}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="12" />
+  </Style>
+
+  <!-- ═══════════════════ CARDS ═══════════════════ -->
+
+  <!-- Card — WPF: ModernCard / ModernGlassCard -->
+  <Style Selector="Border.card, Border.ModernCard, Border.ModernGlassCard">
+    <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Border1}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="18" />
+    <Setter Property="Padding" Value="24" />
+    <Setter Property="BoxShadow" Value="0 5 20 0 #40000000" />
+  </Style>
+
+  <!-- Stat card — WPF: StatCard -->
+  <Style Selector="Border.StatCard">
+    <Setter Property="BorderBrush" Value="{DynamicResource Border1}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="14" />
+    <Setter Property="Padding" Value="16" />
+    <Setter Property="BoxShadow" Value="0 3 12 0 #33000000" />
+  </Style>
+
+  <!-- Hotkey-lijstitem — WPF: HotkeyCard / HotkeyListItem -->
+  <Style Selector="Border.HotkeyCard, Border.HotkeyListItem">
+    <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Border1}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="14" />
+    <Setter Property="Padding" Value="16" />
+    <Setter Property="Margin" Value="0,0,0,12" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="BoxShadow" Value="0 2 8 0 #26000000" />
+  </Style>
+  <Style Selector="Border.HotkeyCard:pointerover, Border.HotkeyListItem:pointerover">
+    <Setter Property="Background" Value="{DynamicResource BackgroundHover}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderLight}" />
+  </Style>
+
+  <!-- ═══════════════════ TEKST ═══════════════════ -->
+
+  <Style Selector="TextBlock.title, TextBlock.TitleText">
+    <Setter Property="FontSize" Value="28" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource Text1}" />
+  </Style>
+  <Style Selector="TextBlock.subtitle, TextBlock.SubtitleText">
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="Foreground" Value="{DynamicResource Text2}" />
+  </Style>
+  <Style Selector="TextBlock.CardTitle">
+    <Setter Property="FontSize" Value="18" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="{DynamicResource Text1}" />
+    <Setter Property="Margin" Value="0,0,0,12" />
+  </Style>
+  <Style Selector="TextBlock.StatValue">
+    <Setter Property="FontSize" Value="32" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="Foreground" Value="{DynamicResource Text1}" />
+  </Style>
+  <Style Selector="TextBlock.StatLabel">
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="Foreground" Value="{DynamicResource Text2}" />
+  </Style>
+  <Style Selector="TextBlock.eyebrow">
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="{DynamicResource Text3}" />
+  </Style>
+  <Style Selector="TextBlock.muted">
+    <Setter Property="Foreground" Value="{DynamicResource Text2}" />
+    <Setter Property="FontSize" Value="12" />
+  </Style>
+  <Style Selector="TextBlock.dimmed">
+    <Setter Property="Foreground" Value="{DynamicResource Text3}" />
+    <Setter Property="FontSize" Value="11" />
+  </Style>
+
+  <!-- ═══════════════════ SCROLLBAR ═══════════════════ -->
+  <Style Selector="ScrollBar">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="ScrollBar:vertical /template/ Thumb">
+    <Setter Property="Background" Value="{DynamicResource BorderStrong}" />
+    <Setter Property="CornerRadius" Value="4" />
+  </Style>
+
+  <!-- ═══════════════════ SEPARATOR ═══════════════════ -->
+  <Style Selector="Separator">
+    <Setter Property="Background" Value="{DynamicResource Border1}" />
+    <Setter Property="Height" Value="1" />
+    <Setter Property="Margin" Value="0,8" />
+  </Style>
+
+</Styles>

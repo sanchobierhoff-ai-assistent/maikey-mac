@@ -1,0 +1,8 @@
+bin/
+obj/
+publish/
+Releases-osx/
+vpk_work/
+*.app/
+*.zip
+.DS_Store

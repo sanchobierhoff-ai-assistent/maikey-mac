@@ -1,0 +1,157 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="https://github.com/projektanker/icons.avalonia"
+        x:Class="mAIkey.Desktop.MainWindow"
+        Title="mAIkey"
+        Width="1280" Height="720"
+        MinWidth="1100" MinHeight="580"
+        WindowStartupLocation="CenterScreen"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="40"
+        TransparencyLevelHint="Transparent"
+        Background="Transparent">
+
+  <!-- Afgeronde vensterschil met rand (WPF: WindowShell CornerRadius 18) -->
+  <Border CornerRadius="18" BorderThickness="1"
+          BorderBrush="{DynamicResource Border1}"
+          Background="{DynamicResource Bg0}"
+          ClipToBounds="True">
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="232" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+
+      <!-- ═══ SIDEBAR ═══ -->
+      <Border Grid.Column="0" Background="{DynamicResource Bg0}"
+              BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,1,0">
+        <DockPanel>
+
+          <!-- Logo + titelbalk-sleepgebied -->
+          <Border DockPanel.Dock="Top" Height="40" Margin="18,0,0,0"
+                  IsHitTestVisible="True" Name="TitleBarArea" Background="Transparent">
+            <TextBlock VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold">
+              <Run Text="m" Foreground="{DynamicResource Text1}" />
+              <Run Text="AI" Foreground="#F5A524" FontWeight="Bold" />
+              <Run Text="key" Foreground="{DynamicResource Text1}" />
+            </TextBlock>
+          </Border>
+
+          <!-- Profiel + uitloggen onderaan -->
+          <StackPanel DockPanel.Dock="Bottom" Margin="0,8,0,12">
+            <Separator Margin="12,0,12,8" />
+
+            <Button Name="ProfileBtn" Classes="NavButton" Height="44" Click="NavProfile_Click">
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <Border Width="28" Height="28" CornerRadius="8" VerticalAlignment="Center">
+                  <Border.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                      <GradientStop Color="#F5A524" Offset="0" />
+                      <GradientStop Color="#C27F0E" Offset="1" />
+                    </LinearGradientBrush>
+                  </Border.Background>
+                  <i:Icon Value="mdi-account" FontSize="14" Foreground="#0B0B0D"
+                          HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <TextBlock Name="UserEmailText" Text="Profiel" VerticalAlignment="Center"
+                           FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource Text1}"
+                           TextTrimming="CharacterEllipsis" />
+              </StackPanel>
+            </Button>
+
+            <Button Name="LogoutBtn" Classes="NavLogoutButton" Height="36">
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <i:Icon Value="mdi-logout" FontSize="16" VerticalAlignment="Center" />
+                <TextBlock Text="Uitloggen" VerticalAlignment="Center" FontSize="13" FontWeight="Medium" />
+              </StackPanel>
+            </Button>
+          </StackPanel>
+
+          <!-- Nav-knoppen -->
+          <StackPanel Margin="0,12,0,0" Spacing="2">
+            <Button Name="NavDashboard" Classes="NavButton active" Height="36" Click="NavDashboard_Click">
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <i:Icon Value="mdi-view-dashboard" FontSize="16" VerticalAlignment="Center" />
+                <TextBlock Text="Dashboard" VerticalAlignment="Center" FontSize="13" FontWeight="Medium" />
+              </StackPanel>
+            </Button>
+
+            <Button Name="NavHotkeys" Classes="NavButton" Height="36" Click="NavHotkeys_Click">
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <i:Icon Value="mdi-lightning-bolt" FontSize="16" VerticalAlignment="Center" />
+                <TextBlock Text="Hotkeys" VerticalAlignment="Center" FontSize="13" FontWeight="Medium" />
+              </StackPanel>
+            </Button>
+
+            <Button Name="NavStyles" Classes="NavButton" Height="36" Click="NavStyles_Click">
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <i:Icon Value="mdi-book-open-variant" FontSize="16" VerticalAlignment="Center" />
+                <TextBlock Text="Stijl Library" VerticalAlignment="Center" FontSize="13" FontWeight="Medium" />
+              </StackPanel>
+            </Button>
+
+            <Button Name="NavTemplates" Classes="NavButton" Height="36" Click="NavTemplates_Click">
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <i:Icon Value="mdi-file-document-edit" FontSize="16" VerticalAlignment="Center" />
+                <TextBlock Text="Templates" VerticalAlignment="Center" FontSize="13" FontWeight="Medium" />
+              </StackPanel>
+            </Button>
+
+            <Button Name="NavIntegrations" Classes="NavButton" Height="36" Click="NavIntegrations_Click">
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <i:Icon Value="mdi-connection" FontSize="16" VerticalAlignment="Center" />
+                <TextBlock Text="Integraties" VerticalAlignment="Center" FontSize="13" FontWeight="Medium" />
+              </StackPanel>
+            </Button>
+
+            <Button Name="NavCloudSync" Classes="NavButton" Height="36" Click="NavCloudSync_Click">
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <i:Icon Value="mdi-cloud-sync-outline" FontSize="16" VerticalAlignment="Center" />
+                <TextBlock Text="Cloud Sync" VerticalAlignment="Center" FontSize="13" FontWeight="Medium" />
+              </StackPanel>
+            </Button>
+
+            <Button Name="NavSettings" Classes="NavButton" Height="36" Click="NavSettings_Click">
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <i:Icon Value="mdi-cog" FontSize="16" VerticalAlignment="Center" />
+                <TextBlock Text="Instellingen" VerticalAlignment="Center" FontSize="13" FontWeight="Medium" />
+              </StackPanel>
+            </Button>
+
+            <Button Name="NavMinimize" Classes="NavButton" Height="36" Click="MinimizeBtn_Click">
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <i:Icon Value="mdi-pin" FontSize="16" VerticalAlignment="Center" />
+                <TextBlock Text="Minimaliseer" VerticalAlignment="Center" FontSize="13" FontWeight="Medium" />
+              </StackPanel>
+            </Button>
+          </StackPanel>
+        </DockPanel>
+      </Border>
+
+      <!-- ═══ CONTENT ═══ -->
+      <Border Grid.Column="1" Background="{DynamicResource Bg1}">
+        <DockPanel>
+          <!-- Titelbalk-sleepgebied + vensterknoppen -->
+          <Border DockPanel.Dock="Top" Height="40" Name="ContentTitleBar"
+                  Background="Transparent" IsHitTestVisible="True">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                        VerticalAlignment="Top" Spacing="0">
+              <Button Name="MinimizeBtn" Classes="WinControlButton" Click="MinimizeBtn_Click">
+                <i:Icon Value="mdi-window-minimize" FontSize="14" />
+              </Button>
+              <Button Name="MaximizeBtn" Classes="WinControlButton" Click="MaximizeBtn_Click">
+                <i:Icon Value="mdi-window-maximize" FontSize="11" />
+              </Button>
+              <Button Name="CloseBtn" Classes="WinControlCloseButton" Click="CloseBtn_Click">
+                <i:Icon Value="mdi-close" FontSize="13" />
+              </Button>
+            </StackPanel>
+          </Border>
+
+          <ContentControl Name="ContentArea" Margin="0" />
+        </DockPanel>
+      </Border>
+    </Grid>
+  </Border>
+</Window>

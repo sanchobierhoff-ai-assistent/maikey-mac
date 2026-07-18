@@ -1,0 +1,111 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="mAIkey.Desktop.Windows.LoginWindow"
+        Title="mAIkey — Inloggen"
+        Width="460" Height="580"
+        CanResize="False"
+        WindowStartupLocation="CenterScreen"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="40"
+        Background="#0B0B0D">
+
+  <DockPanel>
+    <!-- Title bar -->
+    <Border DockPanel.Dock="Top" Height="40" Name="LoginTitleBar"
+            Background="Transparent">
+      <Grid>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                   FontSize="12" Foreground="#5E5E66">mAIkey</TextBlock>
+        <Button HorizontalAlignment="Right" VerticalAlignment="Top"
+                Width="46" Height="40" Content="✕"
+                Background="Transparent" BorderThickness="0" CornerRadius="0"
+                Foreground="#9A9AA3" FontSize="10"
+                Click="CloseBtn_Click" Name="LoginCloseBtn"/>
+      </Grid>
+    </Border>
+
+    <ScrollViewer>
+      <StackPanel Margin="48,16,48,32" Spacing="20" MaxWidth="360"
+                  HorizontalAlignment="Center">
+
+        <!-- Logo -->
+        <StackPanel HorizontalAlignment="Center" Spacing="12">
+          <Border Background="#18181C" BorderBrush="#32323A" BorderThickness="1"
+                  CornerRadius="12" Width="80" Height="60"
+                  HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                        VerticalAlignment="Center" Spacing="1">
+              <TextBlock Text="m" FontSize="14" FontWeight="ExtraBold"
+                         Foreground="#F2F2F5" VerticalAlignment="Center"/>
+              <TextBlock Text="AI" FontSize="20" FontWeight="ExtraBold"
+                         Foreground="#F5A524" VerticalAlignment="Center"/>
+              <TextBlock Text="key" FontSize="14" FontWeight="ExtraBold"
+                         Foreground="#F2F2F5" VerticalAlignment="Center"/>
+            </StackPanel>
+          </Border>
+
+          <TextBlock Text="Welkom terug" FontSize="22" FontWeight="SemiBold"
+                     Foreground="#F2F2F5" HorizontalAlignment="Center"/>
+          <TextBlock Text="Log in om mAIkey te gebruiken"
+                     FontSize="13" Foreground="#9A9AA3" HorizontalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- Error message -->
+        <Border Name="ErrorBorder" IsVisible="False"
+                Background="#2A1215" BorderBrush="#5C2D33" BorderThickness="1"
+                CornerRadius="10" Padding="12,10">
+          <TextBlock Name="ErrorText" Foreground="#EF4444" FontSize="12"
+                     TextWrapping="Wrap"/>
+        </Border>
+
+        <!-- Email -->
+        <StackPanel Spacing="6">
+          <TextBlock Text="E-mailadres" FontSize="12" FontWeight="Medium"
+                     Foreground="#9A9AA3"/>
+          <TextBox Name="EmailBox" Watermark="naam@voorbeeld.nl"
+                   FontSize="13"/>
+        </StackPanel>
+
+        <!-- Password -->
+        <StackPanel Spacing="6">
+          <TextBlock Text="Wachtwoord" FontSize="12" FontWeight="Medium"
+                     Foreground="#9A9AA3"/>
+          <TextBox Name="PasswordBox" PasswordChar="●"
+                   Watermark="••••••••" FontSize="13"/>
+        </StackPanel>
+
+        <!-- Login button -->
+        <Button Name="LoginBtn" Classes="accent" Content="Inloggen"
+                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                Height="44" FontSize="14" Click="LoginBtn_Click"/>
+
+        <!-- Loading -->
+        <StackPanel Name="LoadingPanel" IsVisible="False"
+                    HorizontalAlignment="Center" Spacing="8">
+          <TextBlock Text="Inloggen..." FontSize="12" Foreground="#9A9AA3"
+                     HorizontalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- Forgot password link -->
+        <Button Name="ForgotBtn" Classes="ghost" Content="Wachtwoord vergeten?"
+                HorizontalAlignment="Center" FontSize="12"
+                Padding="12,6" BorderThickness="0" Foreground="#9A9AA3"/>
+
+        <!-- Register link -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="4">
+          <TextBlock Text="Nog geen account?" FontSize="12" Foreground="#5E5E66"
+                     VerticalAlignment="Center"/>
+          <Button Name="RegisterBtn" Content="Registreer"
+                  Background="Transparent" BorderThickness="0"
+                  Foreground="#F5A524" FontSize="12" Padding="4,2"
+                  Cursor="Hand"/>
+        </StackPanel>
+
+        <!-- Version -->
+        <TextBlock Text="Beta-v1.4-mac" FontSize="10" Foreground="#5E5E66"
+                   HorizontalAlignment="Center" Margin="0,8,0,0"/>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</Window>

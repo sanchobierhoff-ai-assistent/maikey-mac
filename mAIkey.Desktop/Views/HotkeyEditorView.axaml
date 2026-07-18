@@ -1,0 +1,179 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="mAIkey.Desktop.Views.HotkeyEditorView">
+
+  <Grid ColumnDefinitions="260,*">
+
+    <!-- ═══ LEFT: HOTKEY LIST ═══ -->
+    <Border Grid.Column="0" Background="#0B0B0D" BorderBrush="#26262C"
+            BorderThickness="0,0,1,0">
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Margin="16,16,16,0" Spacing="12">
+          <TextBlock Text="Hotkeys" FontSize="16" FontWeight="SemiBold"
+                     Foreground="#F2F2F5"/>
+          <Separator Background="#26262C" Height="1"/>
+        </StackPanel>
+
+        <Button DockPanel.Dock="Bottom" Classes="accent" Content="+ Nieuwe hotkey"
+                Margin="16,8,16,16" HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Center" FontSize="12"
+                Name="AddHotkeyBtn" Click="AddHotkey_Click"/>
+
+        <ScrollViewer Margin="8,8,8,0">
+          <StackPanel Name="HotkeyListPanel" Spacing="2"/>
+        </ScrollViewer>
+      </DockPanel>
+    </Border>
+
+    <!-- ═══ RIGHT: EDITOR ═══ -->
+    <Border Grid.Column="1" Background="#111114">
+      <DockPanel>
+        <!-- Top Bar -->
+        <Border DockPanel.Dock="Top" Height="52" Padding="16,0"
+                BorderBrush="#26262C" BorderThickness="0,0,0,1">
+          <Grid>
+            <TextBlock Text="← Hotkeys" FontSize="13" Foreground="#9A9AA3"
+                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                        VerticalAlignment="Center" Spacing="8">
+              <Button Name="DeleteBtn" Classes="danger" Content="Verwijderen"
+                      FontSize="12" Click="DeleteHotkey_Click"/>
+              <Button Name="SaveBtn" Classes="accent" Content="Opslaan"
+                      FontSize="12" Padding="16,8" Click="SaveHotkey_Click"/>
+            </StackPanel>
+          </Grid>
+        </Border>
+
+        <!-- Empty state -->
+        <StackPanel Name="EmptyEditorState" VerticalAlignment="Center"
+                    HorizontalAlignment="Center" Spacing="12"
+                    Margin="0,0,0,60">
+          <TextBlock Text="⚡" FontSize="48" HorizontalAlignment="Center"
+                     Foreground="#5E5E66"/>
+          <TextBlock Text="Selecteer een hotkey of maak een nieuwe aan"
+                     FontSize="14" Foreground="#9A9AA3"
+                     HorizontalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- Editor content -->
+        <ScrollViewer Name="EditorPanel" IsVisible="False"
+                      VerticalScrollBarVisibility="Auto">
+          <StackPanel Margin="24,20,24,24" Spacing="20" MaxWidth="680">
+
+            <!-- Hero: Name -->
+            <TextBox Name="HotkeyNameBox" FontSize="22" FontWeight="SemiBold"
+                     Watermark="Naam van je hotkey"
+                     Background="Transparent" BorderThickness="0" Padding="0,8"/>
+
+            <!-- Section: Trigger -->
+            <Border Classes="card">
+              <StackPanel Spacing="12">
+                <TextBlock Text="Trigger" FontSize="13" FontWeight="SemiBold"
+                           Foreground="#F2F2F5"/>
+
+                <StackPanel Spacing="6">
+                  <TextBlock Text="Toetscombo" FontSize="11" Foreground="#9A9AA3"/>
+                  <TextBox Name="HotkeyComboBox" IsReadOnly="True"
+                           Watermark="Klik hier en druk een combinatie"
+                           Height="40" FontSize="13"
+                           Background="#1F1F24" Cursor="Hand"
+                           KeyDown="HotkeyCombo_KeyDown"/>
+                  <TextBlock Text="Klik op het veld en druk een combinatie in (bijv. Ctrl+Alt+1)"
+                             FontSize="10" Foreground="#5E5E66"/>
+                </StackPanel>
+              </StackPanel>
+            </Border>
+
+            <!-- Section: AI Prompt -->
+            <Border Classes="card">
+              <StackPanel Spacing="12">
+                <TextBlock Text="AI Prompt" FontSize="13" FontWeight="SemiBold"
+                           Foreground="#F2F2F5"/>
+
+                <StackPanel Spacing="6">
+                  <TextBlock Text="Instructie voor de AI" FontSize="11"
+                             Foreground="#9A9AA3"/>
+                  <TextBox Name="PromptBox" AcceptsReturn="True"
+                           TextWrapping="Wrap" MinHeight="80" MaxHeight="200"
+                           Watermark="Bijv: Verbeter de tekst en maak deze professioneler..."
+                           FontSize="13"/>
+                </StackPanel>
+
+                <!-- Model -->
+                <StackPanel Spacing="6">
+                  <TextBlock Text="AI Model" FontSize="11" Foreground="#9A9AA3"/>
+                  <ComboBox Name="ModelComboBox" HorizontalAlignment="Stretch"
+                            FontSize="13"/>
+                </StackPanel>
+
+                <!-- Writing style -->
+                <StackPanel Spacing="6">
+                  <TextBlock Text="Schrijfstijl" FontSize="11" Foreground="#9A9AA3"/>
+                  <ComboBox Name="StyleComboBox" HorizontalAlignment="Stretch"
+                            FontSize="13"/>
+                </StackPanel>
+              </StackPanel>
+            </Border>
+
+            <!-- Section: Gedrag -->
+            <Border Classes="card">
+              <StackPanel Spacing="12">
+                <TextBlock Text="Gedrag" FontSize="13" FontWeight="SemiBold"
+                           Foreground="#F2F2F5"/>
+
+                <StackPanel Spacing="6">
+                  <TextBlock Text="Output modus" FontSize="11" Foreground="#9A9AA3"/>
+                  <ComboBox Name="OutputModeComboBox" HorizontalAlignment="Stretch"
+                            FontSize="13">
+                    <ComboBoxItem Content="Vervangen (replace)" Tag="replace"/>
+                    <ComboBoxItem Content="Klembord (clipboard)" Tag="clipboard"/>
+                    <ComboBoxItem Content="Venster (window)" Tag="window"/>
+                  </ComboBox>
+                </StackPanel>
+
+                <CheckBox Name="AskContextCheck" Content="Vraag om extra context"
+                          FontSize="12"/>
+                <CheckBox Name="UseInputCheck"
+                          Content="Gebruik invoerveld in plaats van selectie"
+                          FontSize="12"/>
+              </StackPanel>
+            </Border>
+
+            <!-- Section: Geavanceerd -->
+            <Expander Header="Geavanceerde AI-parameters" FontSize="12"
+                      Foreground="#9A9AA3" Margin="0,0,0,20">
+              <Border Classes="card" Margin="0,8,0,0">
+                <StackPanel Spacing="16">
+                  <!-- Temperature -->
+                  <StackPanel Spacing="4">
+                    <Grid ColumnDefinitions="*,Auto">
+                      <TextBlock Text="Temperature" FontSize="11" Foreground="#9A9AA3"/>
+                      <TextBlock Name="TempValueText" Grid.Column="1" Text="0.7"
+                                 FontSize="11" Foreground="#F2F2F5"/>
+                    </Grid>
+                    <Slider Name="TempSlider" Minimum="0" Maximum="2"
+                            Value="0.7" TickFrequency="0.1"
+                            IsSnapToTickEnabled="True"/>
+                  </StackPanel>
+
+                  <!-- Max tokens -->
+                  <StackPanel Spacing="4">
+                    <Grid ColumnDefinitions="*,Auto">
+                      <TextBlock Text="Max Tokens" FontSize="11" Foreground="#9A9AA3"/>
+                      <TextBlock Name="TokensValueText" Grid.Column="1" Text="8000"
+                                 FontSize="11" Foreground="#F2F2F5"/>
+                    </Grid>
+                    <Slider Name="TokensSlider" Minimum="2000" Maximum="16000"
+                            Value="8000" TickFrequency="1000"
+                            IsSnapToTickEnabled="True"/>
+                  </StackPanel>
+                </StackPanel>
+              </Border>
+            </Expander>
+
+          </StackPanel>
+        </ScrollViewer>
+      </DockPanel>
+    </Border>
+  </Grid>
+</UserControl>

@@ -1,0 +1,1294 @@
+# Navigatie (zijbalk)
+Nav_Dashboard=Dashboard
+Nav_Hotkeys=mAIkeys
+Nav_StyleLibrary=Stijlprofielen
+Nav_Templates=Templates
+Nav_Integrations=Integraties
+Nav_CloudSync=Cloud Sync
+Nav_Settings=Instellingen
+Nav_Minimize=Minimaliseer
+Nav_Profile=Profiel
+Nav_Logout=Uitloggen
+
+# Dashboard
+Dashboard_Eyebrow=Dashboard
+Dashboard_Title=Welkom terug.
+Dashboard_NewHotkey=Nieuwe mAIkey
+Dashboard_Active=actief
+Dashboard_Today=VANDAAG
+Dashboard_Requests=verzoeken
+Dashboard_Styles=STIJLEN
+Dashboard_StylesLabel=schrijfstijlen
+Dashboard_Sub=ABONNEMENT
+Dashboard_YourHotkeys=Jouw mAIkeys
+Dashboard_NoHotkeys=Nog geen mAIkeys
+Dashboard_NoHotkeysSub=Maak je eerste mAIkey aan.
+Dashboard_Hotkeys=mAIKEYS
+
+# Hotkey editor
+HotkeyEditor_Title=Jouw mAIkeys
+HotkeyEditor_NewHotkey=Nieuwe mAIkey
+HotkeyEditor_Back=← mAIkeys
+HotkeyEditor_Delete=Verwijder
+HotkeyEditor_Save=Opslaan
+HotkeyEditor_SavedOk=✓ Opgeslagen
+HotkeyEditor_ConfirmDelete=mAIkey verwijderen
+HotkeyEditor_ConfirmDeleteMsg=Weet je zeker dat je deze mAIkey wilt verwijderen?
+HotkeyEditor_NewHotkeyName=Nieuwe mAIkey
+HotkeyEditor_TriggerSection=Trigger
+HotkeyEditor_KeyCombo=Toetscombinatie
+HotkeyEditor_KeyComboPlaceholder=Klik hier en druk een combinatie in
+HotkeyEditor_PromptSection=AI Prompt
+HotkeyEditor_AskContext=Vraag extra context bij uitvoering
+HotkeyEditor_WriteStyle=Schrijfstijl (optioneel)
+HotkeyEditor_StyleHint=Selecteer in welke stijl je de reactie wil.
+HotkeyEditor_StyleLinkText=Nog geen stijlprofiel? Klik hier om er 1 toe te voegen.
+StyleTour_LimitTitle=Limiet bereikt
+StyleTour_LimitBody=Je hebt het maximale aantal stijlprofielen bereikt. Je kunt een bestaand profiel bijwerken via de tour die nu start.
+HotkeyEditor_AIModel=AI Model
+HotkeyEditor_BehaviorSection=Gedrag
+HotkeyEditor_OutputMode=Resultaat weergeven als
+HotkeyEditor_OutWindow=Toon in nieuw venster (met preview)
+HotkeyEditor_OutReplace=Vervang geselecteerde tekst direct
+HotkeyEditor_OutCopy=Kopieer naar klembord
+HotkeyEditor_OutAppend=Plak na geselecteerde tekst
+HotkeyEditor_OutEmail=Gmail – Direct versturen
+HotkeyEditor_OutEmailReview=Gmail – Met review venster
+HotkeyEditor_OutCalendar=Google Agenda – Direct aanmaken
+HotkeyEditor_OutCalendarReview=Google Agenda – Met review
+HotkeyEditor_OutGitHub=GitHub – Direct aanmaken
+HotkeyEditor_OutGitHubReview=GitHub – Met review venster
+HotkeyEditor_OutJira=Jira – Direct aanmaken
+HotkeyEditor_OutJiraReview=Jira – Met review venster
+HotkeyEditor_OutSlack=Slack – Direct versturen
+HotkeyEditor_OutSlackReview=Slack – Met preview
+HotkeyEditor_OutTeams=Teams – Direct versturen
+HotkeyEditor_OutTeamsReview=Teams – Met preview
+HotkeyEditor_OutZapier=Zapier/Make – Direct versturen
+HotkeyEditor_OutZapierReview=Zapier/Make – Met preview
+HotkeyEditor_CustomParams=Gebruik aangepaste AI parameters
+AIParam_Temperature_Tooltip=Bepaalt de willekeur/creativiteit van het AI-antwoord.\n0 = deterministisch (dezelfde invoer geeft dezelfde uitvoer)\n2 = zeer creatief (meer gevarieerde en onverwachte antwoorden)
+AIParam_MaxTokens_Tooltip=Maximale lengte van het AI-antwoord in tokens.\nEen token is ruwweg 3/4 van een woord.\nHogere waarden staan langere antwoorden toe, maar kunnen meer tijd kosten.
+AIParam_TopP_Tooltip=Nucleus sampling — beperkt de pool van tokens die de AI overweegt.\n1.0 = alle tokens overwegen\n0.1 = alleen de top 10% meest waarschijnlijke tokens\nEen alternatieve manier om creativiteit te sturen naast Temperature.
+AIParam_FrequencyPenalty_Tooltip=Vermindert herhaling van woorden en zinnen die al in het antwoord zijn gebruikt.\n0 = geen straf (kan zinnen herhalen)\n2 = sterke straf (vermijdt herhalingen)
+AIParam_PresencePenalty_Tooltip=Moedigt de AI aan om nieuwe onderwerpen te introduceren.\n0 = geen straf (kan bij een onderwerp blijven)\n2 = sterke straf (verkent vaker diverse onderwerpen)
+HotkeyEditor_SendImages=Stuur clipboard afbeeldingen mee naar AI
+HotkeyEditor_UseInput=Toon invoerveld in plaats van geselecteerde tekst
+HotkeyEditor_PersonalContext=Persoonlijke context
+HotkeyEditor_GmailSection=Gmail — Instellingen
+HotkeyEditor_SlackSection=Slack — Instellingen
+HotkeyEditor_GHSection=GitHub — Instellingen
+HotkeyEditor_CalSection=Google Agenda — Instellingen
+HotkeyEditor_NoStyle=Geen stijl
+HotkeyEditor_AIBuilder=✨ Nieuwe hotkey met AI aanmaken
+HotkeyEditor_AIOptimizer=🔧 Prompt optimaliseren
+HotkeyEditor_EmptyTitle=Je hebt nog geen mAIkeys.
+HotkeyEditor_EmptySub=Klik op 'Nieuwe mAIkey' om je eerste mAIkey aan te maken.
+HotkeyEditor_EmptyTourLink=Bekijk de instructies
+
+# Stijl library
+StyleLib_Eyebrow=STIJLEN
+StyleLib_Title=Stijlprofielen
+StyleLib_NoStyles=Geen stijlen aangemaakt
+StyleLib_NoStylesSub=Klik op 'Nieuwe Stijl' om te beginnen
+StyleLib_SelectPrompt=Selecteer een stijl om te bewerken
+StyleLib_NewStyle=Nieuwe Stijl
+
+# Stijl editor
+StyleEditor_BackBtn=← Stijlprofielen
+StyleEditor_NewStyle=Nieuwe Stijl
+StyleEditor_EditStyle=Stijl Bewerken
+StyleEditor_Cancel=Annuleren
+StyleEditor_Delete=Verwijderen
+StyleEditor_ConfirmDelete=Stijl verwijderen
+StyleEditor_ConfirmDeleteMsg=Weet je zeker dat je de stijl wilt verwijderen?
+StyleEditor_Save=Opslaan
+StyleEditor_BasicInfo=Basisinformatie
+StyleEditor_NameLabel=Naam *
+StyleEditor_UsageLabel=Waarvoor gebruik je deze stijl? *
+StyleEditor_Examples=Voorbeeldteksten
+StyleEditor_AddExample=+ Toevoegen
+StyleEditor_ExamplesHint=Plak teksten die jij zelf geschreven hebt (minimaal 3, maximaal 15)
+StyleEditor_NoExamples=Nog geen voorbeeldteksten toegevoegd
+StyleEditor_WriteStyle=Jouw Schrijfstijl
+StyleEditor_GenerateBtn=Genereer schrijfstijl
+StyleEditor_OptimizeBtn=Optimaliseer schrijfstijl
+StyleEditor_StyleHint=Beschrijf hoe je schrijft (toon, zinlengte, woordkeuze, etc.)
+
+# Integraties
+Integrations_Eyebrow=INTEGRATIES
+Integrations_Title=Verbind externe services
+Integrations_Subtitle=Koppel tools die je dagelijks gebruikt aan je AI-hotkeys.
+Integrations_RequestBtn=Integratie aanvragen
+Integrations_Loading=Integraties laden...
+Integrations_Connected=Verbonden
+Integrations_Available=Beschikbaar
+
+# Instellingen
+Settings_Title=INSTELLINGEN
+Settings_Heading=Voorkeursinstellingen
+Settings_Subtitle=Pas de app naar jouw voorkeur aan.
+Settings_Card_Behavior=Gedrag
+Settings_Card_Lang=Taal
+Settings_LangInterface=Taal interface
+Settings_LangSubtitle=Taal van menu's, labels en berichten
+Settings_Autostart=Autostart bij Windows
+Settings_AutostartSub=Start mAIkey automatisch bij inloggen
+Settings_ShowIndicator=Toon AI-indicator tijdens verwerking
+Settings_ShowIndicatorSub=Laat zien dat de AI bezig is
+Settings_Sound=Geluid bij voltooiing
+Settings_SoundSub=Speel een geluid af als de AI klaar is
+Settings_DesktopShortcut=Snelkoppeling op bureaublad
+Settings_DesktopShortcutSub=Plaats een mAIkey-snelkoppeling op je bureaublad
+Settings_StartMenuShortcut=Snelkoppeling in Startmenu
+Settings_StartMenuShortcutSub=Toon mAIkey in het Startmenu
+Settings_ContentLimits=Contentlimieten
+Settings_ContentLimitsSub=Als je meer afbeeldingen of tekens verstuurt dan het ingestelde limiet, vraagt de app om bevestiging.
+Settings_MinimizeToTray=Minimaliseer naar systeemvak
+Settings_MinimizeToTraySub=Verberg de app in het systeemvak bij minimaliseren
+Settings_WindowCard=Venster
+
+# Cloud sync
+CloudSync_Title=Cloud Sync
+CloudSync_Subtitle=Exporteer je hotkeys en stijlen naar de cloud. Importeer ze op een ander apparaat of smartphone.
+CloudSync_ExportHeader=Exporteren naar cloud
+CloudSync_HotkeysLabel=mAIkeys
+CloudSync_StylesLabel=Schrijfstijlen
+CloudSync_EmptyExport=Er zijn nog geen hotkeys of stijlen aangemaakt.
+CloudSync_SelectAll=Alles selecteren
+CloudSync_ExportBtn=Exporteer naar cloud
+CloudSync_ImportHeader=Importeren vanuit cloud
+CloudSync_ImportCheckHint=Controleer of er een cloudexport beschikbaar is voor dit account.
+CloudSync_CheckBtn=Controleer beschikbare export
+CloudSync_NotFound=Geen cloudexport gevonden voor dit account. Exporteer eerst vanuit de PC-app of smartphone.
+CloudSync_ImportHotkeys=Hotkeys om te importeren
+CloudSync_ImportStyles=Schrijfstijlen om te importeren
+CloudSync_ImportBtn=Importeer geselecteerde
+CloudSync_Loading=Even wachten...
+
+# Prompt templates
+Templates_Title=Custom Prompts
+Templates_Subtitle=Kies een template en voeg toe aan je mAIkeys
+Templates_AddBtn=+ Voeg toe
+Templates_OutReplace=Vervang geselecteerde tekst
+Templates_OutClipboard=Kopieer naar klembord
+Templates_OutWindow=Toon in reviewvenster
+Templates_SearchLabel=Zoek je favoriete template
+
+# AI Hotkey Builder
+AIBuilder_Title=Hotkey maken met AI
+AIBuilder_TypeAhead=Beschrijf wat je hotkey moet doen…
+AIBuilder_Placeholder=Bijv: Vertaal geselecteerde tekst naar Nederlands
+AIBuilder_Create=✓ Hotkey aanmaken
+AIBuilder_Cancel=Annuleren
+AIBuilder_Welcome=Hallo! Ik help je een mAIkey instellen. Beschrijf wat je wil: welke tekst selecteer je en wat moet er mee gebeuren?
+AIBuilder_ModeReplace=Vervangen — geselecteerde tekst wordt direct vervangen
+AIBuilder_ModeClipboard=Klembord — resultaat wordt gekopieerd naar klembord
+AIBuilder_ModeWindow=Venster — resultaat wordt getoond ter review
+AIBuilder_ModePrompt=Vraag — app vraagt elke keer om extra context
+
+# AI Prompt Optimizer
+AIOptimizer_Title=Prompt optimaliseren met AI
+AIOptimizer_FeedbackLabel=💬 Feedback (optioneel)
+AIOptimizer_Start=⚡ Analyse starten
+AIOptimizer_Apply=✓ Optimalisatie toepassen
+AIOptimizer_Cancel=Annuleren
+
+# Google Calendar Config
+CalConfig_Title=Google Agenda Configureren
+CalConfig_Heading=Google Agenda Verbinden
+CalConfig_Subtitle=Verbind je Google-account om agenda-afspraken aan te maken via hotkeys
+CalConfig_Step1=Stap 1: Verbind je Google-account
+CalConfig_ConnectBtn=Verbinden met Google
+CalConfig_ConnectedAs=Verbonden als:
+CalConfig_Reconnect=Opnieuw verbinden
+CalConfig_Opening=Browser openen...
+CalConfig_WaitingBrowser=Wachten op autorisatie in browser...
+CalConfig_Step2=Stap 2: Standaard Agenda
+CalConfig_CalHint=Agenda waar nieuwe afspraken worden aangemaakt (standaard: primaire agenda)
+CalConfig_Step3=Stap 3: Custom AI Prompt (Optioneel)
+CalConfig_PromptHint=Bijv: 'Voeg altijd een Teams-link toe aan de beschrijving'
+CalConfig_Cancel=Annuleren
+CalConfig_Save=Opslaan
+CalConfig_Saving=Opslaan...
+
+# Google Calendar event review
+CalReview_Title=Agenda-afspraak Aanmaken
+CalReview_Heading=Agenda-afspraak Aanmaken
+CalReview_Subtitle=Controleer en pas de AI-gegenereerde afspraak aan
+CalReview_EventTitle=Titel
+CalReview_Start=Start
+CalReview_End=Einde
+CalReview_Description=Beschrijving (Optioneel)
+CalReview_Attendees=Deelnemers (Optioneel)
+CalReview_AttendeesHint=Kommagescheiden e-mailadressen
+CalReview_Location=Locatie (Optioneel)
+CalReview_Cancel=Annuleren
+CalReview_CreateBtn=Maak Afspraak
+CalReview_Creating=Aanmaken...
+
+# Inloggen
+Login_Title=AI-Assistent - Inloggen
+Login_Subtitle=Log in met je account
+Login_Email=Email
+Login_Password=Wachtwoord
+Login_Button=Inloggen
+Login_LoggingIn=Bezig met inloggen...
+Login_ForgotPassword=Wachtwoord vergeten?
+Login_NoAccount=Nog geen account? 
+Login_Register=Registreer nu
+Login_VerifyTitle=E-mail nog niet geverifieerd
+Login_VerifyMsg=Controleer je inbox en klik op de verificatielink. Geen e-mail ontvangen?
+Login_ResendVerify=Verificatiemail opnieuw sturen
+Login_Sending=Versturen...
+Login_Sent=✓ Verstuurd!
+Login_ErrEmail=Vul je email adres in
+Login_ErrPassword=Vul je wachtwoord in
+Login_ErrUnknown=Inloggen mislukt. Controleer je gegevens en probeer opnieuw.
+Login_ErrNetwork=Verbindingsfout. Controleer je internetverbinding.
+Login_RateLimitWait=Wacht {0} seconden voor je het opnieuw probeert...
+Login_Or=of
+Login_GoogleButton=Inloggen met Google
+Login_MicrosoftButton=Inloggen met Microsoft
+Login_MicrosoftWaiting=Wachten op Microsoft… voltooi het inloggen in je browser.
+Login_GoogleWaiting=Wachten op Google… voltooi het inloggen in je browser.
+Login_GoogleFailed=Inloggen met Google is mislukt. Probeer het opnieuw.
+Login_GoogleTimeout=Time-out: het inloggen met Google duurde te lang. Probeer het opnieuw.
+Login_GoogleBrowserFailed=Kon je browser niet openen. Probeer het opnieuw.
+
+# Registreren
+Register_Title=AI-Assistent - Registreren
+Register_Subtitle=Maak gratis je account aan.
+Register_Name=Naam
+Register_Email=Email
+Register_Password=Wachtwoord
+Register_ReqTitle=Wachtwoordvereisten:
+Register_ReqLength=Minimaal 12 karakters
+Register_ReqUpper=Hoofdletter (A-Z)
+Register_ReqLower=Kleine letter (a-z)
+Register_ReqDigit=Cijfer (0-9)
+Register_ReqSpecial=Speciaal teken (@$!%*?&amp;)
+Register_Button=Account Aanmaken
+Register_Loading=Account aanmaken…
+Register_GoogleButton=Registreren met Google
+Register_MicrosoftButton=Registreren met Microsoft
+Register_HaveAccount=Al een account?
+Register_Login=Inloggen
+Register_SuccessTitle=Account aangemaakt!
+Register_ErrEmail=Vul je email adres in
+Register_ErrName=Vul je naam in
+Register_ErrPassword=Vul een wachtwoord in
+Register_ErrEmailExists=Dit e-mailadres is al geregistreerd. Log in op je bestaande account of reset je wachtwoord.
+Register_ForgotPwHint=Wachtwoord vergeten?
+Register_RateLimitWait=Wacht {0} seconden voor je het opnieuw probeert...
+
+# Wachtwoord vergeten
+ForgotPw_Title=Wachtwoord Vergeten
+ForgotPw_Step1Sub=Vul je emailadres in. We sturen je een 6-cijferige code om je wachtwoord te resetten.
+ForgotPw_EmailLabel=Email
+ForgotPw_SendCode=Resetcode sturen
+ForgotPw_Sending=Versturen…
+ForgotPw_Step2Header=Code ontvangen?
+ForgotPw_CodeReceived=Voer de code in die je per e-mail hebt ontvangen.
+ForgotPw_NewPassword=Nieuw wachtwoord
+ForgotPw_ConfirmPassword=Wachtwoord bevestigen
+ForgotPw_ReqLength=Minimaal 12 karakters
+ForgotPw_ReqUpper=○ Hoofdletter (A-Z)
+ForgotPw_ReqLower=○ Kleine letter (a-z)
+ForgotPw_ReqDigit=Cijfer (0-9)
+ForgotPw_ReqSpecial=Speciaal teken (@$!%*?&amp;)
+ForgotPw_ResetBtn=Wachtwoord resetten
+ForgotPw_Resetting=Wachtwoord resetten...
+ForgotPw_ToLogin=Naar inloggen
+ForgotPw_SuccessTitle=Wachtwoord ingesteld!
+ForgotPw_SuccessSub=Je kunt nu inloggen met je nieuwe wachtwoord.
+ForgotPw_ErrEmail=Vul je emailadres in.
+ForgotPw_Step2EmailSent=We hebben een 6-cijferige code gestuurd naar:\n{0}
+ForgotPw_ErrCodeRequired=Vul de 6-cijferige code in uit je e-mail.
+ForgotPw_ErrInvalidCode=Onjuiste code. Controleer je e-mail of vraag een nieuwe code aan.
+ForgotPw_ErrCodeExpired=De code is verlopen (1 uur geldig). Ga terug en vraag een nieuwe code aan.
+
+# Auth gedeelde foutmeldingen
+Auth_ErrEmailExists=Dit e-mailadres is al geregistreerd. Log in op je bestaande account of reset je wachtwoord.
+Auth_ErrPasswordWeak=Wachtwoord voldoet niet aan de vereisten. Controleer de checklist.
+Auth_ErrDeviceLimit=Er bestaat al een gratis account op dit apparaat.\n\nJe kunt maar 1 gratis account per apparaat aanmaken. Log in op je bestaande account of upgrade naar Starter.
+Auth_ErrMissingFields=Vul alle velden in.
+Auth_ErrUserNotFound=Account niet gevonden. Controleer je e-mailadres of maak een nieuw account aan.
+Auth_ErrWrongPassword=Onjuist wachtwoord. Probeer opnieuw of klik op 'Wachtwoord vergeten?'.\n\nTip: wachtwoord heeft minimaal 12 tekens, hoofdletter, cijfer en speciaal teken (@$!%*?&).
+Auth_ErrServer=Serverfout. Controleer je internetverbinding en probeer opnieuw.
+Auth_ErrNetwork=Verbindingsfout. Controleer je internetverbinding.
+Auth_ErrPasswordMismatch=Wachtwoorden komen niet overeen.
+Auth_ErrGeneral=Er is een fout opgetreden. Probeer het opnieuw.
+
+# Dashboard — onboarding sectie
+Dashboard_SetupHeader=SETUP VOORTGANG
+Dashboard_SetupSub=Klik een stap voor een rondleiding door de app.
+Dashboard_SetupTitle=Laten we mAIkey klaarzetten.
+Dashboard_SetupProgress=Je bent {0}% op weg.
+Dashboard_Step1_Title=Maak je eerste mAIkey
+Dashboard_Step1_Sub=Kies een toetscombo en wat de AI moet doen.
+Dashboard_Step2_Title=Voeg een schrijfstijl toe
+Dashboard_Step2_Sub=Upload voorbeelden zodat de AI klinkt als jij.
+Dashboard_Step3_Title=Probeer een template
+Dashboard_Step3_Sub=Klaar-voor-gebruik prompts uit onze library.
+Dashboard_Step4_Title=Pin de app aan je taakbalk
+Dashboard_Step4_Sub=Sneltoetsen werken alleen als mAIkey draait.
+Dashboard_TourBtn=Tutorial
+Dashboard_UpgradeBtn=Abonnement wijzigen →
+Dashboard_RefreshTooltip=Abonnementsstatus verversen
+Dashboard_RefreshCooldown=Even geduld, probeer het over enkele seconden opnieuw
+Dashboard_UpgradePlanBtn=Upgrade plan
+Dashboard_News=Nieuws & tips
+Dashboard_HotkeyCount={0} totaal
+Dashboard_WarnAlmost=⚠ Bijna op
+Dashboard_WarnExceeded=⚠ Limiet bereikt
+Dashboard_ResetToday=reset vandaag
+Dashboard_ResetTomorrow=reset morgen
+Dashboard_ResetDays=reset over {0} d.
+Dashboard_EmptyStateBtn=+ Maak je eerste mAIkey
+
+# Instellingen — extra
+Settings_Card_Theme=Thema
+Settings_Theme_Dark=Donker
+Settings_Theme_Light=Licht (Linnen)
+Settings_MaxImages=Max. afbeeldingen
+Settings_MaxImagesSub=Bevestiging vereist boven dit aantal
+Settings_MaxChars=Max. tekens
+Settings_MaxCharsSub=Bevestiging vereist boven dit aantal tekens
+Settings_Card_Tour=Rondleiding
+Settings_TourSub=Start een rondleiding opnieuw om een functie stap voor stap te leren kennen.
+Settings_Tour_Hotkey=mAIkeys
+Settings_Tour_HotkeySub=Maak je eerste mAIkey en leer alle opties kennen
+Settings_Tour_Style=Stijl Library
+Settings_Tour_StyleSub=Leer de AI jouw schrijfstijl aan
+Settings_Tour_Template=Templates
+Settings_Tour_TemplateSub=Gebruik kant-en-klare AI-acties
+Settings_Tour_Pin=App vastmaken aan taakbalk
+Settings_Tour_PinSub=Open mAIkey altijd met één klik
+Settings_Tour_Start=▶  Starten
+
+# Hotkey editor — extra
+HotkeyEditor_TourTooltip=Rondleiding opnieuw starten
+HotkeyEditor_TourLabel=Instructies
+HotkeyEditor_FrozenTitle=Deze mAIkey is bevroren
+HotkeyEditor_FrozenBody=Je abonnement staat minder mAIkeys toe dan je hebt. Upgrade of verwijder een mAIkey om deze weer te activeren.
+HotkeyEditor_KeyComboHint=Klik op het veld en druk een combinatie in (bijv. Ctrl+Shift+A)
+HotkeyEditor_PromptLabel=Wat wil je met de geselecteerde tekst doen?
+HotkeyEditor_PromptHint=Beschrijf eerst wat voor tekst je selecteert (bijv. een e-mail, stukje code of alinea), en daarna wat de AI ermee moet doen.
+HotkeyEditor_NoCombosTitle=Geen combinaties beschikbaar
+HotkeyEditor_NoCombosDesc=Alle mogelijke hotkey combinaties (Ctrl/Alt/Shift + 0-9) zijn al in gebruik.\n\nVerwijder eerst een hotkey of schakel deze uit om een nieuwe te kunnen maken.
+HotkeyEditor_ComboRequired=Toetscombinatie vereist
+HotkeyEditor_ComboRequiredDesc=Stel eerst een toetscombinatie in door te klikken in het veld en een combinatie te drukken (bijvoorbeeld Ctrl+A).
+HotkeyEditor_ImagesUnavailTitle=Afbeeldingen niet beschikbaar
+HotkeyEditor_ImagesUnavailDesc=Afbeeldingen analyseren is beschikbaar vanaf het Starter-abonnement.\n\nDe optie 'Stuur afbeeldingen mee' is uitgeschakeld. Je mAIkey wordt opgeslagen zonder afbeeldingsanalyse.
+HotkeyEditor_ModelUnavailTitle=Model niet beschikbaar
+HotkeyEditor_ModelUnavailDesc='{0}' is niet beschikbaar in het {1}-abonnement.\n\nDit model is ingesteld op GPT-4o Mini. Je mAIkey wordt opgeslagen met GPT-4o Mini.
+HotkeyEditor_AIBuilderApplied=Hotkey configuratie is ingesteld! Vergeet niet om op te slaan.
+HotkeyEditor_AIBuilderError=Fout bij maken van hotkey met AI:
+HotkeyEditor_NoHotkeySelected=Geen hotkey geselecteerd
+HotkeyEditor_NoHotkeySelectedDesc=Selecteer eerst een hotkey om te optimaliseren.
+HotkeyEditor_NoUsageTitle=Geen gebruik voorbeelden
+HotkeyEditor_NoUsageDesc=Er zijn nog geen gebruik voorbeelden voor deze hotkey.\n\nDe AI kan de prompt analyseren zonder voorbeelden, maar met gebruik data is de optimalisatie veel effectiever.\n\nWil je doorgaan zonder voorbeelden?
+HotkeyEditor_OptimizeApplied=Hotkey optimalisatie is toegepast! Vergeet niet om op te slaan.
+HotkeyEditor_OptimizeError=Fout bij optimaliseren van prompt:
+HotkeyEditor_ModifierRequired=Modifier vereist
+HotkeyEditor_ModifierRequiredDesc=Hotkeys moeten minimaal één modifier hebben (Ctrl, Alt, Shift of Win).\n\nDruk een combinatie zoals Ctrl+A of Ctrl+Shift+F1.
+HotkeyEditor_DuplicateTitle=Dubbele hotkey
+HotkeyEditor_DuplicateDesc=Deze hotkey combinatie ({0}) is al in gebruik door '{1}'.\n\nKies een andere combinatie.
+HotkeyEditor_SysShortcutTitle=Mogelijke systeem shortcut
+HotkeyEditor_SysShortcutDesc=Let op: {0} kan een systeem shortcut zijn.\n\nWil je deze combinatie toch gebruiken?
+HotkeyEditor_MainWinNotFound=Kan hoofdvenster niet vinden.
+
+# Tour / onboarding
+Tour_Next=Volgende →
+Tour_Done=Klaar ✓
+Tour_PinDone=Klaar — ik heb het gedaan! ✓
+
+# Tour stappen — hotkey tour
+Tour_Hotkey_1_Title=Stap 1 · Ga naar mAIkeys
+Tour_Hotkey_1_Body=Klik op 'mAIkeys' in de zijbalk om al je mAIkeys te zien en te beheren.
+Tour_Hotkey_2_Title=Stap 2 · Nieuwe mAIkey maken
+Tour_Hotkey_2_Body=Klik op 'Nieuwe mAIkey' onderaan de lijst. Er verschijnt direct een bewerkingsformulier aan de rechterkant.
+Tour_Hotkey_3_Title=Stap 3 · Naam geven
+Tour_Hotkey_3_Body=We hebben een voorbeeld-mAIkey voor je aangemaakt. Zie je de naam bovenaan? Die kun je aanpassen naar wat je zelf wilt.
+Tour_Hotkey_4_Title=Stap 4 · Toetscombinatie kiezen
+Tour_Hotkey_4_Body=Dit is de sneltoets waarmee je de mAIkey activeert. Klik erin en druk de gewenste combinatie in, bijv. Ctrl+1.
+Tour_Hotkey_5_Title=Stap 5 · AI-instructie schrijven
+Tour_Hotkey_5_Body=mAIkey werkt op basis van geselecteerde tekst. Vertel de AI wat voor tekst je wil selecteren (bijv. een mail, of tekst met spelfouten) en wat hij ermee moet doen. Dit voorbeeld controleert spelling en grammatica van de geselecteerde tekst.
+Tour_Hotkey_6_Title=Stap 6 · AI-model kiezen
+Tour_Hotkey_6_Body=Elk model heeft zijn eigen karakter: snellere modellen reageren direct maar zijn wat minder uitgebreid, slimmere modellen denken dieper na maar kosten iets meer tijd. Bij elk model staat een korte omschrijving.
+Tour_Hotkey_7_Title=Stap 7 · Schrijfstijl koppelen
+Tour_Hotkey_7_Body=Optioneel: koppel een schrijfstijlprofiel zodat de AI in jouw toon schrijft. Profielen maak je aan bij Stijlprofielen door een paar eigen teksten toe te voegen. Niet voor elke taak nodig.
+Tour_Hotkey_8_Title=Stap 8 · Maak met AI
+Tour_Hotkey_8_Body=Geen idee hoe je de instructie moet formuleren? Klik op 'Maak met AI', beschrijf wat je wilt en de AI schrijft de prompt voor je.
+Tour_Hotkey_9_Title=Stap 9 · Prompt optimaliseren
+Tour_Hotkey_9_Body=Al een instructie maar niet helemaal tevreden met de output? 'Optimaliseren' analyseert je eerdere gebruik en verbetert de prompt automatisch op basis van wat wel en niet werkte.
+Tour_Hotkey_10_Title=Stap 10 · Output-modus
+Tour_Hotkey_10_Body=Bepaal wat er met het AI-resultaat gebeurt: vervang de geselecteerde tekst, kopieer naar klembord, toon in een venster, of stuur direct naar Jira, GitHub, Slack of Gmail.
+Tour_Hotkey_11_Title=Stap 11 · Vraag om extra context
+Tour_Hotkey_11_Body=Met 'Vraag om extra context' kun je vlak vóór uitvoering nog iets meegeven aan de AI, handig als de instructie soms wat aanvullende info nodig heeft, zoals een naam, datum of toelichting.
+Tour_Hotkey_12_Title=Stap 12 · Afbeeldingen meesturen
+Tour_Hotkey_12_Body=Zet dit aan om afbeeldingen vanuit het klembord mee te sturen naar de AI, zodat hij ook visuele content kan verwerken.
+Tour_Hotkey_13_Title=Stap 13 · Toon invoerveld
+Tour_Hotkey_13_Body=Met 'Toon invoerveld' hoef je geen tekst te selecteren: er verschijnt een tekstvak waarin je zelf typt wat de AI moet verwerken. Handig voor taken als 'Maak een Jira-ticket aan voor...' of 'Stel een e-mail op over...'.
+Tour_Hotkey_14_Title=Stap 14 · AI-parameters
+Tour_Hotkey_14_Body=Wil je fijnere controle? Temperatuur bepaalt hoe creatief de AI reageert, max. tokens begrenst de lengte van het antwoord. Tip: gebruik je een template, dan zijn de parameters daar al optimaal voor ingesteld.
+Tour_Hotkey_15_Title=Stap 15 · Opslaan en klaar!
+Tour_Hotkey_15_Body=Klik op 'Opslaan'. Je mAIkey is actief! Selecteer tekst in elke app en druk de toetscombinatie — mAIkey doet de rest.
+
+# Tour stappen — style tour
+Tour_Style_1_Title=Stap 1 · Ga naar Stijl Library
+Tour_Style_1_Body=Klik op 'Stijl Library' in de zijbalk. Hier maak je schrijfstijlprofielen aan die de AI kan nabootsen — zo schrijft elke mAIkey in jouw eigen toon.
+Tour_Style_2_Title=Stap 2 · Nieuw stijlprofiel aanmaken
+Tour_Style_2_Body=Klik op '+ Nieuwe Stijl'. Je maakt hier een profiel aan met voorbeeldteksten die jij hebt geschreven. De AI leest die voorbeelden en leert hoe jij klinkt — denk aan je e-mailtoon, woordkeuze of zinslengte.
+Tour_Style_3_Title=Stap 3 · Voeg voorbeeldteksten toe
+Tour_Style_3_Body=Plak 2–3 teksten die jij hebt geschreven (e-mails, berichten, rapporten). Hoe meer voorbeelden, hoe beter de AI jouw stijl leert. Koppel het profiel daarna aan een mAIkey via 'Stijl' in de mAIkey-instellingen.
+
+# Tour stappen — stijlprofiel aanmaken (interactief)
+Tour_StyleNew_1_Title=Stap 1 · Nieuwe stijl
+Tour_StyleNew_1_Body=Klik op '+ Nieuwe stijl' om een stijlprofiel aan te maken.
+Tour_StyleNew_2_Title=Stap 2 · Naam
+Tour_StyleNew_2_Body=Geef je stijlprofiel een naam, bijv. 'Professionele e-mail' of 'Informele berichten'. Klik op 'Klaar – ik heb het gedaan!' als je klaar bent.
+Tour_StyleNew_3_Title=Stap 3 · Gebruik
+Tour_StyleNew_3_Body=Beschrijf waarvoor je dit profiel gebruikt, bijv. 'Antwoorden op klantvragen per e-mail'. Klik op 'Klaar – ik heb het gedaan!' als je klaar bent.
+Tour_StyleNew_4_Title=Stap 4 · Voorbeeldteksten
+Tour_StyleNew_4_Body=Voeg minstens 3 voorbeeldteksten toe in jouw eigen schrijfstijl. Klik op '+ Toevoegen' en plak telkens een tekst die jij hebt geschreven. Klik op 'Klaar – ik heb het gedaan!' als je minimaal 3 hebt.
+Tour_StyleNew_5_Title=Stap 5 · Genereer
+Tour_StyleNew_5_Body=Klik op 'Genereer schrijfstijl' — de AI analyseert je voorbeelden en maakt een stijlprofiel. Klik op 'Klaar – ik heb het gedaan!' als het profiel gegenereerd is.
+Tour_StyleNew_6_Title=Stap 6 · Opslaan
+Tour_StyleNew_6_Body=Klaar! Klik op 'Opslaan' om je stijlprofiel te bewaren. Je kunt het daarna koppelen aan een hotkey via het 'Schrijfstijl'-veld in de hotkey-instellingen.
+
+# Tour stappen — stijlprofiel bijwerken (bij limiet)
+Tour_StyleEdit_1_Title=Bestaand profiel bijwerken
+Tour_StyleEdit_1_Body=Je hebt het maximale aantal stijlprofielen bereikt. Selecteer een profiel uit de lijst dat je wil bijwerken, en klik op 'Klaar – ik heb het gedaan!'.
+Tour_StyleEdit_2_Title=Voorbeeldteksten aanpassen
+Tour_StyleEdit_2_Body=Voeg nieuwe voorbeeldteksten toe of pas bestaande aan via '+ Toevoegen'. Klik op 'Klaar – ik heb het gedaan!' als je klaar bent.
+Tour_StyleEdit_3_Title=Opnieuw genereren
+Tour_StyleEdit_3_Body=Klik op 'Genereer schrijfstijl' om het profiel opnieuw te laten maken op basis van de bijgewerkte voorbeelden. Klik op 'Klaar – ik heb het gedaan!' als het profiel gegenereerd is.
+Tour_StyleEdit_4_Title=Opslaan
+Tour_StyleEdit_4_Body=Klik op 'Opslaan' om de wijzigingen te bewaren.
+
+# Tour stappen — template tour
+Tour_Template_1_Title=Stap 1 · Ga naar Templates
+Tour_Template_1_Body=Klik op 'Templates' in de sidebar voor kant-en-klare AI-acties die je direct kan activeren.
+Tour_Template_2_Title=Stap 2 · Activeer een template
+Tour_Template_2_Body=Klik op een template-kaart om hem als hotkey in te stellen. In één klik heb je een werkende AI-hotkey!
+
+# Tour stappen — pin tour
+Tour_Pin_Title=Pin mAIkey aan de taakbalk
+Tour_Pin_Body=Rechtsklik op het mAIkey-icoon in de Windows-taakbalk → kies 'Vastmaken aan taakbalk'. Zo open je de app altijd met één klik.
+
+# Systeemvak & meldingen
+Tray_Open=Open
+Tray_Exit=Afsluiten
+Tray_Title=mAIkey
+Notif_Copied=✓ Gekopieerd naar clipboard!
+Notif_Replaced=✓ Tekst vervangen!
+Notif_WindowShown=✓ Resultaat getoond in venster!
+
+# Dialogen
+Dialog_SessionExpired_Title=Sessie verlopen
+Dialog_SessionExpired_Msg=Je sessie is verlopen. Log opnieuw in om door te gaan.
+Dialog_Logout_Title=Afsluiten
+Dialog_Logout_Msg=Weet je zeker dat je de applicatie wilt afsluiten?
+Lang_ChangeRestartTitle=Taal gewijzigd
+Lang_ChangeRestart=De taal wordt toegepast na het herstarten van de app.
+
+# Foutmeldingen
+Error_NoContent=Geen content geselecteerd. Selecteer eerst tekst of een afbeelding voordat je de hotkey gebruikt.
+Error_ImagesDisabled=Afbeelding gevonden, maar 'Stuur afbeeldingen mee naar AI' staat uit voor deze sneltoets. Schakel dit in via de sneltoets-instellingen.
+Error_HotkeyRegister=Fout bij registreren hotkey {0}: {1}
+App_GlobalError=Er is een fout opgetreden:
+App_GlobalErrorTitle=Onverwachte fout
+App_GlobalErrorSub=Check logs/crash.log voor details.
+
+# Netwerk- en verbindingsfouten
+Error_NoInternet_Title=Geen internetverbinding
+Error_NoInternet_Body=Controleer je internetverbinding en probeer het opnieuw.
+Error_Timeout_Title=Verzoek duurde te lang
+Error_Timeout_Body=Het AI-model reageerde niet op tijd. Probeer het opnieuw, of ga naar Instellingen om een ander model te kiezen.
+
+# Model kolomheaders
+Model_ColSpeed=SNELHEID
+Model_ColIntelligence=SLIMHEID
+Model_ColUsage=VERBRUIK
+
+# Model picker dialog
+ModelPicker_Header=TIJDELIJKE FOUT
+ModelPicker_Subtitle=Het model '{0}' is tijdelijk niet beschikbaar.
+ModelPicker_Body=Kies een ander model om het opnieuw te proberen.
+ModelPicker_Cancel=Annuleren
+ModelPicker_Retry=Probeer opnieuw
+
+# AI-model fouten
+Error_ModelUnavailable_Title=AI-model tijdelijk niet beschikbaar
+Error_ModelUnavailable_Body=Het geselecteerde AI-model is momenteel niet beschikbaar.\n\nTip: Ga naar Instellingen en kies een ander AI-model om toch gebruik te kunnen maken van mAIkey.
+Error_ModelBlocked_Title=Model niet beschikbaar
+Error_ModelBlocked_Body=Dit AI-model is niet beschikbaar in je huidige abonnement.\n\nTip: Ga naar Instellingen om een model te kiezen dat beschikbaar is voor jouw abonnement, of upgrade voor toegang tot meer modellen.
+Error_FallbackUsed_Body=Het geselecteerde model ({0}) was tijdelijk niet beschikbaar. Je verzoek is verwerkt met {1} als alternatief.
+
+# Limieten (402)
+Error_403_CloudSync=Cloud sync is beschikbaar vanaf het Starter-abonnement.\n\nUpgrade om al je mAIkeys gesynchroniseerd te houden.
+Error_403_Integrations=Integraties (Jira, Slack, Gmail...) zijn beschikbaar vanaf het Plus-abonnement.\n\nUpgrade voor volledige integratiemogelijkheden.
+Error_403_ImageAnalysis=Afbeeldingen analyseren is beschikbaar vanaf het Starter-abonnement.\n\nUpgrade om afbeeldingen mee te sturen.
+Error_SessionExpired=Je sessie is verlopen. Log opnieuw in om door te gaan.
+Error_402_DailyReset=Je dagelijkse limiet reset op {0}.
+Error_402_DailyResetTomorrow=Je dagelijkse limiet reset morgen.
+Error_402_DailyCap=Je hebt je dagelijkse limiet bereikt.\n\n{0}\n\nOf upgrade naar een hoger abonnement voor een hogere daglimiet.
+Error_402_MonthlyDays=over {0} dag(en)
+Error_402_MonthlyResetOn=Je limiet reset op {0} ({1}).
+Error_402_MonthlyResetSoon=Je limiet reset binnenkort.
+Error_402_MonthlyUsed=Je hebt deze maand al {0} van je {1} mAIkeys gebruikt.\n\n{2}\n\nUpgrade naar Starter voor meer mAIkeys per maand.
+Error_402_SubExpired=Je abonnement is verlopen.\n\nVernieuw je abonnement om mAIkey te blijven gebruiken.
+Error_402_Default=Je hebt je maandlimiet bereikt.\n\n{0}\n\nUpgrade naar een hoger abonnement voor meer mAIkeys.
+Error_402_Fallback=Je hebt je limiet bereikt. Upgrade voor meer mAIkeys.
+
+# Serverbelasting (429)
+Error_429_DayLimit=Je hebt vandaag {0} van je {1} mAIkeys gebruikt — je daglimiet is bereikt.\n\nJe kunt morgen weer mAIkeys gebruiken.\n\nUpgrade naar Starter voor meer mAIkeys per dag.
+Error_429_DayLimitSimple=Je daglimiet is bereikt. Je kunt morgen weer mAIkeys gebruiken.
+Error_429_ServerBusy=mAIkey verwerkt op dit moment veel verzoeken. Probeer het over een paar seconden opnieuw.
+
+# Gesprek (chat)
+Error_ChatFailed_Title=Fout in gesprek
+Error_ChatFailed_Body=Er is iets misgegaan tijdens het gesprek. Probeer het opnieuw.
+
+# Integraties
+Error_IntegrationFailed_Body=Er is iets misgegaan. Controleer je integratie-instellingen en probeer opnieuw. Als het probleem aanhoudt, controleer dan je internetverbinding.
+Error_Integration_NotConfig_Jira=Jira integratie niet gevonden. Configureer eerst je Jira integratie in het Integraties menu.
+Error_Integration_NotConfig_GitHub=GitHub integratie niet geconfigureerd. Verbind eerst je GitHub-account in het Integraties menu.
+Error_Integration_NotConfig_Slack=Slack integratie niet geconfigureerd. Verbind eerst je Slack-webhook in het Integraties menu.
+Error_Integration_NotConfig_Teams=Teams integratie niet geconfigureerd. Verbind eerst je Teams-webhook in het Integraties menu.
+Error_Integration_NotConfig_Zapier=Zapier/Make integratie niet geconfigureerd. Verbind eerst je webhook in het Integraties menu.
+Error_Integration_NotConfig_Gmail=Gmail integratie niet geconfigureerd. Verbind eerst je Google-account in het Integraties menu.
+Error_Integration_NotConfig_Calendar=Google Agenda integratie niet geconfigureerd. Verbind eerst je Google-account in het Integraties menu.
+Error_Integration_DraftFailed=Kon geen concept genereren. Probeer opnieuw.
+Error_Integration_SendFailed=Kon het bericht niet versturen. Probeer opnieuw.
+Error_Integration_Unsupported=Dit integratietype wordt nog niet ondersteund.
+
+# Algemene API- en serverfouten
+Error_General_Title=Er is iets misgegaan
+Error_General_Body=mAIkey kon het verzoek niet verwerken. Probeer het opnieuw.
+
+# Gedeelde knoppen
+Common_Cancel=Annuleren
+Common_Save=Opslaan
+Common_Send=Verstuur
+Common_Close=Sluiten
+Common_Add=Toevoegen
+Common_Edit=Bewerken
+Common_Delete=Verwijderen
+Common_Skip=Overslaan
+Common_Success=Succes
+Common_Error=Fout
+Common_Validation=Validatie
+
+# AI Hotkey Builder venster UI
+AIBuilder_WindowTitle=Hotkey maken met AI
+AIBuilder_Header=AI MAIKEY BUILDER
+AIBuilder_Subtitle=Hotkey maken met AI
+AIBuilder_Desc=Beschrijf wat je hotkey moet doen — de AI helpt je met de beste instellingen.
+AIBuilder_RefineHint=Je kunt ook gewoon verder typen om het voorstel te verfijnen.
+AIBuilder_Error=Er ging iets mis: {0}
+AIBuilder_NoResponse=Ik kon geen antwoord genereren. Probeer het opnieuw.
+
+# AI Prompt Optimizer venster UI
+AIOptimizer_WindowTitle=Prompt optimaliseren met AI
+AIOptimizer_Header=PROMPT OPTIMIZER
+AIOptimizer_Subtitle=Prompt optimaliseren met AI
+AIOptimizer_Desc=De AI analyseert je gebruik en stelt verbeteringen voor.
+AIOptimizer_FeedbackHint=Vertel wat er niet werkt of wat je anders wil. Je kan dit ook leeg laten en de AI laten analyseren.
+AIOptimizer_Placeholder=Bijv: de output is te lang, prompt geeft niet genoeg detail, moet formeler zijn…
+AIOptimizer_Error=Er ging iets mis: {0}
+AIOptimizer_NoResponse=⚠️ AI gaf geen antwoord. Probeer het opnieuw.
+AIOptimizer_ConfigError=⚠️ Er is een probleem met de configuratie. Probeer opnieuw.
+
+# Feedback / resultaatvenster
+FeedbackWindow_Title=AI Resultaat
+FeedbackWindow_Header=AI RESULTAAT
+FeedbackWindow_Subtitle=Resultaat
+FeedbackWindow_Desc=Bekijk het resultaat. Je kunt verdere aanpassingen vragen of kopiëren als het goed is.
+FeedbackWindow_CopyClose=Kopieer en sluit
+
+# E-mailbestanden preview
+EmailFiles_Title=E-mailbestanden preview
+EmailFiles_Header=E-MAILS · IMPORT
+EmailFiles_Subtitle=E-mailbestanden preview
+EmailFiles_ParsedOf=bestanden geïmporteerd, waarvan
+EmailFiles_ParsedOk=succesvol geparsed
+EmailFiles_ParsedEmails=Geparsede e-mails
+EmailFiles_NoParse=Geen e-mails kunnen parsen
+EmailFiles_NoParseHint=Zorg dat de bestanden .eml of .msg formaat hebben.
+EmailFiles_Import=Importeer
+
+# Extra instructies venster
+InputPrompt_Title=Extra instructies
+InputPrompt_Header=EXTRA INSTRUCTIES
+InputPrompt_Question=Wat moet de AI met de selectie doen?
+InputPrompt_Placeholder=Typ je extra instructies. Druk Esc om te annuleren.
+InputPrompt_EmptyHint=Je hebt nog niets ingevuld.\n\nKlik op 'Overslaan' als je geen extra context wilt toevoegen, of typ eerst instructies voordat je op 'Verstuur' klikt.
+
+# Tour overlay
+Tour_Close=Tour sluiten (ESC)
+Tour_Prev=← Vorige
+
+# Jira configuratievenster
+JiraConfig_Title=Jira Integratie Configureren
+JiraConfig_Header=JIRA · CONFIGURATIE
+JiraConfig_Subtitle=Jira-integratie instellen
+JiraConfig_Desc=Verbind je Jira-account om tickets aan te maken via hotkeys.
+JiraConfig_UrlLabel=Jira URL
+JiraConfig_UrlPlaceholder=Bijvoorbeeld: yourcompany.atlassian.net
+JiraConfig_EmailLabel=E-mail
+JiraConfig_TokenLabel=API Token
+JiraConfig_TokenHelp=Hoe krijg ik een API token?
+JiraConfig_TestBtn=Test verbinding
+JiraConfig_DefaultProject=Standaard project
+JiraConfig_ProjectHint=Selecteer een project voor nieuwe tickets
+JiraConfig_DefaultType=Standaard issue type
+JiraConfig_TypeHint=Standaard type voor nieuwe tickets
+JiraConfig_CustomPrompt=Custom AI-prompt (optioneel)
+JiraConfig_PromptHint=Laat leeg om de standaard prompt te gebruiken. Pas aan voor specifieke ticket formats of requirements.
+
+# Jira ticket review venster
+JiraReview_Header=JIRA · TICKET REVIEW
+JiraReview_Title=Ticket aanmaken
+JiraReview_Subtitle=Controleer en pas de ticket-details aan voor je deze aanmaakt.
+JiraReview_Summary=Summary (Titel)
+JiraReview_Description=Description (Beschrijving)
+JiraReview_Project=Project
+JiraReview_IssueType=Issue Type
+JiraReview_Priority=Priority
+JiraReview_Assignee=Assignee (optioneel)
+JiraReview_AssigneeHint=Selecteer een persoon om toe te wijzen aan dit ticket
+JiraReview_Labels=Labels (komma-gescheiden)
+JiraReview_LabelsPlaceholder=Bijvoorbeeld: frontend, bug, urgent
+JiraReview_AiNote=Deze ticket is gegenereerd door AI. Controleer de details en pas aan indien nodig voordat je deze aanmaakt.
+JiraReview_Chat=Chat met AI
+JiraReview_Create=Maak ticket
+
+# Content limiet bevestigingsvenster
+ContentLimit_Title=Veel content gedetecteerd
+ContentLimit_Header=WAARSCHUWING
+ContentLimit_Subtitle=Veel content gedetecteerd
+ContentLimit_Desc=Je staat op het punt om meer content te sturen dan het ingestelde limiet.
+ContentLimit_Images=Afbeeldingen
+ContentLimit_Chars=Tekens
+ContentLimit_Continue=Doorgaan
+
+# Stijlprofiel generator venster
+StyleGen_Title=Genereer style profile met AI
+StyleGen_Header=STIJL PROFIEL GENERATOR
+StyleGen_Desc=Plak 3-5 voorbeelden van jouw teksten — de AI analyseert je schrijfstijl.
+StyleGen_TipsHeader=Tips voor het beste resultaat
+StyleGen_ExamplesHeader=Jouw voorbeelden
+StyleGen_AddExample=Voeg voorbeeld toe
+StyleGen_ExampleLabel=Voorbeeld
+StyleGen_EditBtn=Bewerk
+StyleGen_DeleteBtn=Verwijder
+StyleGen_NoExamples=Nog geen voorbeelden
+StyleGen_NoExamplesSub=Voeg voorbeelden toe van jouw teksten — minimaal 3 aanbevolen.
+StyleGen_Analyzing=AI analyseert je voorbeelden…
+StyleGen_GenerateBtn=Genereer style profile
+StyleGen_TooFewTitle=Te weinig voorbeelden
+StyleGen_TooFewDesc=Voeg minimaal 3 voorbeelden toe voor een goede analyse.
+StyleGen_FailedTitle=Generatie mislukt
+StyleGen_FailedDesc=AI kon geen style profile genereren. Probeer andere voorbeelden.
+StyleGen_ErrorDesc=Fout bij genereren style profile:
+
+# Stijlprofiel voorbeeld invoervenster
+StyleExample_Title=Voorbeeldtekst toevoegen
+StyleExample_TitleEdit=Voorbeeldtekst bewerken
+StyleExample_Header=STIJL · VOORBEELD
+StyleExample_Subtitle=Voorbeeldtekst toevoegen
+StyleExample_WhatHeader=Wat kun je toevoegen?
+StyleExample_YourText=Jouw voorbeeldtekst
+StyleExample_AddBtn=Toevoegen
+StyleExample_ValidationTitle=Validatie
+StyleExample_ValidationEmpty=Vul een voorbeeldtekst in.
+StyleExample_TooShortTitle=Te kort
+StyleExample_TooShortDesc=Voorbeeldtekst is te kort. Voeg minimaal ~50 karakters toe voor een goede analyse.
+
+# Template instellen dialoog
+TemplateSetup_Title=Template instellen
+TemplateSetup_Header=TEMPLATE
+TemplateSetup_TitleFmt=Stel je {0} in
+TemplateSetup_Desc=Vul je gegevens in. Deze worden automatisch meegestuurd bij elke uitvoering.
+TemplateSetup_AddBtn=Toevoegen
+
+# E-mail template setup dialoog
+EmailSetup_Desc=Vul je gegevens in en kies een schrijfstijl voor de beste resultaten.
+EmailSetup_NaamLabel=Jouw naam
+EmailSetup_NaamPlaceholder=Jan de Vries
+EmailSetup_StyleLabel=Schrijfstijl
+EmailSetup_StyleDesc=Een stijlprofiel zorgt voor consistent en persoonlijk klinkende e-mails.
+EmailSetup_NoStyle=Geen stijlprofiel
+EmailSetup_StyleWarning=⚠️ Zonder stijlprofiel klinkt de e-mail minder persoonlijk. Je kunt dit later altijd instellen via Stijl Library.
+EmailSetup_SetupStyle=Stel stijlprofiel in
+
+# Integraties verbinden/loskoppelen
+Integrations_Connect=Verbinden
+Integrations_Disconnect=Loskoppelen
+Integrations_JiraDesc=Maak tickets direct vanuit geselecteerde tekst.
+Integrations_GHDesc=Maak issues vanuit geselecteerde tekst.
+Integrations_SlackDesc=Stuur berichten en updates direct naar Slack.
+Integrations_TeamsDesc=Stuur berichten en updates direct naar Teams.
+Integrations_ZapierDesc=Verbind mAIkey met 5000+ apps via webhooks.
+Integrations_WebhookConnected=Webhook verbonden
+Integrations_Unavailable=Niet beschikbaar
+Integrations_UnavailableTooltip=Integraties zijn beschikbaar vanaf het Plus-abonnement.
+Integrations_UpgradeTitle=Integraties niet beschikbaar
+Integrations_UpgradeDesc=Integraties (Jira, Slack, Gmail...) zijn beschikbaar vanaf het Plus-abonnement.\n\nUpgrade voor volledige integratiemogelijkheden.
+
+# Stijlvoorbeeld invoervenster
+TextExample_WindowTitle=Stijlvoorbeeld toevoegen
+TextExample_WindowTitle_Edit=Stijlvoorbeeld bewerken
+TextExample_Subtitle=SCHRIJFSTIJL · VOORBEELD
+TextExample_Label=Voorbeeldtekst in jouw stijl
+TextExample_Desc1=Plak een tekst die representatief is voor de stijl waarin je wilt schrijven. De AI zal de stijl analyseren en imiteren.
+TextExample_Desc2=Bijvoorbeeld: een eerdere e-mail, rapport of blogpost.
+TextExample_BtnCancel=Annuleren
+TextExample_BtnSave=Opslaan
+TextExample_ValidationTitle=Voorbeeldtekst vereist
+TextExample_ValidationMsg=Voer een voorbeeldtekst in.\n\nDit moet een tekst zijn in de stijl waarin je wilt dat de AI schrijft.
+TextExample_TooShortTitle=Tekst te kort
+TextExample_TooShortMsg=De voorbeeldtekst is te kort.\n\nVoer minimaal 50 karakters in zodat de AI de stijl goed kan analyseren.
+
+# Laad-indicatoren (MainWindow)
+Loading_Working=AI aan het werk...
+Loading_FetchingContent=Content ophalen...
+Loading_Uploading=Uploaden naar cloud ({0}/{1})...
+Loading_Retrying=Opnieuw proberen...
+Loading_JiraTicket=Jira ticket genereren...
+Loading_GitHubIssue=GitHub issue genereren...
+Loading_SlackMessage=Slack bericht genereren...
+Loading_TeamsMessage=Teams bericht genereren...
+Loading_ZapierPayload=Webhook data genereren...
+Loading_Email=E-mail genereren...
+Loading_Calendar=Agenda-afspraak genereren...
+
+# Systeemvak-meldingen (MainWindow)
+Tray_JiraCreated=Jira ticket {0} aangemaakt!
+Tray_JiraCreatedUrl=Jira ticket {0} aangemaakt! URL gekopieerd naar klembord.
+Tray_GitHubCreated=GitHub issue aangemaakt!
+Tray_GitHubCreatedNum=GitHub issue #{0} aangemaakt!
+Tray_SlackSent=Slack bericht verstuurd!
+Tray_TeamsSent=Teams bericht verstuurd!
+Tray_ZapierSent=Data verstuurd naar webhook!
+Tray_EmailSentOrDraft=E-mail verstuurd of opgeslagen als concept!
+Tray_EmailSent=E-mail verstuurd!
+Tray_CalendarCreated=Agenda-afspraak aangemaakt!
+
+# Integratie-dialogen
+Integrations_ErrorTitle=Integraties
+Integrations_DbNotConfigured=De integraties-database is nog niet geconfigureerd. Neem contact op met support.
+Integrations_PlusRequired=Integraties zijn beschikbaar vanaf het Plus-abonnement.
+Integrations_TempUnavailable=Integraties tijdelijk niet beschikbaar:
+Integrations_RequestTitle=Integratie aanvragen
+Integrations_RequestDesc=Stuur een e-mail naar support@maikey.nl met de naam van de integratie die je wilt.\n\nWe voegen populaire integraties toe op basis van aanvragen.
+Integrations_LoadError=Fout bij laden integraties:
+Integrations_ConfirmDeleteTitle=Bevestig verwijdering
+Integrations_JiraConfigured=Jira integratie succesvol geconfigureerd!\n\nJe kan nu Jira tickets maken via hotkeys.
+Integrations_JiraDeleteConfirm=Weet je zeker dat je de Jira integratie wilt verwijderen?\n\nAlle configuratie zal verloren gaan.
+Integrations_JiraDeleted=Jira integratie succesvol verwijderd
+Integrations_GitHubConfigured=GitHub integratie succesvol geconfigureerd!\n\nJe kan nu GitHub issues maken via hotkeys.
+Integrations_GitHubDeleteConfirm=Weet je zeker dat je de GitHub integratie wilt verwijderen?\n\nAlle configuratie zal verloren gaan.
+Integrations_GitHubDeleted=GitHub integratie succesvol verwijderd
+Integrations_SlackConfigured=Slack integratie succesvol geconfigureerd!\n\nJe kan nu berichten sturen via hotkeys.
+Integrations_SlackDeleteConfirm=Weet je zeker dat je de Slack integratie wilt verwijderen?\n\nAlle configuratie zal verloren gaan.
+Integrations_SlackDeleted=Slack integratie succesvol verwijderd
+Integrations_TeamsConfigured=Teams integratie succesvol geconfigureerd!\n\nJe kan nu berichten sturen via hotkeys.
+Integrations_TeamsDeleteConfirm=Weet je zeker dat je de Teams integratie wilt verwijderen?\n\nAlle configuratie zal verloren gaan.
+Integrations_TeamsDeleted=Teams integratie succesvol verwijderd
+Integrations_ZapierConfigured=Webhook-integratie succesvol geconfigureerd!\n\nJe kan nu data doorsturen via hotkeys.
+Integrations_ZapierDeleteConfirm=Weet je zeker dat je de Zapier/Make integratie wilt verwijderen?\n\nAlle configuratie zal verloren gaan.
+Integrations_ZapierDeleted=Zapier/Make integratie succesvol verwijderd
+Integrations_GmailDesc=Verstuur AI-gegenereerde e-mails via Gmail.
+Integrations_GmailConfigured=Gmail integratie succesvol geconfigureerd!\n\nJe kan nu e-mails versturen via hotkeys.
+Integrations_GmailDeleteConfirm=Weet je zeker dat je de Gmail integratie wilt verwijderen?\n\nJe Google-account wordt losgekoppeld.
+Integrations_GmailDeleted=Gmail integratie succesvol verwijderd
+Integrations_CalendarDesc=Maak agenda-afspraken vanuit geselecteerde tekst.
+Integrations_CalendarConfigured=Google Calendar integratie succesvol geconfigureerd!\n\nJe kan nu afspraken aanmaken via hotkeys.
+Integrations_CalendarDeleteConfirm=Weet je zeker dat je de Google Calendar integratie wilt verwijderen?\n\nJe Google-account wordt losgekoppeld.
+Integrations_CalendarDeleted=Google Calendar integratie succesvol verwijderd
+Integrations_DeleteFailed=Kon integratie niet verwijderen. Probeer opnieuw.
+Integrations_DeleteError=Fout bij verwijderen integratie:
+
+# HotkeyEditor uitvoermodi
+OutputMode_Window=Toon in nieuw venster (met preview)
+OutputMode_Replace=Vervang geselecteerde tekst direct
+OutputMode_Append=Plak na selectie
+OutputMode_Clipboard=Kopieer naar klembord
+OutputMode_JiraReview=Jira – Met review venster
+OutputMode_JiraDirect=Jira – Direct aanmaken
+OutputMode_GitHubReview=GitHub – Met review venster
+OutputMode_GitHubDirect=GitHub – Direct aanmaken
+OutputMode_SlackReview=Slack – Met preview
+OutputMode_SlackDirect=Slack – Direct versturen
+OutputMode_GmailReview=Gmail – Met review venster
+OutputMode_GmailDirect=Gmail – Direct versturen
+OutputMode_CalendarReview=Google Agenda – Met review
+OutputMode_CalendarDirect=Google Agenda – Direct aanmaken
+
+# HotkeyEditor labels / panelen
+Editor_OutputModeLabel=Resultaat weergeven als
+Editor_FrozenBadge=Bevroren
+Editor_FrozenBanner=Deze mAIkey is bevroren
+Editor_FrozenDesc=Je abonnement staat minder mAIkeys toe dan je hebt. Upgrade of verwijder een mAIkey om deze weer te activeren.
+Editor_KeyComboLabel=Toetscombinatie
+Editor_KeyComboHint=Klik op het veld en druk een combinatie in (bijv. Ctrl+Shift+A)
+Editor_PromptLabel=Wat wil je met de geselecteerde tekst doen?
+Editor_PromptHint=Beschrijf eerst wat voor tekst je selecteert (bijv. een e-mail, stukje code of alinea), en daarna wat de AI ermee moet doen.
+Editor_StyleLabel=Schrijfstijl (optioneel)
+Editor_GHSectionHeader=GitHub — Instellingen
+Editor_GHRepoHint=Repository (optioneel, overschrijft integratie-instelling)
+Editor_GHLabelsHint=Labels (optioneel, kommagescheiden)
+Editor_SlackSectionHeader=Slack — Instellingen
+Editor_SlackInfo=Berichten worden verstuurd naar het geconfigureerde Slack-kanaal uit de integratie-instellingen.
+Editor_AskContext=Vraag extra context bij uitvoering
+Editor_IncludeImages=Stuur clipboard afbeeldingen mee naar AI
+Editor_UseScreenCapture=Screenshot-modus: selecteer een schermgebied
+Editor_UseInputField=Toon invoerveld in plaats van geselecteerde tekst
+Editor_CustomParams=Gebruik aangepaste AI parameters
+Editor_BehaviourHeader=Gedrag
+Editor_NewHotkeyBtn=+ Nieuwe hotkey
+Editor_BackBtn=← Hotkeys
+Editor_TourBtn=Instructies
+Editor_DeleteBtn=Verwijder
+Editor_SaveBtn=Opslaan
+Editor_EmptyTitle=Je hebt nog geen mAIkeys.
+Editor_EmptySubtitle=Klik op 'Nieuwe mAIkey' om te beginnen.
+Editor_AICreateBtn=Maak nieuwe hotkey met AI
+Editor_AIOptimizeBtn=Optimaliseer prompt
+Editor_PrefixText=De geselecteerde tekst is
+Editor_LangNL=Nederlands
+
+
+# Jira config — status / acties
+JiraConfig_FillRequired=Vul alle velden in
+JiraConfig_Testing=Testen...
+JiraConfig_TestOk=✅ Verbinding succesvol!
+JiraConfig_TestFail=❌ Verbinding mislukt. Controleer je gegevens.
+JiraConfig_TestError=❌ Fout: {0}
+JiraConfig_ProjectsLoadError=Kan projecten niet laden: {0}
+JiraConfig_TypesLoadError=Kan issue types niet laden: {0}
+JiraConfig_ConnectionRequired=Verbinding vereist
+JiraConfig_ConnectionRequiredDesc=Test eerst de verbinding voordat je opslaat.
+JiraConfig_Saving=Opslaan...
+JiraConfig_SaveOk=Jira integratie succesvol opgeslagen!
+JiraConfig_SaveFail=Kon integratie niet opslaan. Probeer opnieuw.
+JiraConfig_SaveError=Fout bij opslaan: {0}
+JiraConfig_AlreadyConnected=✅ Verbonden — API token blijft behouden als je deze leeg laat.
+
+# Jira ticket review — status / acties
+JiraReview_CharCount={0} / 80 karakters
+JiraReview_SummaryRequired=Summary is verplicht
+JiraReview_SelectProject=Selecteer een project
+JiraReview_SelectIssueType=Selecteer een issue type
+JiraReview_Creating=Aanmaken...
+JiraReview_CreateOk=✅ Ticket {0} succesvol aangemaakt!\n\nURL gekopieerd naar clipboard:\n{1}
+JiraReview_CreateFail=Kon ticket niet aanmaken. Probeer opnieuw.
+JiraReview_CreateError=Fout bij aanmaken ticket:\n{0}\n\nType: {1}
+JiraReview_Unassigned=(Niet toegewezen)
+JiraReview_ChatWip=Chat functionaliteit wordt binnenkort toegevoegd.\n\nJe vraag: {0}
+
+# GitHub config — status / acties
+GitHubConfig_FillToken=Vul een Personal Access Token in
+GitHubConfig_Testing=Testen...
+GitHubConfig_TestOk=✅ Verbinding succesvol!
+GitHubConfig_TestFail=❌ Verbinding mislukt. Controleer je token.
+GitHubConfig_TestError=❌ Fout: {0}
+GitHubConfig_TestBtnReset=Test verbinding
+GitHubConfig_ConnectedNoRepos=✅ Verbonden, maar geen repositories gevonden.
+GitHubConfig_ReposLoadError=Kan repositories niet laden: {0}
+GitHubConfig_ConnectionRequired=Verbinding vereist
+GitHubConfig_ConnectionRequiredDesc=Test eerst de verbinding voordat je opslaat.
+GitHubConfig_Saving=Opslaan...
+GitHubConfig_SaveOk=GitHub integratie succesvol opgeslagen!
+GitHubConfig_SaveFail=Kon integratie niet opslaan. Probeer opnieuw.
+GitHubConfig_SaveError=Fout bij opslaan: {0}
+GitHubConfig_AlreadyConnected=✅ Verbonden — token blijft behouden als je deze leeg laat.
+
+# GitHub issue review — status / acties
+GitHubReview_TitleRequired=Titel is verplicht.
+GitHubReview_Creating=Aanmaken...
+GitHubReview_CreateTitle=Issue aangemaakt
+GitHubReview_CreateOk=✅ Issue #{0} aangemaakt!\n\n{1}\n\nURL gekopieerd naar klembord.
+GitHubReview_CreateFail=Kon issue niet aanmaken. Probeer opnieuw.
+GitHubReview_CreateError=Fout bij aanmaken issue:\n{0}
+GitHubReview_CreateBtn=Maak Issue
+
+# Slack config — status / acties
+SlackConfig_FillWebhook=Vul een webhook URL in
+SlackConfig_Testing=Testen...
+SlackConfig_TestOk=✅ Testbericht verstuurd! Controleer je Slack workspace.
+SlackConfig_TestFail=❌ Verbinding mislukt. Controleer de webhook URL.
+SlackConfig_TestError=❌ Fout: {0}
+SlackConfig_TestBtnReset=Test verbinding (stuurt testbericht)
+SlackConfig_ConnectionRequired=Verbinding vereist
+SlackConfig_ConnectionRequiredDesc=Test eerst de verbinding voordat je opslaat.
+SlackConfig_Saving=Opslaan...
+SlackConfig_SaveOk=Slack integratie succesvol opgeslagen!
+SlackConfig_SaveFail=Kon integratie niet opslaan. Probeer opnieuw.
+SlackConfig_SaveError=Fout bij opslaan: {0}
+SlackConfig_AlreadyConnected=✅ Verbonden — webhook URL blijft behouden als je deze leeg laat.
+
+# Slack bericht review — status / acties
+SlackReview_ChannelSuggestion=AI suggereert kanaal: {0}
+SlackReview_MessageRequired=Bericht mag niet leeg zijn.
+SlackReview_Sending=Versturen...
+SlackReview_SendOk=✅ Bericht verstuurd naar Slack!
+SlackReview_SendFail=Kon bericht niet versturen. Probeer opnieuw.
+SlackReview_SendError=Fout bij versturen:\n{0}
+SlackReview_SendBtn=Verstuur naar Slack
+
+# Microsoft Teams config — status / acties
+TeamsConfig_FillWebhook=Vul een webhook URL in
+TeamsConfig_Testing=Testen...
+TeamsConfig_TestOk=✅ Testbericht verstuurd! Controleer je Teams-kanaal.
+TeamsConfig_TestFail=❌ Verbinding mislukt. Controleer de webhook URL.
+TeamsConfig_TestError=❌ Fout: {0}
+TeamsConfig_TestBtnReset=Test verbinding (stuurt testbericht)
+TeamsConfig_ConnectionRequired=Verbinding vereist
+TeamsConfig_ConnectionRequiredDesc=Test eerst de verbinding voordat je opslaat.
+TeamsConfig_Saving=Opslaan...
+TeamsConfig_SaveOk=Teams integratie succesvol opgeslagen!
+TeamsConfig_SaveFail=Kon integratie niet opslaan. Probeer opnieuw.
+TeamsConfig_SaveError=Fout bij opslaan: {0}
+TeamsConfig_AlreadyConnected=✅ Verbonden — webhook URL blijft behouden als je deze leeg laat.
+
+# Teams bericht review — status / acties
+TeamsReview_ChannelSuggestion=AI suggereert kanaal: {0}
+TeamsReview_MessageRequired=Bericht mag niet leeg zijn.
+TeamsReview_Sending=Versturen...
+TeamsReview_SendOk=✅ Bericht verstuurd naar Teams!
+TeamsReview_SendFail=Kon bericht niet versturen. Probeer opnieuw.
+TeamsReview_SendError=Fout bij versturen:\n{0}
+TeamsReview_SendBtn=Verstuur naar Teams
+
+# Zapier/Make config — status / acties
+ZapierConfig_FillWebhook=Vul een webhook URL in
+ZapierConfig_Testing=Testen...
+ZapierConfig_TestOk=✅ Webhook bereikbaar! Test-payload verstuurd.
+ZapierConfig_TestFail=❌ Webhook niet bereikbaar. Controleer de URL.
+ZapierConfig_TestError=❌ Fout: {0}
+ZapierConfig_TestBtnReset=Test webhook (stuurt test-payload)
+ZapierConfig_ConnectionRequired=Verbinding vereist
+ZapierConfig_ConnectionRequiredDesc=Test eerst de webhook voordat je opslaat.
+ZapierConfig_Saving=Opslaan...
+ZapierConfig_SaveOk=Webhook-integratie succesvol opgeslagen!
+ZapierConfig_SaveFail=Kon integratie niet opslaan. Probeer opnieuw.
+ZapierConfig_SaveError=Fout bij opslaan: {0}
+ZapierConfig_AlreadyConnected=✅ Verbonden — webhook URL blijft behouden als je deze leeg laat.
+
+# Zapier/Make data review — status / acties
+ZapierReview_PayloadRequired=Payload mag niet leeg zijn.
+ZapierReview_InvalidJson=Ongeldige JSON. Controleer de opmaak.
+ZapierReview_Sending=Versturen...
+ZapierReview_SendOk=✅ Data verstuurd naar webhook!
+ZapierReview_SendFail=Kon data niet versturen. Probeer opnieuw.
+ZapierReview_SendError=Fout bij versturen:\n{0}
+ZapierReview_SendBtn=Verstuur naar webhook
+
+# Gmail config — status / acties
+GmailConfig_ConnectedAs=✅ Verbonden als: {0}
+GmailConfig_Reconnect=Opnieuw verbinden
+GmailConfig_OpeningBrowser=Browser openen...
+GmailConfig_AuthUrlError=Kon geen autorisatie-URL ophalen. Controleer de serverconfiguratie.
+GmailConfig_WaitingBrowser=Wachten op autorisatie in browser...
+GmailConfig_AuthError=Fout bij starten van autorisatie:\n{0}
+GmailConfig_ConnectionRequired=Verbinding vereist
+GmailConfig_ConnectionRequiredDesc=Verbind eerst je Google-account.
+GmailConfig_Saving=Opslaan...
+GmailConfig_SaveFail=Kon configuratie niet opslaan. Probeer opnieuw.
+GmailConfig_SaveError=Fout bij opslaan:\n{0}
+
+# Gmail review — venster
+GmailReview_WindowTitle=E-mail versturen
+GmailReview_Eyebrow=GMAIL · REVIEW
+GmailReview_Title=E-mail versturen
+GmailReview_Subtitle=Controleer en pas de AI-gegenereerde e-mail aan.
+GmailReview_To=Aan
+GmailReview_Cc=CC (optioneel)
+GmailReview_Subject=Onderwerp
+GmailReview_Body=Bericht
+GmailReview_SendBtn=Versturen
+# Gmail review — status / acties
+GmailReview_RecipientRequired=Vul een ontvanger in (Aan-veld).
+GmailReview_SubjectRequired=Vul een onderwerp in.
+GmailReview_Sending=Versturen...
+GmailReview_SendOk=✅ E-mail verstuurd!
+GmailReview_SendFail=Kon e-mail niet versturen. Probeer opnieuw.
+GmailReview_SendError=Fout bij versturen:\n{0}
+GmailReview_Saving=Opslaan...
+GmailReview_DraftOk=✅ Concept opgeslagen in Gmail!
+GmailReview_DraftFail=Kon concept niet opslaan. Probeer opnieuw.
+GmailReview_DraftError=Fout bij opslaan concept:\n{0}
+GmailReview_SaveDraftBtn=Opslaan als concept
+
+# Calendar config — foutdialogen
+CalConfig_AuthUrlError=Kon geen autorisatie-URL ophalen. Controleer de serverconfiguratie.
+CalConfig_AuthError=Fout bij starten van autorisatie:\n{0}
+CalConfig_ConnectionRequired=Verbinding vereist
+CalConfig_ConnectionRequiredDesc=Verbind eerst je Google-account.
+CalConfig_SaveFail=Kon configuratie niet opslaan. Probeer opnieuw.
+CalConfig_SaveError=Fout bij opslaan:\n{0}
+
+# Calendar event review — dialogen
+CalReview_TitleRequired=Vul een titel in.
+CalReview_TimeRequired=Vul start- en eindtijd in (formaat: 2026-05-05T14:00:00).
+CalReview_CreateOk=✅ Afspraak aangemaakt!\n\n{0}\n\nOpenen in Google Agenda?
+CalReview_CreateFail=Kon afspraak niet aanmaken. Probeer opnieuw.
+CalReview_CreateError=Fout bij aanmaken afspraak:\n{0}
+
+# Stijleditor — dialogen
+StyleEditor_ValidationDesc=Vul een naam in voor de stijl
+StyleEditor_ProfileRequired=Stijlprofiel vereist
+StyleEditor_ProfileRequiredDesc=Genereer eerst een stijlprofiel voordat je kunt opslaan.\n\nKlik op Genereer schrijfstijl om een profiel te maken op basis van je voorbeelden.
+StyleEditor_TooFewTitle=Te weinig voorbeelden
+StyleEditor_TooFewDesc=Voeg minimaal 3 voorbeeldteksten toe (nu: {0}).
+StyleEditor_UsageRequired=Gebruikscontext vereist
+StyleEditor_UsageRequiredDesc=Vul eerst in waarvoor je deze stijl wilt gebruiken.
+StyleEditor_GenerateOk=Schrijfstijl profiel succesvol gegenereerd!\n\nGeanalyseerd voor: {0}
+StyleEditor_GenerateFail=Kon geen schrijfstijl profiel genereren. Probeer het opnieuw.
+StyleEditor_GenerateError=Fout bij genereren schrijfstijl:\n{0}
+StyleEditor_NoStyle=Geen schrijfstijl
+StyleEditor_NoStyleDesc=Genereer eerst een schrijfstijl voordat je deze kunt optimaliseren.
+StyleEditor_UsageRequiredOptDesc=Vul eerst in waarvoor je deze stijl gebruikt.
+StyleEditor_OptimizeTitle=Optimalisatie Voltooid
+StyleEditor_OptimizeOk=Schrijfstijl succesvol geoptimaliseerd!\n\nVERBETERINGEN:\n{0}\n\nDe geoptimaliseerde stijl is nu actief.
+StyleEditor_OptimizeFail=Kon schrijfstijl niet optimaliseren. Probeer het opnieuw.
+StyleEditor_OptimizeError=Fout bij optimaliseren schrijfstijl:\n{0}
+StyleEditor_MaxExamples=Maximum bereikt
+StyleEditor_MaxExamplesDesc=Maximaal 15 voorbeeldteksten toegestaan.
+StyleEditor_ExampleTooShort=Te kort
+StyleEditor_ExampleTooShortDesc=Voer minimaal 50 tekens in.
+
+# Voorbeeld toevoegen dialoog (in StyleEditorView.cs)
+AddExample_Title=Voorbeeldtekst toevoegen
+AddExample_Label=Plak een tekst die jij zelf geschreven hebt (minimaal 50 tekens):
+AddExample_Hint=Bijv. een e-mail die je verstuurd hebt, een bericht, een post - iets dat jouw stijl weerspiegelt.
+AddExample_AddBtn=Toevoegen
+AddExample_Cancel=Annuleren
+
+# Schrijfstijl optimaliseren dialoog (in StyleEditorView.cs)
+OptimizeDlg_Title=Optimaliseer Schrijfstijl
+OptimizeDlg_Header=Optimaliseer je schrijfstijl
+OptimizeDlg_Desc=We analyseren je laatste 5 gebruiken van deze stijl om verbeteringen voor te stellen.\n\nWat vind je dat er beter kan? (optioneel)
+OptimizeDlg_OptimizeBtn=Optimaliseer
+OptimizeDlg_Cancel=Annuleren
+
+# Training paar detailweergave
+Training_Metadata=Input: {0} woorden • Output: {1} woorden
+Training_PairTitle=Training Paar #{0}
+Training_ValidationTitle=Validatiefout
+Training_ValidationDesc=Beide velden (Input en Output) moeten ingevuld zijn
+Training_SavedTitle=Opgeslagen
+Training_SavedDesc=Training paar succesvol bijgewerkt!
+Training_ConfirmTitle=Bevestigen
+Training_ConfirmDelete=Weet je zeker dat je dit training paar wilt verwijderen?
+Training_DeletedTitle=Verwijderd
+Training_DeletedDesc=Training paar succesvol verwijderd!
+
+# Feedback venster — dialogen / tik-indicator
+Feedback_ApiError=API fout: {0}
+Feedback_SendError=Fout bij versturen: {0}
+Feedback_Typing=AI is bezig
+Feedback_NoCopyError=Geen AI response om te kopiëren.
+Feedback_CopyError=Fout bij kopiëren naar klembord: {0}
+Feedback_ConsolidateTitle=Feedback Consolidatie
+Feedback_ConsolidateMsg=Je hebt {0} feedback voorbeelden. Oudere voorbeelden worden nu samengevoegd voor betere performance...
+Feedback_ConsolidateDoneTitle=Consolidatie Voltooid
+Feedback_ConsolidateDoneMsg=Consolidatie geslaagd! {0} oude voorbeelden zijn samengevoegd. Je hebt nu {1} recente voorbeelden.
+Feedback_ConsolidateErrorTitle=Consolidatie Fout
+Feedback_ConsolidateError=Consolidatie fout (niet-kritisch): {0}
+Feedback_UnknownError=Onbekende fout
+
+# Stijl bibliotheek — dialogen
+StyleLib_NoDescription=Geen beschrijving
+StyleLib_LimitTitle=Stijlprofiel-limiet bereikt
+StyleLib_LimitDesc=Je {0}-abonnement staat maximaal {1} stijlprofiel(en) toe.\n\nUpgrade je abonnement op maikey.nl/prijzen om meer stijlprofielen aan te maken.
+
+# Template weergave — dialogen
+Templates_SearchPlaceholder=🔍 Zoek template...
+Templates_StyleWarningTitle=Stijl aanbevolen
+Templates_StyleWarningDesc=⚠️ LET OP: Deze template werkt het beste met een schrijfstijl!\n\nHet is sterk aangeraden om een stijl te koppelen aan deze hotkey via Stijl Library voor betere resultaten.\n\nWil je doorgaan?
+Templates_HotkeyLimitTitle=Hotkey-limiet bereikt
+Templates_HotkeyLimitDesc=Je {0}-abonnement staat maximaal {1} hotkeys toe.\n\nUpgrade je abonnement op maikey.nl/prijzen om meer hotkeys aan te maken.
+Templates_IntegrationRequiredTitle=Integratie vereist
+Templates_IntegrationRequiredDesc=Deze template werkt met de {0}-integratie.\n\nVerbind eerst {0} via het Integraties-menu en voeg de template daarna opnieuw toe.
+Templates_NoSlotsTitle=Limiet bereikt
+Templates_NoSlotsDesc=Geen beschikbare hotkey combinaties meer!\n\nJe hebt al 9 hotkeys (Ctrl+1 t/m Ctrl+9) geconfigureerd.\nVerwijder eerst een bestaande hotkey via het 'Hotkeys' menu.
+
+# Screenshot-modus
+ScreenCapture_Instruction=Selecteer een gebied om naar AI te sturen. Druk op Esc om te annuleren.
+ScreenCapture_Processing=Screenshot verwerken...
+
+# Auto-update
+Update_Available_Title=Update beschikbaar
+Update_Required_Title=Update vereist
+Update_NewVersion=Er is een nieuwe versie beschikbaar: {0}\nJe huidige versie: {1}
+Update_ReleaseNotes=\n\nNieuw:\n{0}
+Update_ForceMessage=\n\nDeze update is verplicht om mAIkey te blijven gebruiken.
+Update_OptionalMessage=\n\nWil je nu updaten?
+Update_Failed_Title=Update mislukt
+Update_Failed_Body=De update kon niet worden gedownload.\n\nJe kunt de nieuwste versie handmatig downloaden:\n{0}
+Update_Failed_Error=Er ging iets mis bij het updaten.\n\nDownload handmatig:\n{0}
+Update_Outdated=Je versie van mAIkey is verouderd en wordt niet meer ondersteund.\n\nDownload de nieuwste versie:\n{0}
+Update_NowBtn=Update nu
+Update_LaterBtn=Later
+Update_Downloading=Update wordt gedownload en geïnstalleerd…
+
+# Todoist / Trello / Asana integraties
+HotkeyEditor_OutTodoist=Todoist – Direct aanmaken
+HotkeyEditor_OutTodoistReview=Todoist – Met review-venster
+HotkeyEditor_OutTrello=Trello – Direct aanmaken
+HotkeyEditor_OutTrelloReview=Trello – Met review-venster
+HotkeyEditor_OutAsana=Asana – Direct aanmaken
+HotkeyEditor_OutAsanaReview=Asana – Met review-venster
+Error_Integration_NotConfig_Todoist=Todoist integratie niet geconfigureerd. Verbind eerst je Todoist-account in het Integraties menu.
+Error_Integration_NotConfig_Trello=Trello integratie niet geconfigureerd. Verbind eerst je Trello-account in het Integraties menu.
+Error_Integration_NotConfig_Asana=Asana integratie niet geconfigureerd. Verbind eerst je Asana-account in het Integraties menu.
+Integrations_TodoistDesc=Maak taken aan vanuit geselecteerde tekst.
+Integrations_TrelloDesc=Maak kaarten aan vanuit geselecteerde tekst.
+Integrations_AsanaDesc=Maak taken aan vanuit geselecteerde tekst.
+Loading_TodoistTask=Todoist-taak genereren...
+Loading_TrelloCard=Trello-kaart genereren...
+Loading_AsanaTask=Asana-taak genereren...
+Tray_TodoistCreated=Todoist-taak aangemaakt!
+Tray_TrelloCreated=Trello-kaart aangemaakt!
+Tray_AsanaCreated=Asana-taak aangemaakt!
+Integrations_TodoistConfigured=Todoist-integratie succesvol geconfigureerd!\n\nJe kan nu taken aanmaken via hotkeys.
+Integrations_TodoistDeleteConfirm=Weet je zeker dat je de Todoist integratie wilt verwijderen?\n\nAlle configuratie zal verloren gaan.
+Integrations_TodoistDeleted=Todoist integratie succesvol verwijderd
+Integrations_TrelloConfigured=Trello-integratie succesvol geconfigureerd!\n\nJe kan nu kaarten aanmaken via hotkeys.
+Integrations_TrelloDeleteConfirm=Weet je zeker dat je de Trello integratie wilt verwijderen?\n\nAlle configuratie zal verloren gaan.
+Integrations_TrelloDeleted=Trello integratie succesvol verwijderd
+Integrations_AsanaConfigured=Asana-integratie succesvol geconfigureerd!\n\nJe kan nu taken aanmaken via hotkeys.
+Integrations_AsanaDeleteConfirm=Weet je zeker dat je de Asana integratie wilt verwijderen?\n\nAlle configuratie zal verloren gaan.
+Integrations_AsanaDeleted=Asana integratie succesvol verwijderd
+
+# Todoist configuratievenster
+TodoistConfig_FillToken=Vul een API-token in
+TodoistConfig_Testing=Testen...
+TodoistConfig_TestOk=✅ Verbinding succesvol!
+TodoistConfig_TestFail=❌ Verbinding mislukt. Controleer je token.
+TodoistConfig_TestError=❌ Fout: {0}
+TodoistConfig_TestBtnReset=Test verbinding
+TodoistConfig_ConnectedNoProjects=✅ Verbonden, maar geen projecten gevonden.
+TodoistConfig_ProjectsLoadError=Kan projecten niet laden: {0}
+TodoistConfig_ConnectionRequired=Verbinding vereist
+TodoistConfig_ConnectionRequiredDesc=Test eerst de verbinding voordat je opslaat.
+TodoistConfig_Saving=Opslaan...
+TodoistConfig_SaveOk=Todoist integratie succesvol opgeslagen!
+TodoistConfig_SaveFail=Kon integratie niet opslaan. Probeer opnieuw.
+TodoistConfig_SaveError=Fout bij opslaan: {0}
+TodoistConfig_AlreadyConnected=✅ Verbonden — token blijft behouden als je deze leeg laat.
+
+# Trello configuratievenster
+TrelloConfig_FillKeyToken=Vul zowel API-key als token in
+TrelloConfig_Testing=Testen...
+TrelloConfig_TestOk=✅ Verbinding succesvol!
+TrelloConfig_TestFail=❌ Verbinding mislukt. Controleer je API-key en token.
+TrelloConfig_TestError=❌ Fout: {0}
+TrelloConfig_TestBtnReset=Test verbinding
+TrelloConfig_ConnectedNoBoards=✅ Verbonden, maar geen borden gevonden.
+TrelloConfig_BoardsLoadError=Kan borden niet laden: {0}
+TrelloConfig_ListsLoadError=Kan lijsten niet laden: {0}
+TrelloConfig_ConnectionRequired=Verbinding vereist
+TrelloConfig_ConnectionRequiredDesc=Test eerst de verbinding voordat je opslaat.
+TrelloConfig_Saving=Opslaan...
+TrelloConfig_SaveOk=Trello integratie succesvol opgeslagen!
+TrelloConfig_SaveFail=Kon integratie niet opslaan. Probeer opnieuw.
+TrelloConfig_SaveError=Fout bij opslaan: {0}
+TrelloConfig_AlreadyConnected=✅ Verbonden — credentials blijven behouden als je deze leeg laat.
+
+# Asana configuratievenster
+AsanaConfig_FillToken=Vul een personal access token in
+AsanaConfig_Testing=Testen...
+AsanaConfig_TestOk=✅ Verbinding succesvol!
+AsanaConfig_TestFail=❌ Verbinding mislukt. Controleer je token.
+AsanaConfig_TestError=❌ Fout: {0}
+AsanaConfig_TestBtnReset=Test verbinding
+AsanaConfig_ConnectedNoWorkspaces=✅ Verbonden, maar geen workspaces gevonden.
+AsanaConfig_WorkspacesLoadError=Kan workspaces niet laden: {0}
+AsanaConfig_ProjectsLoadError=Kan projecten niet laden: {0}
+AsanaConfig_ConnectionRequired=Verbinding vereist
+AsanaConfig_ConnectionRequiredDesc=Test eerst de verbinding voordat je opslaat.
+AsanaConfig_Saving=Opslaan...
+AsanaConfig_SaveOk=Asana integratie succesvol opgeslagen!
+AsanaConfig_SaveFail=Kon integratie niet opslaan. Probeer opnieuw.
+AsanaConfig_SaveError=Fout bij opslaan: {0}
+AsanaConfig_AlreadyConnected=✅ Verbonden — token blijft behouden als je deze leeg laat.
+
+# Todoist review-venster
+TodoistReview_ContentRequired=Taakomschrijving is verplicht.
+TodoistReview_Creating=Aanmaken...
+TodoistReview_CreateTitle=Taak aangemaakt
+TodoistReview_CreateOk=✅ Taak aangemaakt!\n\n{0}\n\nURL gekopieerd naar klembord.
+TodoistReview_CreateFail=Kon taak niet aanmaken. Probeer opnieuw.
+TodoistReview_CreateError=Fout bij aanmaken taak:\n{0}
+TodoistReview_CreateBtn=Maak taak
+TodoistPriority_Urgent=P1 – Urgent
+TodoistPriority_High=P2 – Hoog
+TodoistPriority_Medium=P3 – Middel
+TodoistPriority_Normal=P4 – Normaal
+
+# Trello review-venster
+TrelloReview_NameRequired=Kaartnaam is verplicht.
+TrelloReview_Creating=Aanmaken...
+TrelloReview_CreateTitle=Kaart aangemaakt
+TrelloReview_CreateOk=✅ Kaart aangemaakt!\n\n{0}\n\nURL gekopieerd naar klembord.
+TrelloReview_CreateFail=Kon kaart niet aanmaken. Probeer opnieuw.
+TrelloReview_CreateError=Fout bij aanmaken kaart:\n{0}
+TrelloReview_CreateBtn=Maak kaart
+
+# Asana review-venster
+AsanaReview_NameRequired=Taaknaam is verplicht.
+AsanaReview_Creating=Aanmaken...
+AsanaReview_CreateTitle=Taak aangemaakt
+AsanaReview_CreateOk=✅ Taak aangemaakt!\n\n{0}\n\nURL gekopieerd naar klembord.
+AsanaReview_CreateFail=Kon taak niet aanmaken. Probeer opnieuw.
+AsanaReview_CreateError=Fout bij aanmaken taak:\n{0}
+AsanaReview_CreateBtn=Maak taak
+
+# Google Tasks integratie
+HotkeyEditor_OutGTasks=Google Tasks – Direct aanmaken
+HotkeyEditor_OutGTasksReview=Google Tasks – Met review-venster
+Error_Integration_NotConfig_GTasks=Google Tasks integratie niet geconfigureerd. Verbind eerst je Google-account in het Integraties menu.
+Integrations_GTasksDesc=Maak taken aan vanuit geselecteerde tekst.
+Loading_GTask=Google Tasks-taak genereren...
+Tray_GTaskCreated=Google Tasks-taak aangemaakt!
+Integrations_GTasksConfigured=Google Tasks-integratie succesvol geconfigureerd!\n\nJe kan nu taken aanmaken via hotkeys.
+Integrations_GTasksDeleteConfirm=Weet je zeker dat je de Google Tasks integratie wilt verwijderen?\n\nAlle configuratie zal verloren gaan.
+Integrations_GTasksDeleted=Google Tasks integratie succesvol verwijderd
+
+# Google Tasks configuratievenster
+GTasksConfig_Title=Google Tasks Configureren
+GTasksConfig_Heading=Google Tasks verbinden
+GTasksConfig_Subtitle=Verbind je Google-account om taken aan te maken via hotkeys.
+GTasksConfig_Step1=Stap 1: Verbind je Google-account
+GTasksConfig_ConnectBtn=Verbinden met Google
+GTasksConfig_Reconnect=Opnieuw verbinden
+GTasksConfig_Opening=Browser openen...
+GTasksConfig_WaitingBrowser=Wachten op autorisatie in de browser...
+GTasksConfig_ConnectedAs=Verbonden als
+GTasksConfig_AuthUrlError=Kan geen autorisatie-URL ophalen. Probeer het later opnieuw.
+GTasksConfig_AuthError=Fout bij verbinden: {0}
+GTasksConfig_Step2=Stap 2: Standaard takenlijst
+GTasksConfig_ListHint=Takenlijst waar nieuwe taken worden aangemaakt (standaard: Mijn taken)
+GTasksConfig_ConnectionRequired=Verbinding vereist
+GTasksConfig_ConnectionRequiredDesc=Verbind eerst je Google-account voordat je opslaat.
+GTasksConfig_Saving=Opslaan...
+GTasksConfig_SaveFail=Kon configuratie niet opslaan. Probeer opnieuw.
+GTasksConfig_SaveError=Fout bij opslaan: {0}
+GTasksConfig_Cancel=Annuleren
+GTasksConfig_Save=Opslaan
+
+# Google Tasks review-venster
+GTaskReview_TitleRequired=Taaknaam is verplicht.
+GTaskReview_Creating=Aanmaken...
+GTaskReview_CreateTitle=Taak aangemaakt
+GTaskReview_CreateOk=✅ Taak aangemaakt in Google Tasks:\n\n{0}
+GTaskReview_CreateFail=Kon taak niet aanmaken. Probeer opnieuw.
+GTaskReview_CreateError=Fout bij aanmaken taak:\n{0}
+GTaskReview_CreateBtn=Maak taak

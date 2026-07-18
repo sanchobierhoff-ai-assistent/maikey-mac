@@ -1,0 +1,1294 @@
+# Navigatie (zijbalk)
+Nav_Dashboard=Dashboard
+Nav_Hotkeys=mAIkeys
+Nav_StyleLibrary=Style Library
+Nav_Templates=Templates
+Nav_Integrations=Integrations
+Nav_CloudSync=Cloud Sync
+Nav_Settings=Settings
+Nav_Minimize=Minimize
+Nav_Profile=Profile
+Nav_Logout=Log out
+
+# Dashboard
+Dashboard_Eyebrow=Dashboard
+Dashboard_Title=Welcome back.
+Dashboard_NewHotkey=New mAIkey
+Dashboard_Active=active
+Dashboard_Today=TODAY
+Dashboard_Requests=requests
+Dashboard_Styles=STYLES
+Dashboard_StylesLabel=writing styles
+Dashboard_Sub=SUBSCRIPTION
+Dashboard_YourHotkeys=Your mAIkeys
+Dashboard_NoHotkeys=No mAIkeys yet
+Dashboard_NoHotkeysSub=Create your first mAIkey.
+Dashboard_Hotkeys=mAIKEYS
+
+# Hotkey editor
+HotkeyEditor_Title=Your mAIkeys
+HotkeyEditor_NewHotkey=New mAIkey
+HotkeyEditor_Back=← mAIkeys
+HotkeyEditor_Delete=Delete
+HotkeyEditor_Save=Save
+HotkeyEditor_SavedOk=✓ Saved
+HotkeyEditor_ConfirmDelete=Delete mAIkey
+HotkeyEditor_ConfirmDeleteMsg=Are you sure you want to delete this mAIkey?
+HotkeyEditor_NewHotkeyName=New mAIkey
+HotkeyEditor_TriggerSection=Trigger
+HotkeyEditor_KeyCombo=Key combination
+HotkeyEditor_KeyComboPlaceholder=Click here and press a combination
+HotkeyEditor_PromptSection=AI Prompt
+HotkeyEditor_AskContext=Ask for extra context at execution
+HotkeyEditor_WriteStyle=Writing style (optional)
+HotkeyEditor_StyleHint=Select the writing style to use for the response.
+HotkeyEditor_StyleLinkText=No style profile yet? Click here to add one.
+StyleTour_LimitTitle=Profile limit reached
+StyleTour_LimitBody=You've reached the maximum number of style profiles. You can update an existing one via the tour that will now start.
+HotkeyEditor_AIModel=AI Model
+HotkeyEditor_BehaviorSection=Behavior
+HotkeyEditor_OutputMode=Display result as
+HotkeyEditor_OutWindow=Show in new window (with preview)
+HotkeyEditor_OutReplace=Replace selected text directly
+HotkeyEditor_OutCopy=Copy to clipboard
+HotkeyEditor_OutAppend=Paste after selected text
+HotkeyEditor_OutEmail=Gmail – Send directly
+HotkeyEditor_OutEmailReview=Gmail – With review window
+HotkeyEditor_OutCalendar=Google Calendar – Create directly
+HotkeyEditor_OutCalendarReview=Google Calendar – With review
+HotkeyEditor_OutGitHub=GitHub – Create directly
+HotkeyEditor_OutGitHubReview=GitHub – With review window
+HotkeyEditor_OutJira=Jira – Create directly
+HotkeyEditor_OutJiraReview=Jira – With review window
+HotkeyEditor_OutSlack=Slack – Send directly
+HotkeyEditor_OutSlackReview=Slack – With preview
+HotkeyEditor_OutTeams=Teams – Send directly
+HotkeyEditor_OutTeamsReview=Teams – With preview
+HotkeyEditor_OutZapier=Zapier/Make – Send directly
+HotkeyEditor_OutZapierReview=Zapier/Make – With preview
+HotkeyEditor_CustomParams=Use custom AI parameters
+AIParam_Temperature_Tooltip=Controls randomness/creativity of the AI response.\n0 = deterministic (same input gives same output)\n2 = very creative (more varied and unexpected responses)
+AIParam_MaxTokens_Tooltip=Maximum length of the AI response in tokens.\nOne token is roughly 3/4 of a word.\nHigher values allow longer responses but may take more time.
+AIParam_TopP_Tooltip=Nucleus sampling — limits the pool of tokens the AI considers.\n1.0 = consider all tokens\n0.1 = only consider the top 10% most likely tokens\nAn alternative way to control creativity alongside Temperature.
+AIParam_FrequencyPenalty_Tooltip=Reduces repetition of tokens already used in the response.\n0 = no penalty (may repeat phrases)\n2 = strong penalty (avoids repeating words and phrases)
+AIParam_PresencePenalty_Tooltip=Encourages the AI to introduce new topics.\n0 = no penalty (may stay on one topic)\n2 = strong penalty (more likely to explore diverse topics)
+HotkeyEditor_SendImages=Send clipboard images to AI
+HotkeyEditor_UseInput=Show input field instead of selected text
+HotkeyEditor_PersonalContext=Personal context
+HotkeyEditor_GmailSection=Gmail — Settings
+HotkeyEditor_SlackSection=Slack — Settings
+HotkeyEditor_GHSection=GitHub — Settings
+HotkeyEditor_CalSection=Google Calendar — Settings
+HotkeyEditor_NoStyle=No style
+HotkeyEditor_AIBuilder=✨ Create new mAIkey with AI
+HotkeyEditor_AIOptimizer=🔧 Optimize prompt
+HotkeyEditor_EmptyTitle=You don't have any mAIkeys yet.
+HotkeyEditor_EmptySub=Click 'New mAIkey' to create your first mAIkey.
+HotkeyEditor_EmptyTourLink=View the instructions
+
+# Stijl library
+StyleLib_Eyebrow=STYLES
+StyleLib_Title=Style Library
+StyleLib_NoStyles=No styles created
+StyleLib_NoStylesSub=Click 'New Style' to get started
+StyleLib_SelectPrompt=Select a style to edit
+StyleLib_NewStyle=New Style
+
+# Stijl editor
+StyleEditor_BackBtn=← Style Library
+StyleEditor_NewStyle= / New Style
+StyleEditor_EditStyle= / Edit Style
+StyleEditor_Cancel=Cancel
+StyleEditor_Delete=Delete
+StyleEditor_ConfirmDelete=Delete style
+StyleEditor_ConfirmDeleteMsg=Are you sure you want to delete the style?
+StyleEditor_Save=Save
+StyleEditor_BasicInfo=Basic information
+StyleEditor_NameLabel=Name *
+StyleEditor_UsageLabel=What do you use this style for? *
+StyleEditor_Examples=Example texts
+StyleEditor_AddExample=+ Add
+StyleEditor_ExamplesHint=Paste texts you have written yourself (minimum 3, maximum 15)
+StyleEditor_NoExamples=No example texts added yet
+StyleEditor_WriteStyle=Your Writing Style
+StyleEditor_GenerateBtn=Generate writing style
+StyleEditor_OptimizeBtn=Optimize writing style
+StyleEditor_StyleHint=Describe how you write (tone, sentence length, word choice, etc.)
+
+# Integraties
+Integrations_Eyebrow=INTEGRATIONS
+Integrations_Title=Connect external services
+Integrations_Subtitle=Link the tools you use daily to your mAIkeys.
+Integrations_RequestBtn=Request integration
+Integrations_Loading=Loading integrations...
+Integrations_Connected=Connected
+Integrations_Available=Available
+
+# Instellingen
+Settings_Title=SETTINGS
+Settings_Heading=Preferences
+Settings_Subtitle=Customize the app to your liking.
+Settings_Card_Behavior=Behavior
+Settings_Card_Lang=Language
+Settings_LangInterface=Interface language
+Settings_LangSubtitle=Language for menus, labels and messages
+Settings_Autostart=Start with Windows
+Settings_AutostartSub=Launch mAIkey automatically at login
+Settings_ShowIndicator=Show AI indicator during processing
+Settings_ShowIndicatorSub=Display that the AI is busy
+Settings_Sound=Sound on completion
+Settings_SoundSub=Play a sound when the AI finishes
+Settings_DesktopShortcut=Desktop shortcut
+Settings_DesktopShortcutSub=Place a mAIkey shortcut on your desktop
+Settings_StartMenuShortcut=Start menu shortcut
+Settings_StartMenuShortcutSub=Show mAIkey in the Start menu
+Settings_ContentLimits=Content limits
+Settings_ContentLimitsSub=If you send more images or characters than the set limit, the app will ask for confirmation.
+Settings_MinimizeToTray=Minimize to system tray
+Settings_MinimizeToTraySub=Hide the app in the system tray when minimizing
+Settings_WindowCard=Window
+
+# Cloud sync
+CloudSync_Title=Cloud Sync
+CloudSync_Subtitle=Export your mAIkeys and styles to the cloud. Import them on another device or smartphone.
+CloudSync_ExportHeader=Export to cloud
+CloudSync_HotkeysLabel=mAIkeys
+CloudSync_StylesLabel=Writing styles
+CloudSync_EmptyExport=No mAIkeys or styles created yet.
+CloudSync_SelectAll=Select all
+CloudSync_ExportBtn=Export to cloud
+CloudSync_ImportHeader=Import from cloud
+CloudSync_ImportCheckHint=Check if a cloud export is available for this account.
+CloudSync_CheckBtn=Check available export
+CloudSync_NotFound=No cloud export found for this account. Export first from the PC app or smartphone.
+CloudSync_ImportHotkeys=mAIkeys to import
+CloudSync_ImportStyles=Writing styles to import
+CloudSync_ImportBtn=Import selected
+CloudSync_Loading=Please wait...
+
+# Prompt templates
+Templates_Title=Custom Prompts
+Templates_Subtitle=Choose a template and add it to your mAIkeys
+Templates_AddBtn=+ Add
+Templates_OutReplace=Replace selected text
+Templates_OutClipboard=Copy to clipboard
+Templates_OutWindow=Show in review window
+Templates_SearchLabel=Search your favourite template
+
+# AI Hotkey Builder
+AIBuilder_Title=Create mAIkey with AI
+AIBuilder_TypeAhead=Describe what your mAIkey should do…
+AIBuilder_Placeholder=E.g.: Translate selected text to Dutch
+AIBuilder_Create=✓ Create mAIkey
+AIBuilder_Cancel=Cancel
+AIBuilder_Welcome=Hi! I'll help you set up a mAIkey. Describe what you want: what text do you select, and what should happen to it?
+AIBuilder_ModeReplace=Replace — selected text is replaced directly
+AIBuilder_ModeClipboard=Clipboard — result is copied to clipboard
+AIBuilder_ModeWindow=Window — result is shown for review
+AIBuilder_ModePrompt=Ask — app asks for extra context each time
+
+# AI Prompt Optimizer
+AIOptimizer_Title=Optimize prompt with AI
+AIOptimizer_FeedbackLabel=💬 Feedback (optional)
+AIOptimizer_Start=⚡ Start Analysis
+AIOptimizer_Apply=✓ Apply Optimization
+AIOptimizer_Cancel=Cancel
+
+# Google Calendar Config
+CalConfig_Title=Configure Google Calendar
+CalConfig_Heading=Connect Google Calendar
+CalConfig_Subtitle=Connect your Google account to create calendar events via mAIkeys
+CalConfig_Step1=Step 1: Connect your Google account
+CalConfig_ConnectBtn=Connect with Google
+CalConfig_ConnectedAs=Connected as:
+CalConfig_Reconnect=Reconnect
+CalConfig_Opening=Opening browser...
+CalConfig_WaitingBrowser=Waiting for browser authorization...
+CalConfig_Step2=Step 2: Default Calendar
+CalConfig_CalHint=Calendar where new events are created (default: primary calendar)
+CalConfig_Step3=Step 3: Custom AI Prompt (Optional)
+CalConfig_PromptHint=E.g.: 'Always add a Teams link to the description'
+CalConfig_Cancel=Cancel
+CalConfig_Save=Save
+CalConfig_Saving=Saving...
+
+# Google Calendar event review
+CalReview_Title=Create Calendar Event
+CalReview_Heading=Create Calendar Event
+CalReview_Subtitle=Review and adjust the AI-generated event
+CalReview_EventTitle=Title
+CalReview_Start=Start
+CalReview_End=End
+CalReview_Description=Description (Optional)
+CalReview_Attendees=Attendees (Optional)
+CalReview_AttendeesHint=Comma-separated email addresses
+CalReview_Location=Location (Optional)
+CalReview_Cancel=Cancel
+CalReview_CreateBtn=Create Event
+CalReview_Creating=Creating...
+
+# Inloggen
+Login_Title=AI-Assistant - Sign In
+Login_Subtitle=Sign in with your account
+Login_Email=Email
+Login_Password=Password
+Login_Button=Sign In
+Login_LoggingIn=Signing in...
+Login_ForgotPassword=Forgot password?
+Login_NoAccount=No account yet?
+Login_Register=Register now
+Login_VerifyTitle=Email not yet verified
+Login_VerifyMsg=Check your inbox and click the verification link. No email received?
+Login_ResendVerify=Resend verification email
+Login_Sending=Sending...
+Login_Sent=✓ Sent!
+Login_ErrEmail=Please enter your email address
+Login_ErrPassword=Please enter your password
+Login_ErrUnknown=Login failed. Check your credentials and try again.
+Login_ErrNetwork=Connection error. Check your internet connection.
+Login_RateLimitWait=Wait {0} seconds before trying again...
+Login_Or=or
+Login_GoogleButton=Sign in with Google
+Login_MicrosoftButton=Sign in with Microsoft
+Login_MicrosoftWaiting=Waiting for Microsoft… complete the sign-in in your browser.
+Login_GoogleWaiting=Waiting for Google… complete the sign-in in your browser.
+Login_GoogleFailed=Google sign-in failed. Please try again.
+Login_GoogleTimeout=Timed out: Google sign-in took too long. Please try again.
+Login_GoogleBrowserFailed=Could not open your browser. Please try again.
+
+# Registreren
+Register_Title=AI-Assistant - Register
+Register_Subtitle=Create your free account.
+Register_Name=Name
+Register_Email=Email
+Register_Password=Password
+Register_ReqTitle=Password requirements:
+Register_ReqLength=At least 12 characters
+Register_ReqUpper=Uppercase letter (A-Z)
+Register_ReqLower=Lowercase letter (a-z)
+Register_ReqDigit=Digit (0-9)
+Register_ReqSpecial=Special character (@$!%*?&amp;)
+Register_Button=Create Account
+Register_Loading=Creating account…
+Register_GoogleButton=Sign up with Google
+Register_MicrosoftButton=Sign up with Microsoft
+Register_HaveAccount=Already have an account?
+Register_Login=Log in
+Register_SuccessTitle=Account created!
+Register_ErrEmail=Please enter your email address
+Register_ErrName=Please enter your name
+Register_ErrPassword=Please enter a password
+Register_ErrEmailExists=This email address is already registered. Log in to your existing account or reset your password.
+Register_ForgotPwHint=Forgot your password?
+Register_RateLimitWait=Wait {0} seconds before trying again...
+
+# Wachtwoord vergeten
+ForgotPw_Title=Forgot Password
+ForgotPw_Step1Sub=Enter your email address. We will send you a 6-digit code to reset your password.
+ForgotPw_EmailLabel=Email
+ForgotPw_SendCode=Send Reset Code
+ForgotPw_Sending=Sending…
+ForgotPw_Step2Header=Code received?
+ForgotPw_CodeReceived=Enter the code you received by email.
+ForgotPw_NewPassword=New password
+ForgotPw_ConfirmPassword=Confirm password
+ForgotPw_ReqLength=At least 12 characters
+ForgotPw_ReqUpper=○ Uppercase letter (A-Z)
+ForgotPw_ReqLower=○ Lowercase letter (a-z)
+ForgotPw_ReqDigit=Digit (0-9)
+ForgotPw_ReqSpecial=Special character (@$!%*?&amp;)
+ForgotPw_ResetBtn=Reset password
+ForgotPw_Resetting=Resetting password...
+ForgotPw_ToLogin=Go to sign in
+ForgotPw_SuccessTitle=Password set!
+ForgotPw_SuccessSub=You can now log in with your new password.
+ForgotPw_ErrEmail=Please enter your email address.
+ForgotPw_Step2EmailSent=We sent a 6-digit code to:\n{0}
+ForgotPw_ErrCodeRequired=Enter the 6-digit code from your email.
+ForgotPw_ErrInvalidCode=Incorrect code. Check your email or request a new code.
+ForgotPw_ErrCodeExpired=The code has expired (valid for 1 hour). Go back and request a new code.
+
+# Auth shared errors
+Auth_ErrEmailExists=This email address is already registered. Log in to your existing account or reset your password.
+Auth_ErrPasswordWeak=Password does not meet the requirements. Check the checklist.
+Auth_ErrDeviceLimit=A free account already exists on this device.\n\nYou can only create 1 free account per device. Log in to your existing account or upgrade to Starter.
+Auth_ErrMissingFields=Please fill in all fields.
+Auth_ErrUserNotFound=Account not found. Check your email address or create a new account.
+Auth_ErrWrongPassword=Incorrect password. Try again or click 'Forgot password?'.\n\nTip: password must have at least 12 characters, uppercase letter, digit and special character (@$!%*?&).
+Auth_ErrServer=Server error. Check your internet connection and try again.
+Auth_ErrNetwork=Connection error. Check your internet connection.
+Auth_ErrPasswordMismatch=Passwords do not match.
+Auth_ErrGeneral=An error occurred. Please try again.
+
+# Dashboard — onboarding sectie
+Dashboard_SetupHeader=SETUP PROGRESS
+Dashboard_SetupSub=Click a step for a guided tour through the app.
+Dashboard_SetupTitle=Let's set up mAIkey.
+Dashboard_SetupProgress=You are {0}% of the way.
+Dashboard_Step1_Title=Create your first mAIkey
+Dashboard_Step1_Sub=Choose a key combo and what the AI should do.
+Dashboard_Step2_Title=Add a writing style
+Dashboard_Step2_Sub=Upload examples so the AI sounds like you.
+Dashboard_Step3_Title=Try a template
+Dashboard_Step3_Sub=Ready-to-use prompts from our library.
+Dashboard_Step4_Title=Pin the app to the taskbar
+Dashboard_Step4_Sub=Shortcuts only work while mAIkey is running.
+Dashboard_TourBtn=Tutorial
+Dashboard_UpgradeBtn=Change subscription →
+Dashboard_RefreshTooltip=Refresh subscription status
+Dashboard_RefreshCooldown=Please wait, try again in a few seconds
+Dashboard_UpgradePlanBtn=Upgrade plan
+Dashboard_News=News & tips
+Dashboard_HotkeyCount={0} total
+Dashboard_WarnAlmost=⚠ Almost full
+Dashboard_WarnExceeded=⚠ Limit reached
+Dashboard_ResetToday=reset today
+Dashboard_ResetTomorrow=reset tomorrow
+Dashboard_ResetDays=reset in {0} d.
+Dashboard_EmptyStateBtn=+ Create your first mAIkey
+
+# Instellingen — extra
+Settings_Card_Theme=Theme
+Settings_Theme_Dark=Dark
+Settings_Theme_Light=Light (Linen)
+Settings_MaxImages=Max. images
+Settings_MaxImagesSub=Confirmation required above this number
+Settings_MaxChars=Max. characters
+Settings_MaxCharsSub=Confirmation required above this number of characters
+Settings_Card_Tour=Tour
+Settings_TourSub=Restart a tour to learn a feature step by step.
+Settings_Tour_Hotkey=mAIkeys
+Settings_Tour_HotkeySub=Create your first mAIkey and learn all the options
+Settings_Tour_Style=Style Library
+Settings_Tour_StyleSub=Teach the AI your writing style
+Settings_Tour_Template=Templates
+Settings_Tour_TemplateSub=Use ready-made AI actions
+Settings_Tour_Pin=Pin app to taskbar
+Settings_Tour_PinSub=Open mAIkey with a single click
+Settings_Tour_Start=▶  Start
+
+# Hotkey editor — extra
+HotkeyEditor_TourTooltip=Restart tour
+HotkeyEditor_TourLabel=Instructions
+HotkeyEditor_FrozenTitle=This mAIkey is frozen
+HotkeyEditor_FrozenBody=Your subscription allows fewer mAIkeys than you have. Upgrade or delete a mAIkey to activate it again.
+HotkeyEditor_KeyComboHint=Click the field and press a combination (e.g. Ctrl+Shift+A)
+HotkeyEditor_PromptLabel=What do you want to do with the selected text?
+HotkeyEditor_PromptHint=First describe what type of text you select (e.g. an email, piece of code or paragraph), then what the AI should do with it.
+HotkeyEditor_NoCombosTitle=No combinations available
+HotkeyEditor_NoCombosDesc=All possible hotkey combinations (Ctrl/Alt/Shift + 0-9) are already in use.\n\nDelete or disable a mAIkey first to create a new one.
+HotkeyEditor_ComboRequired=Key combination required
+HotkeyEditor_ComboRequiredDesc=First set a key combination by clicking in the field and pressing a combination (e.g. Ctrl+A).
+HotkeyEditor_ImagesUnavailTitle=Images not available
+HotkeyEditor_ImagesUnavailDesc=Image analysis is available from the Starter subscription.\n\nThe 'Send images' option has been disabled. Your mAIkey will be saved without image analysis.
+HotkeyEditor_ModelUnavailTitle=Model not available
+HotkeyEditor_ModelUnavailDesc='{0}' is not available in the {1} subscription.\n\nThis model has been set to GPT-4o Mini. Your mAIkey will be saved with GPT-4o Mini.
+HotkeyEditor_AIBuilderApplied=mAIkey configuration has been set! Don't forget to save.
+HotkeyEditor_AIBuilderError=Error creating mAIkey with AI:
+HotkeyEditor_NoHotkeySelected=No mAIkey selected
+HotkeyEditor_NoHotkeySelectedDesc=Select a mAIkey first to optimize it.
+HotkeyEditor_NoUsageTitle=No usage examples
+HotkeyEditor_NoUsageDesc=There are no usage examples yet for this mAIkey.\n\nThe AI can analyse the prompt without examples, but with usage data the optimisation is much more effective.\n\nDo you want to continue without examples?
+HotkeyEditor_OptimizeApplied=Optimisation applied! Don't forget to save.
+HotkeyEditor_OptimizeError=Error optimising prompt:
+HotkeyEditor_ModifierRequired=Modifier required
+HotkeyEditor_ModifierRequiredDesc=Hotkeys must have at least one modifier (Ctrl, Alt, Shift or Win).\n\nPress a combination like Ctrl+A or Ctrl+Shift+F1.
+HotkeyEditor_DuplicateTitle=Duplicate hotkey
+HotkeyEditor_DuplicateDesc=This hotkey combination ({0}) is already in use by '{1}'.\n\nChoose a different combination.
+HotkeyEditor_SysShortcutTitle=Possible system shortcut
+HotkeyEditor_SysShortcutDesc=Note: {0} may be a system shortcut.\n\nDo you want to use this combination anyway?
+HotkeyEditor_MainWinNotFound=Cannot find main window.
+
+# Tour / onboarding
+Tour_Next=Next →
+Tour_Done=Done ✓
+Tour_PinDone=Done — I did it! ✓
+
+# Tour stappen — hotkey tour
+Tour_Hotkey_1_Title=Step 1 · Go to mAIkeys
+Tour_Hotkey_1_Body=Click 'mAIkeys' in the sidebar to see and manage all your mAIkeys.
+Tour_Hotkey_2_Title=Step 2 · Create a new mAIkey
+Tour_Hotkey_2_Body=Click 'New mAIkey' at the bottom of the list. An edit form will appear on the right.
+Tour_Hotkey_3_Title=Step 3 · Give it a name
+Tour_Hotkey_3_Body=We've created an example mAIkey for you. See the name at the top? You can change it to whatever you like.
+Tour_Hotkey_4_Title=Step 4 · Choose a key combination
+Tour_Hotkey_4_Body=This is the shortcut that activates the mAIkey. Click it and press the desired combination, e.g. Ctrl+1.
+Tour_Hotkey_5_Title=Step 5 · Write an AI instruction
+Tour_Hotkey_5_Body=mAIkey works on selected text. Tell the AI what kind of text to expect (e.g. an email, or text with typos) and what to do with it. This example checks spelling and grammar.
+Tour_Hotkey_6_Title=Step 6 · Choose an AI model
+Tour_Hotkey_6_Body=Each model has its own character: faster models respond quickly but are less thorough; smarter models think deeper but take a bit longer. Each model has a short description.
+Tour_Hotkey_7_Title=Step 7 · Link a writing style
+Tour_Hotkey_7_Body=Optional: link a writing style profile so the AI writes in your tone. Create profiles under Style Library by adding a few of your own texts. Not needed for every task.
+Tour_Hotkey_8_Title=Step 8 · Create with AI
+Tour_Hotkey_8_Body=Not sure how to phrase the instruction? Click 'Create with AI', describe what you want, and the AI writes the prompt for you.
+Tour_Hotkey_9_Title=Step 9 · Optimize prompt
+Tour_Hotkey_9_Body=Already have an instruction but not happy with the output? 'Optimize' analyses your previous usage and improves the prompt automatically based on what did and didn't work.
+Tour_Hotkey_10_Title=Step 10 · Output mode
+Tour_Hotkey_10_Body=Decide what happens with the AI result: replace the selected text, copy to clipboard, show in a window, or send directly to Jira, GitHub, Slack or Gmail.
+Tour_Hotkey_11_Title=Step 11 · Ask for extra context
+Tour_Hotkey_11_Body=With 'Ask for extra context' you can provide extra information to the AI just before execution — useful when the instruction sometimes needs a name, date or additional note.
+Tour_Hotkey_12_Title=Step 12 · Send images
+Tour_Hotkey_12_Body=Turn this on to send clipboard images to the AI, so it can also process visual content.
+Tour_Hotkey_13_Title=Step 13 · Show input field
+Tour_Hotkey_13_Body=With 'Show input field' you don't need to select text: a text box appears where you type what the AI should process. Great for tasks like 'Create a Jira ticket for...' or 'Draft an email about...'.
+Tour_Hotkey_14_Title=Step 14 · AI parameters
+Tour_Hotkey_14_Body=Want finer control? Temperature controls how creative the AI responds; max tokens limits the answer length. Tip: if you use a template, the parameters are already optimally set.
+Tour_Hotkey_15_Title=Step 15 · Save and done!
+Tour_Hotkey_15_Body=Click 'Save'. Your mAIkey is active! Select text in any app and press the key combination — mAIkey does the rest.
+
+# Tour stappen — style tour
+Tour_Style_1_Title=Step 1 · Go to Style Library
+Tour_Style_1_Body=Click 'Style Library' in the sidebar. Here you create writing style profiles for the AI to mimic — so every mAIkey writes in your own tone.
+Tour_Style_2_Title=Step 2 · Create a new style profile
+Tour_Style_2_Body=Click '+ New Style'. Create a profile with example texts you have written. The AI reads those examples and learns how you sound — think email tone, word choice or sentence length.
+Tour_Style_3_Title=Step 3 · Add example texts
+Tour_Style_3_Body=Paste 2–3 texts you have written (emails, messages, reports). The more examples, the better the AI learns your style. Then link the profile to a mAIkey via 'Style' in the mAIkey settings.
+
+# Tour steps — create style profile (interactive)
+Tour_StyleNew_1_Title=Step 1 · New style
+Tour_StyleNew_1_Body=Click '+ New style' to create a style profile.
+Tour_StyleNew_2_Title=Step 2 · Name
+Tour_StyleNew_2_Body=Give your style profile a name, e.g. 'Professional email' or 'Informal messages'. Click 'Done – I did it!' when ready.
+Tour_StyleNew_3_Title=Step 3 · Usage
+Tour_StyleNew_3_Body=Describe what you use this profile for, e.g. 'Replies to customer emails'. Click 'Done – I did it!' when ready.
+Tour_StyleNew_4_Title=Step 4 · Example texts
+Tour_StyleNew_4_Body=Add at least 3 example texts in your own writing style. Click '+ Add' and paste a text you wrote each time. Click 'Done – I did it!' once you have at least 3.
+Tour_StyleNew_5_Title=Step 5 · Generate
+Tour_StyleNew_5_Body=Click 'Generate writing style' — the AI will analyse your examples and create a style profile. Click 'Done – I did it!' once the profile has been generated.
+Tour_StyleNew_6_Title=Step 6 · Save
+Tour_StyleNew_6_Body=Done! Click 'Save' to store your style profile. You can then link it to a hotkey via the 'Writing style' field in the hotkey settings.
+
+# Tour steps — update style profile (at limit)
+Tour_StyleEdit_1_Title=Update existing profile
+Tour_StyleEdit_1_Body=You've reached the maximum number of style profiles. Select a profile from the list you want to update, then click 'Done – I did it!'.
+Tour_StyleEdit_2_Title=Adjust example texts
+Tour_StyleEdit_2_Body=Add new example texts or update existing ones via '+ Add'. Click 'Done – I did it!' when ready.
+Tour_StyleEdit_3_Title=Regenerate
+Tour_StyleEdit_3_Body=Click 'Generate writing style' to recreate the profile based on the updated examples. Click 'Done – I did it!' once generated.
+Tour_StyleEdit_4_Title=Save
+Tour_StyleEdit_4_Body=Click 'Save' to store your changes.
+
+# Tour stappen — template tour
+Tour_Template_1_Title=Step 1 · Go to Templates
+Tour_Template_1_Body=Click 'Templates' in the sidebar for ready-made AI actions you can activate right away.
+Tour_Template_2_Title=Step 2 · Activate a template
+Tour_Template_2_Body=Click a template card to set it as a mAIkey. In one click you have a working AI mAIkey!
+
+# Tour stappen — pin tour
+Tour_Pin_Title=Pin mAIkey to the taskbar
+Tour_Pin_Body=Right-click the mAIkey icon in the Windows taskbar → choose 'Pin to taskbar'. This lets you open the app with a single click at any time.
+
+# Systeemvak & meldingen
+Tray_Open=Open
+Tray_Exit=Exit
+Tray_Title=mAIkey
+Notif_Copied=✓ Copied to clipboard!
+Notif_Replaced=✓ Text replaced!
+Notif_WindowShown=✓ Result shown in window!
+
+# Dialogen
+Dialog_SessionExpired_Title=Session expired
+Dialog_SessionExpired_Msg=Your session has expired. Please log in again to continue.
+Dialog_Logout_Title=Exit
+Dialog_Logout_Msg=Are you sure you want to exit the application?
+Lang_ChangeRestartTitle=Language changed
+Lang_ChangeRestart=The language will be applied after restarting the app.
+
+# Foutmeldingen
+Error_NoContent=No content selected. Select text or an image before using the mAIkey.
+Error_ImagesDisabled=Image found, but 'Send clipboard images to AI' is disabled for this mAIkey. Enable it in the mAIkey settings.
+Error_HotkeyRegister=Error registering mAIkey {0}: {1}
+App_GlobalError=An error occurred:
+App_GlobalErrorTitle=Unexpected Error
+App_GlobalErrorSub=Check logs/crash.log for details.
+
+# Network and connection errors
+Error_NoInternet_Title=No internet connection
+Error_NoInternet_Body=Check your internet connection and try again.
+Error_Timeout_Title=Request timed out
+Error_Timeout_Body=The AI model did not respond in time. Try again, or go to Settings to choose a different model.
+
+# Model column headers
+Model_ColSpeed=SPEED
+Model_ColIntelligence=INTELLIGENCE
+Model_ColUsage=USAGE
+
+# Model picker dialog
+ModelPicker_Header=TEMPORARY ERROR
+ModelPicker_Subtitle=The model '{0}' is temporarily unavailable.
+ModelPicker_Body=Choose a different model to try again.
+ModelPicker_Cancel=Cancel
+ModelPicker_Retry=Try again
+
+# AI model errors
+Error_ModelUnavailable_Title=AI model temporarily unavailable
+Error_ModelUnavailable_Body=The selected AI model is currently unavailable.\n\nTip: Go to Settings and choose a different AI model to keep using mAIkey.
+Error_ModelBlocked_Title=Model not available
+Error_ModelBlocked_Body=This AI model is not available in your current subscription.\n\nTip: Go to Settings to choose a model available for your subscription, or upgrade for access to more models.
+Error_FallbackUsed_Body=The selected model ({0}) was temporarily unavailable. Your request was processed using {1} as an alternative.
+
+# Limits (402)
+Error_403_CloudSync=Cloud sync is available from the Starter subscription.\n\nUpgrade to keep all your mAIkeys synchronized.
+Error_403_Integrations=Integrations (Jira, Slack, Gmail...) are available from the Plus subscription.\n\nUpgrade for full integration capabilities.
+Error_403_ImageAnalysis=Image analysis is available from the Starter subscription.\n\nUpgrade to send images along.
+Error_SessionExpired=Your session has expired. Please log in again to continue.
+Error_402_DailyReset=Your daily limit resets on {0}.
+Error_402_DailyResetTomorrow=Your daily limit resets tomorrow.
+Error_402_DailyCap=You have reached your daily limit.\n\n{0}\n\nOr upgrade to a higher subscription for a higher daily limit.
+Error_402_MonthlyDays=in {0} day(s)
+Error_402_MonthlyResetOn=Your limit resets on {0} ({1}).
+Error_402_MonthlyResetSoon=Your limit resets soon.
+Error_402_MonthlyUsed=You have used {0} of your {1} mAIkeys this month.\n\n{2}\n\nUpgrade to Starter for more mAIkeys per month.
+Error_402_SubExpired=Your subscription has expired.\n\nRenew your subscription to keep using mAIkey.
+Error_402_Default=You have reached your monthly limit.\n\n{0}\n\nUpgrade to a higher subscription for more mAIkeys.
+Error_402_Fallback=You have reached your limit. Upgrade for more mAIkeys.
+
+# Server load (429)
+Error_429_DayLimit=You have used {0} of your {1} mAIkeys today — your daily limit has been reached.\n\nYou can use mAIkeys again tomorrow.\n\nUpgrade to Starter for more mAIkeys per day.
+Error_429_DayLimitSimple=Your daily limit has been reached. You can use mAIkeys again tomorrow.
+Error_429_ServerBusy=mAIkey is currently processing many requests. Please try again in a few seconds.
+
+# Conversation (chat)
+Error_ChatFailed_Title=Chat error
+Error_ChatFailed_Body=Something went wrong during the conversation. Please try again.
+
+# Integrations
+Error_IntegrationFailed_Body=Something went wrong. Check your integration settings and try again. If the problem persists, check your internet connection.
+Error_Integration_NotConfig_Jira=Jira integration not found. Please configure your Jira integration in the Integrations menu first.
+Error_Integration_NotConfig_GitHub=GitHub integration not configured. Please connect your GitHub account in the Integrations menu first.
+Error_Integration_NotConfig_Slack=Slack integration not configured. Please connect your Slack webhook in the Integrations menu first.
+Error_Integration_NotConfig_Teams=Teams integration not configured. First connect your Teams webhook in the Integrations menu.
+Error_Integration_NotConfig_Zapier=Zapier/Make integration not configured. First connect your webhook in the Integrations menu.
+Error_Integration_NotConfig_Gmail=Gmail integration not configured. Please connect your Google account in the Integrations menu first.
+Error_Integration_NotConfig_Calendar=Google Calendar integration not configured. Please connect your Google account in the Integrations menu first.
+Error_Integration_DraftFailed=Could not generate a draft. Please try again.
+Error_Integration_SendFailed=Could not send the message. Please try again.
+Error_Integration_Unsupported=This integration type is not yet supported.
+
+# General API and server errors
+Error_General_Title=Something went wrong
+Error_General_Body=mAIkey could not process the request. Please try again.
+
+# Common buttons
+Common_Cancel=Cancel
+Common_Save=Save
+Common_Send=Send
+Common_Close=Close
+Common_Add=Add
+Common_Edit=Edit
+Common_Delete=Delete
+Common_Skip=Skip
+Common_Success=Success
+Common_Error=Error
+Common_Validation=Validation
+
+# AI Hotkey Builder window UI
+AIBuilder_WindowTitle=Create mAIkey with AI
+AIBuilder_Header=AI MAIKEY BUILDER
+AIBuilder_Subtitle=Create mAIkey with AI
+AIBuilder_Desc=Describe what your mAIkey should do — the AI will help you with the best settings.
+AIBuilder_RefineHint=You can also just keep typing to refine the suggestion.
+AIBuilder_Error=Something went wrong: {0}
+AIBuilder_NoResponse=I couldn't generate a response. Please try again.
+
+# AI Prompt Optimizer window UI
+AIOptimizer_WindowTitle=Optimize prompt with AI
+AIOptimizer_Header=PROMPT OPTIMIZER
+AIOptimizer_Subtitle=Optimize prompt with AI
+AIOptimizer_Desc=The AI analyses your usage and suggests improvements.
+AIOptimizer_FeedbackHint=Describe what doesn't work or what you want different. You can also leave this empty and let the AI analyse.
+AIOptimizer_Placeholder=E.g.: the output is too long, prompt doesn't give enough detail, needs to be more formal…
+AIOptimizer_Error=Something went wrong: {0}
+AIOptimizer_NoResponse=⚠️ AI gave no response. Please try again.
+AIOptimizer_ConfigError=⚠️ There is a configuration problem. Please try again.
+
+# Feedback / result window
+FeedbackWindow_Title=AI Result
+FeedbackWindow_Header=AI RESULT
+FeedbackWindow_Subtitle=Result
+FeedbackWindow_Desc=Review the result. You can request further adjustments or copy if it looks good.
+FeedbackWindow_CopyClose=Copy and close
+
+# Email files preview window
+EmailFiles_Title=Email files preview
+EmailFiles_Header=E-MAILS · IMPORT
+EmailFiles_Subtitle=Email files preview
+EmailFiles_ParsedOf=files imported, of which
+EmailFiles_ParsedOk=successfully parsed
+EmailFiles_ParsedEmails=Parsed emails
+EmailFiles_NoParse=Could not parse any emails
+EmailFiles_NoParseHint=Make sure the files are in .eml or .msg format.
+EmailFiles_Import=Import
+
+# Input prompt window
+InputPrompt_Title=Extra instructions
+InputPrompt_Header=EXTRA INSTRUCTIONS
+InputPrompt_Question=What should the AI do with the selection?
+InputPrompt_Placeholder=Type your extra instructions. Press Esc to cancel.
+InputPrompt_EmptyHint=You haven't typed anything yet.\n\nClick 'Skip' if you don't want to add extra context, or type instructions first before clicking 'Send'.
+
+# Tour overlay
+Tour_Close=Close tour (ESC)
+Tour_Prev=← Previous
+
+# Jira config window
+JiraConfig_Title=Configure Jira Integration
+JiraConfig_Header=JIRA · CONFIGURATION
+JiraConfig_Subtitle=Set up Jira integration
+JiraConfig_Desc=Connect your Jira account to create tickets via mAIkeys.
+JiraConfig_UrlLabel=Jira URL
+JiraConfig_UrlPlaceholder=E.g.: yourcompany.atlassian.net
+JiraConfig_EmailLabel=Email
+JiraConfig_TokenLabel=API Token
+JiraConfig_TokenHelp=How do I get an API token?
+JiraConfig_TestBtn=Test connection
+JiraConfig_DefaultProject=Default project
+JiraConfig_ProjectHint=Select a project for new tickets
+JiraConfig_DefaultType=Default issue type
+JiraConfig_TypeHint=Default type for new tickets
+JiraConfig_CustomPrompt=Custom AI prompt (optional)
+JiraConfig_PromptHint=Leave empty to use the default prompt. Adjust for specific ticket formats or requirements.
+
+# Jira ticket review window
+JiraReview_Header=JIRA · TICKET REVIEW
+JiraReview_Title=Create ticket
+JiraReview_Subtitle=Review and adjust the ticket details before creating it.
+JiraReview_Summary=Summary (Title)
+JiraReview_Description=Description
+JiraReview_Project=Project
+JiraReview_IssueType=Issue Type
+JiraReview_Priority=Priority
+JiraReview_Assignee=Assignee (optional)
+JiraReview_AssigneeHint=Select a person to assign to this ticket
+JiraReview_Labels=Labels (comma-separated)
+JiraReview_LabelsPlaceholder=E.g.: frontend, bug, urgent
+JiraReview_AiNote=This ticket was generated by AI. Review the details and adjust if needed before creating.
+JiraReview_Chat=Chat with AI
+JiraReview_Create=Create ticket
+
+# Content limit confirm window
+ContentLimit_Title=Lots of content detected
+ContentLimit_Header=WARNING
+ContentLimit_Subtitle=Lots of content detected
+ContentLimit_Desc=You are about to send more content than the set limit.
+ContentLimit_Images=Images
+ContentLimit_Chars=Characters
+ContentLimit_Continue=Continue
+
+# Style profile generator window
+StyleGen_Title=Generate style profile with AI
+StyleGen_Header=STYLE PROFILE GENERATOR
+StyleGen_Desc=Paste 3-5 examples of your own texts — the AI will analyse your writing style.
+StyleGen_TipsHeader=Tips for best results
+StyleGen_ExamplesHeader=Your examples
+StyleGen_AddExample=Add example
+StyleGen_ExampleLabel=Example
+StyleGen_EditBtn=Edit
+StyleGen_DeleteBtn=Delete
+StyleGen_NoExamples=No examples yet
+StyleGen_NoExamplesSub=Add examples of your own texts — minimum 3 recommended.
+StyleGen_Analyzing=AI is analysing your examples…
+StyleGen_GenerateBtn=Generate style profile
+StyleGen_TooFewTitle=Too few examples
+StyleGen_TooFewDesc=Add at least 3 examples for a good analysis.
+StyleGen_FailedTitle=Generation failed
+StyleGen_FailedDesc=AI could not generate a style profile. Try different examples.
+StyleGen_ErrorDesc=Error generating style profile:
+
+# Style profile example entry window
+StyleExample_Title=Add example text
+StyleExample_TitleEdit=Edit example text
+StyleExample_Header=STYLE · EXAMPLE
+StyleExample_Subtitle=Add example text
+StyleExample_WhatHeader=What can you add?
+StyleExample_YourText=Your example text
+StyleExample_AddBtn=Add
+StyleExample_ValidationTitle=Validation
+StyleExample_ValidationEmpty=Please enter an example text.
+StyleExample_TooShortTitle=Too short
+StyleExample_TooShortDesc=Example text is too short. Add at least ~50 characters for a good analysis.
+
+# Template setup dialog
+TemplateSetup_Title=Set up template
+TemplateSetup_Header=TEMPLATE
+TemplateSetup_TitleFmt=Set up your {0}
+TemplateSetup_Desc=Fill in your details. These will be sent automatically with every execution.
+TemplateSetup_AddBtn=Add
+
+# Email template setup dialog
+EmailSetup_Desc=Fill in your details and choose a writing style for the best results.
+EmailSetup_NaamLabel=Your name
+EmailSetup_NaamPlaceholder=John Smith
+EmailSetup_StyleLabel=Writing style
+EmailSetup_StyleDesc=A style profile ensures consistent and personally sounding emails.
+EmailSetup_NoStyle=No style profile
+EmailSetup_StyleWarning=⚠️ Without a style profile the email will sound less personal. You can always set this up later via Style Library.
+EmailSetup_SetupStyle=Set up style profile
+
+# Integrations connect/disconnect
+Integrations_Connect=Connect
+Integrations_Disconnect=Disconnect
+Integrations_JiraDesc=Create tickets directly from selected text.
+Integrations_GHDesc=Create issues from selected text.
+Integrations_SlackDesc=Send messages and updates directly to Slack.
+Integrations_TeamsDesc=Send messages and updates directly to Teams.
+Integrations_ZapierDesc=Connect mAIkey to 5000+ apps via webhooks.
+Integrations_WebhookConnected=Webhook connected
+Integrations_Unavailable=Not available
+Integrations_UnavailableTooltip=Integrations are available from the Plus subscription.
+Integrations_UpgradeTitle=Integrations not available
+Integrations_UpgradeDesc=Integrations (Jira, Slack, Gmail...) are available from the Plus subscription.\n\nUpgrade for full integration capabilities.
+
+# Writing style example entry window
+TextExample_WindowTitle=Add writing style example
+TextExample_WindowTitle_Edit=Edit writing style example
+TextExample_Subtitle=WRITING STYLE · EXAMPLE
+TextExample_Label=Example text in your own style
+TextExample_Desc1=Paste a text that is representative of the style you want to write in. The AI will analyse and imitate the style.
+TextExample_Desc2=For example: a previous email, report, or blog post.
+TextExample_BtnCancel=Cancel
+TextExample_BtnSave=Save
+TextExample_ValidationTitle=Example text required
+TextExample_ValidationMsg=Please enter an example text.\n\nThis should be a text written in the style you want the AI to use.
+TextExample_TooShortTitle=Text too short
+TextExample_TooShortMsg=The example text is too short.\n\nPlease enter at least 50 characters so the AI can properly analyse the style.
+
+# Loading indicators (MainWindow)
+Loading_Working=AI at work...
+Loading_FetchingContent=Fetching content...
+Loading_Uploading=Uploading to cloud ({0}/{1})...
+Loading_Retrying=Retrying...
+Loading_JiraTicket=Creating Jira ticket...
+Loading_GitHubIssue=Creating GitHub issue...
+Loading_SlackMessage=Creating Slack message...
+Loading_TeamsMessage=Generating Teams message...
+Loading_ZapierPayload=Generating webhook data...
+Loading_Email=Creating email...
+Loading_Calendar=Creating calendar event...
+
+# Tray notifications (MainWindow)
+Tray_JiraCreated=Jira ticket {0} created!
+Tray_JiraCreatedUrl=Jira ticket {0} created! URL copied to clipboard.
+Tray_GitHubCreated=GitHub issue created!
+Tray_GitHubCreatedNum=GitHub issue #{0} created!
+Tray_SlackSent=Slack message sent!
+Tray_TeamsSent=Teams message sent!
+Tray_ZapierSent=Data sent to webhook!
+Tray_EmailSentOrDraft=Email sent or saved as draft!
+Tray_EmailSent=Email sent!
+Tray_CalendarCreated=Calendar event created!
+
+# Integrations dialogs
+Integrations_ErrorTitle=Integrations
+Integrations_DbNotConfigured=The integrations database is not yet configured. Please contact support.
+Integrations_PlusRequired=Integrations are available from the Plus subscription.
+Integrations_TempUnavailable=Integrations temporarily unavailable:
+Integrations_RequestTitle=Request integration
+Integrations_RequestDesc=Send an email to support@maikey.nl with the name of the integration you want.\n\nWe add popular integrations based on requests.
+Integrations_LoadError=Error loading integrations:
+Integrations_ConfirmDeleteTitle=Confirm deletion
+Integrations_JiraConfigured=Jira integration successfully configured!\n\nYou can now create Jira tickets via mAIkeys.
+Integrations_JiraDeleteConfirm=Are you sure you want to delete the Jira integration?\n\nAll configuration will be lost.
+Integrations_JiraDeleted=Jira integration successfully deleted
+Integrations_GitHubConfigured=GitHub integration successfully configured!\n\nYou can now create GitHub issues via mAIkeys.
+Integrations_GitHubDeleteConfirm=Are you sure you want to delete the GitHub integration?\n\nAll configuration will be lost.
+Integrations_GitHubDeleted=GitHub integration successfully deleted
+Integrations_SlackConfigured=Slack integration successfully configured!\n\nYou can now send messages via mAIkeys.
+Integrations_SlackDeleteConfirm=Are you sure you want to delete the Slack integration?\n\nAll configuration will be lost.
+Integrations_SlackDeleted=Slack integration successfully deleted
+Integrations_TeamsConfigured=Teams integration successfully configured!\n\nYou can now send messages via hotkeys.
+Integrations_TeamsDeleteConfirm=Are you sure you want to delete the Teams integration?\n\nAll configuration will be lost.
+Integrations_TeamsDeleted=Teams integration successfully deleted
+Integrations_ZapierConfigured=Webhook integration successfully configured!\n\nYou can now send data via hotkeys.
+Integrations_ZapierDeleteConfirm=Are you sure you want to delete the Zapier/Make integration?\n\nAll configuration will be lost.
+Integrations_ZapierDeleted=Zapier/Make integration successfully deleted
+Integrations_GmailDesc=Send AI-generated emails via Gmail.
+Integrations_GmailConfigured=Gmail integration successfully configured!\n\nYou can now send emails via mAIkeys.
+Integrations_GmailDeleteConfirm=Are you sure you want to delete the Gmail integration?\n\nYour Google account will be disconnected.
+Integrations_GmailDeleted=Gmail integration successfully deleted
+Integrations_CalendarDesc=Create calendar events from selected text.
+Integrations_CalendarConfigured=Google Calendar integration successfully configured!\n\nYou can now create events via mAIkeys.
+Integrations_CalendarDeleteConfirm=Are you sure you want to delete the Google Calendar integration?\n\nYour Google account will be disconnected.
+Integrations_CalendarDeleted=Google Calendar integration successfully deleted
+Integrations_DeleteFailed=Could not delete integration. Please try again.
+Integrations_DeleteError=Error deleting integration:
+
+# HotkeyEditor output modes
+OutputMode_Window=Show in new window (with preview)
+OutputMode_Replace=Replace selected text directly
+OutputMode_Append=Paste after selection
+OutputMode_Clipboard=Copy to clipboard
+OutputMode_JiraReview=Jira – With review window
+OutputMode_JiraDirect=Jira – Create directly
+OutputMode_GitHubReview=GitHub – With review window
+OutputMode_GitHubDirect=GitHub – Create directly
+OutputMode_SlackReview=Slack – With preview
+OutputMode_SlackDirect=Slack – Send directly
+OutputMode_GmailReview=Gmail – With review window
+OutputMode_GmailDirect=Gmail – Send directly
+OutputMode_CalendarReview=Google Calendar – With review
+OutputMode_CalendarDirect=Google Calendar – Create directly
+
+# HotkeyEditor labels / panels
+Editor_OutputModeLabel=Display result as
+Editor_FrozenBadge=Frozen
+Editor_FrozenBanner=This mAIkey is frozen
+Editor_FrozenDesc=Your subscription allows fewer mAIkeys than you have. Upgrade or delete a mAIkey to activate this one.
+Editor_KeyComboLabel=Key combination
+Editor_KeyComboHint=Click the field and press a combination (e.g. Ctrl+Shift+A)
+Editor_PromptLabel=What do you want to do with the selected text?
+Editor_PromptHint=First describe what kind of text you select (e.g. an email, piece of code or paragraph), then what the AI should do with it.
+Editor_StyleLabel=Writing style (optional)
+Editor_GHSectionHeader=GitHub — Settings
+Editor_GHRepoHint=Repository (optional, overrides integration setting)
+Editor_GHLabelsHint=Labels (optional, comma-separated)
+Editor_SlackSectionHeader=Slack — Settings
+Editor_SlackInfo=Messages are sent to the Slack channel configured in the integration settings.
+Editor_AskContext=Ask for extra context on execution
+Editor_IncludeImages=Send clipboard images to AI
+Editor_UseScreenCapture=Screenshot mode: select a screen region
+Editor_UseInputField=Show input field instead of selected text
+Editor_CustomParams=Use custom AI parameters
+Editor_BehaviourHeader=Behaviour
+Editor_NewHotkeyBtn=+ New mAIkey
+Editor_BackBtn=← mAIkeys
+Editor_TourBtn=Instructions
+Editor_DeleteBtn=Delete
+Editor_SaveBtn=Save
+Editor_EmptyTitle=You have no mAIkeys yet.
+Editor_EmptySubtitle=Click 'New mAIkey' to get started.
+Editor_AICreateBtn=Create new mAIkey with AI
+Editor_AIOptimizeBtn=Optimize prompt
+Editor_PrefixText=The selected text is
+Editor_LangNL=Dutch
+
+
+# Jira config — status / actions
+JiraConfig_FillRequired=Please fill in all fields
+JiraConfig_Testing=Testing...
+JiraConfig_TestOk=✅ Connection successful!
+JiraConfig_TestFail=❌ Connection failed. Check your details.
+JiraConfig_TestError=❌ Error: {0}
+JiraConfig_ProjectsLoadError=Cannot load projects: {0}
+JiraConfig_TypesLoadError=Cannot load issue types: {0}
+JiraConfig_ConnectionRequired=Connection required
+JiraConfig_ConnectionRequiredDesc=Test the connection first before saving.
+JiraConfig_Saving=Saving...
+JiraConfig_SaveOk=Jira integration successfully saved!
+JiraConfig_SaveFail=Could not save integration. Please try again.
+JiraConfig_SaveError=Error saving: {0}
+JiraConfig_AlreadyConnected=✅ Connected — API token will be preserved if left empty.
+
+# Jira ticket review — status / actions
+JiraReview_CharCount={0} / 80 characters
+JiraReview_SummaryRequired=Summary is required
+JiraReview_SelectProject=Please select a project
+JiraReview_SelectIssueType=Please select an issue type
+JiraReview_Creating=Creating...
+JiraReview_CreateOk=✅ Ticket {0} successfully created!\n\nURL copied to clipboard:\n{1}
+JiraReview_CreateFail=Could not create ticket. Please try again.
+JiraReview_CreateError=Error creating ticket:\n{0}\n\nType: {1}
+JiraReview_Unassigned=(Unassigned)
+JiraReview_ChatWip=Chat functionality coming soon.\n\nYour question: {0}
+
+# GitHub config — status / actions
+GitHubConfig_FillToken=Please enter a Personal Access Token
+GitHubConfig_Testing=Testing...
+GitHubConfig_TestOk=✅ Connection successful!
+GitHubConfig_TestFail=❌ Connection failed. Check your token.
+GitHubConfig_TestError=❌ Error: {0}
+GitHubConfig_TestBtnReset=Test connection
+GitHubConfig_ConnectedNoRepos=✅ Connected, but no repositories found.
+GitHubConfig_ReposLoadError=Cannot load repositories: {0}
+GitHubConfig_ConnectionRequired=Connection required
+GitHubConfig_ConnectionRequiredDesc=Test the connection first before saving.
+GitHubConfig_Saving=Saving...
+GitHubConfig_SaveOk=GitHub integration successfully saved!
+GitHubConfig_SaveFail=Could not save integration. Please try again.
+GitHubConfig_SaveError=Error saving: {0}
+GitHubConfig_AlreadyConnected=✅ Connected — token will be preserved if left empty.
+
+# GitHub issue review — status / actions
+GitHubReview_TitleRequired=Title is required.
+GitHubReview_Creating=Creating...
+GitHubReview_CreateTitle=Issue created
+GitHubReview_CreateOk=✅ Issue #{0} created!\n\n{1}\n\nURL copied to clipboard.
+GitHubReview_CreateFail=Could not create issue. Please try again.
+GitHubReview_CreateError=Error creating issue:\n{0}
+GitHubReview_CreateBtn=Create Issue
+
+# Slack config — status / actions
+SlackConfig_FillWebhook=Please fill in a webhook URL
+SlackConfig_Testing=Testing...
+SlackConfig_TestOk=✅ Test message sent! Check your Slack workspace.
+SlackConfig_TestFail=❌ Connection failed. Check the webhook URL.
+SlackConfig_TestError=❌ Error: {0}
+SlackConfig_TestBtnReset=Test connection (sends a test message)
+SlackConfig_ConnectionRequired=Connection required
+SlackConfig_ConnectionRequiredDesc=Test the connection first before saving.
+SlackConfig_Saving=Saving...
+SlackConfig_SaveOk=Slack integration successfully saved!
+SlackConfig_SaveFail=Could not save integration. Please try again.
+SlackConfig_SaveError=Error saving: {0}
+SlackConfig_AlreadyConnected=✅ Connected — webhook URL will be preserved if left empty.
+
+# Slack message review — status / actions
+SlackReview_ChannelSuggestion=AI suggests channel: {0}
+SlackReview_MessageRequired=Message cannot be empty.
+SlackReview_Sending=Sending...
+SlackReview_SendOk=✅ Message sent to Slack!
+SlackReview_SendFail=Could not send message. Please try again.
+SlackReview_SendError=Error sending:\n{0}
+SlackReview_SendBtn=Send to Slack
+
+# Teams config — status / actions
+TeamsConfig_FillWebhook=Enter a webhook URL
+TeamsConfig_Testing=Testing...
+TeamsConfig_TestOk=✅ Test message sent! Check your Teams channel.
+TeamsConfig_TestFail=❌ Connection failed. Check the webhook URL.
+TeamsConfig_TestError=❌ Error: {0}
+TeamsConfig_TestBtnReset=Test connection (sends test message)
+TeamsConfig_ConnectionRequired=Connection required
+TeamsConfig_ConnectionRequiredDesc=Test the connection before saving.
+TeamsConfig_Saving=Saving...
+TeamsConfig_SaveOk=Teams integration saved successfully!
+TeamsConfig_SaveFail=Could not save integration. Try again.
+TeamsConfig_SaveError=Error saving: {0}
+TeamsConfig_AlreadyConnected=✅ Connected — webhook URL is preserved if you leave it empty.
+
+# Teams message review — status / actions
+TeamsReview_ChannelSuggestion=AI suggests channel: {0}
+TeamsReview_MessageRequired=Message cannot be empty.
+TeamsReview_Sending=Sending...
+TeamsReview_SendOk=✅ Message sent to Teams!
+TeamsReview_SendFail=Could not send message. Try again.
+TeamsReview_SendError=Error sending:\n{0}
+TeamsReview_SendBtn=Send to Teams
+
+# Zapier/Make config — status / actions
+ZapierConfig_FillWebhook=Enter a webhook URL
+ZapierConfig_Testing=Testing...
+ZapierConfig_TestOk=✅ Webhook reachable! Test payload sent.
+ZapierConfig_TestFail=❌ Webhook not reachable. Check the URL.
+ZapierConfig_TestError=❌ Error: {0}
+ZapierConfig_TestBtnReset=Test webhook (sends test payload)
+ZapierConfig_ConnectionRequired=Connection required
+ZapierConfig_ConnectionRequiredDesc=Test the webhook before saving.
+ZapierConfig_Saving=Saving...
+ZapierConfig_SaveOk=Webhook integration saved successfully!
+ZapierConfig_SaveFail=Could not save integration. Try again.
+ZapierConfig_SaveError=Error saving: {0}
+ZapierConfig_AlreadyConnected=✅ Connected — webhook URL is preserved if you leave it empty.
+
+# Zapier/Make review — status / actions
+ZapierReview_PayloadRequired=Payload cannot be empty.
+ZapierReview_InvalidJson=Invalid JSON. Check the formatting.
+ZapierReview_Sending=Sending...
+ZapierReview_SendOk=✅ Data sent to webhook!
+ZapierReview_SendFail=Could not send data. Try again.
+ZapierReview_SendError=Error sending:\n{0}
+ZapierReview_SendBtn=Send to webhook
+
+# Gmail config — status / actions
+GmailConfig_ConnectedAs=✅ Connected as: {0}
+GmailConfig_Reconnect=Reconnect
+GmailConfig_OpeningBrowser=Opening browser...
+GmailConfig_AuthUrlError=Could not retrieve authorisation URL. Check server configuration.
+GmailConfig_WaitingBrowser=Waiting for authorisation in browser...
+GmailConfig_AuthError=Error starting authorisation:\n{0}
+GmailConfig_ConnectionRequired=Connection required
+GmailConfig_ConnectionRequiredDesc=First connect your Google account.
+GmailConfig_Saving=Saving...
+GmailConfig_SaveFail=Could not save configuration. Please try again.
+GmailConfig_SaveError=Error saving:\n{0}
+
+# Gmail review — window
+GmailReview_WindowTitle=Send Email
+GmailReview_Eyebrow=GMAIL · REVIEW
+GmailReview_Title=Send email
+GmailReview_Subtitle=Review and edit the AI-generated email.
+GmailReview_To=To
+GmailReview_Cc=CC (optional)
+GmailReview_Subject=Subject
+GmailReview_Body=Message
+GmailReview_SendBtn=Send
+# Gmail review — status / actions
+GmailReview_RecipientRequired=Please enter a recipient (To field).
+GmailReview_SubjectRequired=Please enter a subject.
+GmailReview_Sending=Sending...
+GmailReview_SendOk=✅ Email sent!
+GmailReview_SendFail=Could not send email. Please try again.
+GmailReview_SendError=Error sending:\n{0}
+GmailReview_Saving=Saving...
+GmailReview_DraftOk=✅ Draft saved in Gmail!
+GmailReview_DraftFail=Could not save draft. Please try again.
+GmailReview_DraftError=Error saving draft:\n{0}
+GmailReview_SaveDraftBtn=Save as draft
+
+# Calendar config — error dialogs
+CalConfig_AuthUrlError=Could not retrieve authorisation URL. Check server configuration.
+CalConfig_AuthError=Error starting authorisation:\n{0}
+CalConfig_ConnectionRequired=Connection required
+CalConfig_ConnectionRequiredDesc=First connect your Google account.
+CalConfig_SaveFail=Could not save configuration. Please try again.
+CalConfig_SaveError=Error saving:\n{0}
+
+# Calendar event review — dialogs
+CalReview_TitleRequired=Please enter a title.
+CalReview_TimeRequired=Please fill in the start and end time (format: 2026-05-05T14:00:00).
+CalReview_CreateOk=✅ Event created!\n\n{0}\n\nOpen in Google Calendar?
+CalReview_CreateFail=Could not create event. Please try again.
+CalReview_CreateError=Error creating event:\n{0}
+
+# Style editor — dialogs
+StyleEditor_ValidationDesc=Please enter a name for the style
+StyleEditor_ProfileRequired=Style profile required
+StyleEditor_ProfileRequiredDesc=Generate a style profile first before saving.\n\nClick Generate writing style to create a profile based on your examples.
+StyleEditor_TooFewTitle=Too few examples
+StyleEditor_TooFewDesc=Add at least 3 example texts (currently: {0}).
+StyleEditor_UsageRequired=Usage context required
+StyleEditor_UsageRequiredDesc=Please fill in what you want to use this style for.
+StyleEditor_GenerateOk=Writing style profile successfully generated!\n\nAnalysed for: {0}
+StyleEditor_GenerateFail=Could not generate a writing style profile. Please try again.
+StyleEditor_GenerateError=Error generating writing style:\n{0}
+StyleEditor_NoStyle=No writing style
+StyleEditor_NoStyleDesc=Generate a writing style first before optimising.
+StyleEditor_UsageRequiredOptDesc=Please fill in what you use this style for.
+StyleEditor_OptimizeTitle=Optimisation complete
+StyleEditor_OptimizeOk=Writing style successfully optimised!\n\nImprovements:\n{0}\n\nThe optimised style is now active.
+StyleEditor_OptimizeFail=Could not optimise writing style. Please try again.
+StyleEditor_OptimizeError=Error optimising writing style:\n{0}
+StyleEditor_MaxExamples=Maximum reached
+StyleEditor_MaxExamplesDesc=Maximum 15 example texts allowed.
+StyleEditor_ExampleTooShort=Too short
+StyleEditor_ExampleTooShortDesc=Please enter at least 50 characters.
+
+# Add text example dialog (inline in StyleEditorView.cs)
+AddExample_Title=Add example text
+AddExample_Label=Paste a text that you have written yourself (minimum 50 characters):
+AddExample_Hint=E.g. an email you sent, a message, a post - something that reflects your style.
+AddExample_AddBtn=Add
+AddExample_Cancel=Cancel
+
+# Optimise style dialog (inline in StyleEditorView.cs)
+OptimizeDlg_Title=Optimise writing style
+OptimizeDlg_Header=Optimise your writing style
+OptimizeDlg_Desc=We will analyse your last 5 uses of this style to suggest improvements.\n\nWhat do you think could be better? (optional)
+OptimizeDlg_OptimizeBtn=Optimise
+OptimizeDlg_Cancel=Cancel
+
+# Training pair detail view
+Training_Metadata=Input: {0} words • Output: {1} words
+Training_PairTitle=Training Pair #{0}
+Training_ValidationTitle=Validation error
+Training_ValidationDesc=Both fields (Input and Output) must be filled in
+Training_SavedTitle=Saved
+Training_SavedDesc=Training pair successfully updated!
+Training_ConfirmTitle=Confirm
+Training_ConfirmDelete=Are you sure you want to delete this training pair?
+Training_DeletedTitle=Deleted
+Training_DeletedDesc=Training pair successfully deleted!
+
+# Feedback window — dialogs / typing indicator
+Feedback_ApiError=API error: {0}
+Feedback_SendError=Error sending: {0}
+Feedback_Typing=AI is working
+Feedback_NoCopyError=No AI response to copy.
+Feedback_CopyError=Error copying to clipboard: {0}
+Feedback_ConsolidateTitle=Feedback Consolidation
+Feedback_ConsolidateMsg=You have {0} feedback examples. Older examples are now being merged for better performance...
+Feedback_ConsolidateDoneTitle=Consolidation Complete
+Feedback_ConsolidateDoneMsg=Consolidation successful! {0} old examples have been merged. You now have {1} recent examples.
+Feedback_ConsolidateErrorTitle=Consolidation Error
+Feedback_ConsolidateError=Consolidation error (non-critical): {0}
+Feedback_UnknownError=Unknown error
+
+# Style library — dialogs
+StyleLib_NoDescription=No description
+StyleLib_LimitTitle=Style profile limit reached
+StyleLib_LimitDesc=Your {0} subscription allows a maximum of {1} style profile(s).\n\nUpgrade your subscription at maikey.nl/prijzen to create more style profiles.
+
+# Template view — dialogs
+Templates_SearchPlaceholder=🔍 Search template...
+Templates_StyleWarningTitle=Style recommended
+Templates_StyleWarningDesc=⚠️ NOTE: This template works best with a writing style!\n\nIt is strongly recommended to link a style to this mAIkey via Style Library for better results.\n\nDo you want to continue?
+Templates_HotkeyLimitTitle=Hotkey limit reached
+Templates_HotkeyLimitDesc=Your {0} subscription allows a maximum of {1} hotkeys.\n\nUpgrade your subscription at maikey.nl/pricing to create more hotkeys.
+Templates_IntegrationRequiredTitle=Integration required
+Templates_IntegrationRequiredDesc=This template works with the {0} integration.\n\nConnect {0} first via the Integrations menu, then add the template again.
+Templates_NoSlotsTitle=Limit reached
+Templates_NoSlotsDesc=No available hotkey combinations left!\n\nYou already have 9 hotkeys (Ctrl+1 through Ctrl+9) configured.\nFirst remove an existing hotkey via the 'Hotkeys' menu.
+
+# Screenshot mode
+ScreenCapture_Instruction=Select an area to send to AI. Press Esc to cancel.
+ScreenCapture_Processing=Processing screenshot...
+
+# Auto-update
+Update_Available_Title=Update available
+Update_Required_Title=Update required
+Update_NewVersion=A new version is available: {0}\nYour current version: {1}
+Update_ReleaseNotes=\n\nWhat's new:\n{0}
+Update_ForceMessage=\n\nThis update is required to continue using mAIkey.
+Update_OptionalMessage=\n\nWould you like to update now?
+Update_Failed_Title=Update failed
+Update_Failed_Body=The update could not be downloaded.\n\nYou can download the latest version manually:\n{0}
+Update_Failed_Error=Something went wrong during the update.\n\nDownload manually:\n{0}
+Update_Outdated=Your version of mAIkey is outdated and no longer supported.\n\nDownload the latest version:\n{0}
+Update_NowBtn=Update now
+Update_LaterBtn=Later
+Update_Downloading=Downloading and installing update…
+
+# Todoist / Trello / Asana integrations
+HotkeyEditor_OutTodoist=Todoist – Create directly
+HotkeyEditor_OutTodoistReview=Todoist – With review window
+HotkeyEditor_OutTrello=Trello – Create directly
+HotkeyEditor_OutTrelloReview=Trello – With review window
+HotkeyEditor_OutAsana=Asana – Create directly
+HotkeyEditor_OutAsanaReview=Asana – With review window
+Error_Integration_NotConfig_Todoist=Todoist integration not configured. Connect your Todoist account in the Integrations menu first.
+Error_Integration_NotConfig_Trello=Trello integration not configured. Connect your Trello account in the Integrations menu first.
+Error_Integration_NotConfig_Asana=Asana integration not configured. Connect your Asana account in the Integrations menu first.
+Integrations_TodoistDesc=Create tasks from selected text.
+Integrations_TrelloDesc=Create cards from selected text.
+Integrations_AsanaDesc=Create tasks from selected text.
+Loading_TodoistTask=Generating Todoist task...
+Loading_TrelloCard=Generating Trello card...
+Loading_AsanaTask=Generating Asana task...
+Tray_TodoistCreated=Todoist task created!
+Tray_TrelloCreated=Trello card created!
+Tray_AsanaCreated=Asana task created!
+Integrations_TodoistConfigured=Todoist integration configured successfully!\n\nYou can now create tasks via hotkeys.
+Integrations_TodoistDeleteConfirm=Are you sure you want to remove the Todoist integration?\n\nAll configuration will be lost.
+Integrations_TodoistDeleted=Todoist integration removed successfully
+Integrations_TrelloConfigured=Trello integration configured successfully!\n\nYou can now create cards via hotkeys.
+Integrations_TrelloDeleteConfirm=Are you sure you want to remove the Trello integration?\n\nAll configuration will be lost.
+Integrations_TrelloDeleted=Trello integration removed successfully
+Integrations_AsanaConfigured=Asana integration configured successfully!\n\nYou can now create tasks via hotkeys.
+Integrations_AsanaDeleteConfirm=Are you sure you want to remove the Asana integration?\n\nAll configuration will be lost.
+Integrations_AsanaDeleted=Asana integration removed successfully
+
+# Todoist config window
+TodoistConfig_FillToken=Enter an API token
+TodoistConfig_Testing=Testing...
+TodoistConfig_TestOk=✅ Connection successful!
+TodoistConfig_TestFail=❌ Connection failed. Check your token.
+TodoistConfig_TestError=❌ Error: {0}
+TodoistConfig_TestBtnReset=Test connection
+TodoistConfig_ConnectedNoProjects=✅ Connected, but no projects found.
+TodoistConfig_ProjectsLoadError=Cannot load projects: {0}
+TodoistConfig_ConnectionRequired=Connection required
+TodoistConfig_ConnectionRequiredDesc=Test the connection before saving.
+TodoistConfig_Saving=Saving...
+TodoistConfig_SaveOk=Todoist integration saved successfully!
+TodoistConfig_SaveFail=Could not save integration. Please try again.
+TodoistConfig_SaveError=Error while saving: {0}
+TodoistConfig_AlreadyConnected=✅ Connected — token is kept if you leave this empty.
+
+# Trello config window
+TrelloConfig_FillKeyToken=Enter both API key and token
+TrelloConfig_Testing=Testing...
+TrelloConfig_TestOk=✅ Connection successful!
+TrelloConfig_TestFail=❌ Connection failed. Check your API key and token.
+TrelloConfig_TestError=❌ Error: {0}
+TrelloConfig_TestBtnReset=Test connection
+TrelloConfig_ConnectedNoBoards=✅ Connected, but no boards found.
+TrelloConfig_BoardsLoadError=Cannot load boards: {0}
+TrelloConfig_ListsLoadError=Cannot load lists: {0}
+TrelloConfig_ConnectionRequired=Connection required
+TrelloConfig_ConnectionRequiredDesc=Test the connection before saving.
+TrelloConfig_Saving=Saving...
+TrelloConfig_SaveOk=Trello integration saved successfully!
+TrelloConfig_SaveFail=Could not save integration. Please try again.
+TrelloConfig_SaveError=Error while saving: {0}
+TrelloConfig_AlreadyConnected=✅ Connected — credentials are kept if you leave these empty.
+
+# Asana config window
+AsanaConfig_FillToken=Enter a personal access token
+AsanaConfig_Testing=Testing...
+AsanaConfig_TestOk=✅ Connection successful!
+AsanaConfig_TestFail=❌ Connection failed. Check your token.
+AsanaConfig_TestError=❌ Error: {0}
+AsanaConfig_TestBtnReset=Test connection
+AsanaConfig_ConnectedNoWorkspaces=✅ Connected, but no workspaces found.
+AsanaConfig_WorkspacesLoadError=Cannot load workspaces: {0}
+AsanaConfig_ProjectsLoadError=Cannot load projects: {0}
+AsanaConfig_ConnectionRequired=Connection required
+AsanaConfig_ConnectionRequiredDesc=Test the connection before saving.
+AsanaConfig_Saving=Saving...
+AsanaConfig_SaveOk=Asana integration saved successfully!
+AsanaConfig_SaveFail=Could not save integration. Please try again.
+AsanaConfig_SaveError=Error while saving: {0}
+AsanaConfig_AlreadyConnected=✅ Connected — token is kept if you leave this empty.
+
+# Todoist review window
+TodoistReview_ContentRequired=Task description is required.
+TodoistReview_Creating=Creating...
+TodoistReview_CreateTitle=Task created
+TodoistReview_CreateOk=✅ Task created!\n\n{0}\n\nURL copied to clipboard.
+TodoistReview_CreateFail=Could not create task. Please try again.
+TodoistReview_CreateError=Error while creating task:\n{0}
+TodoistReview_CreateBtn=Create task
+TodoistPriority_Urgent=P1 – Urgent
+TodoistPriority_High=P2 – High
+TodoistPriority_Medium=P3 – Medium
+TodoistPriority_Normal=P4 – Normal
+
+# Trello review window
+TrelloReview_NameRequired=Card name is required.
+TrelloReview_Creating=Creating...
+TrelloReview_CreateTitle=Card created
+TrelloReview_CreateOk=✅ Card created!\n\n{0}\n\nURL copied to clipboard.
+TrelloReview_CreateFail=Could not create card. Please try again.
+TrelloReview_CreateError=Error while creating card:\n{0}
+TrelloReview_CreateBtn=Create card
+
+# Asana review window
+AsanaReview_NameRequired=Task name is required.
+AsanaReview_Creating=Creating...
+AsanaReview_CreateTitle=Task created
+AsanaReview_CreateOk=✅ Task created!\n\n{0}\n\nURL copied to clipboard.
+AsanaReview_CreateFail=Could not create task. Please try again.
+AsanaReview_CreateError=Error while creating task:\n{0}
+AsanaReview_CreateBtn=Create task
+
+# Google Tasks integration
+HotkeyEditor_OutGTasks=Google Tasks – Create directly
+HotkeyEditor_OutGTasksReview=Google Tasks – With review window
+Error_Integration_NotConfig_GTasks=Google Tasks integration not configured. Connect your Google account in the Integrations menu first.
+Integrations_GTasksDesc=Create tasks from selected text.
+Loading_GTask=Generating Google Tasks task...
+Tray_GTaskCreated=Google Tasks task created!
+Integrations_GTasksConfigured=Google Tasks integration configured successfully!\n\nYou can now create tasks via hotkeys.
+Integrations_GTasksDeleteConfirm=Are you sure you want to remove the Google Tasks integration?\n\nAll configuration will be lost.
+Integrations_GTasksDeleted=Google Tasks integration removed successfully
+
+# Google Tasks config window
+GTasksConfig_Title=Configure Google Tasks
+GTasksConfig_Heading=Connect Google Tasks
+GTasksConfig_Subtitle=Connect your Google account to create tasks via hotkeys.
+GTasksConfig_Step1=Step 1: Connect your Google account
+GTasksConfig_ConnectBtn=Connect with Google
+GTasksConfig_Reconnect=Reconnect
+GTasksConfig_Opening=Opening browser...
+GTasksConfig_WaitingBrowser=Waiting for authorization in the browser...
+GTasksConfig_ConnectedAs=Connected as
+GTasksConfig_AuthUrlError=Cannot retrieve authorization URL. Please try again later.
+GTasksConfig_AuthError=Connection error: {0}
+GTasksConfig_Step2=Step 2: Default task list
+GTasksConfig_ListHint=Task list where new tasks are created (default: My Tasks)
+GTasksConfig_ConnectionRequired=Connection required
+GTasksConfig_ConnectionRequiredDesc=Connect your Google account before saving.
+GTasksConfig_Saving=Saving...
+GTasksConfig_SaveFail=Could not save configuration. Please try again.
+GTasksConfig_SaveError=Error while saving: {0}
+GTasksConfig_Cancel=Cancel
+GTasksConfig_Save=Save
+
+# Google Tasks review window
+GTaskReview_TitleRequired=Task name is required.
+GTaskReview_Creating=Creating...
+GTaskReview_CreateTitle=Task created
+GTaskReview_CreateOk=✅ Task created in Google Tasks:\n\n{0}
+GTaskReview_CreateFail=Could not create task. Please try again.
+GTaskReview_CreateError=Error while creating task:\n{0}
+GTaskReview_CreateBtn=Create task
