@@ -114,7 +114,8 @@ public class HotkeyRuntime
             model: hk.Model,
             customPrompt: hk.CustomPrompt,
             outputMode: hk.OutputMode,
-            prefixLanguage: hk.PrefixLanguage);
+            prefixLanguage: hk.PrefixLanguage,
+            promptId: hk.PromptId);
         Log($"API resultaat: success={result.Success} error={result.Error} output={(result.Output?.Length ?? 0)} tekens");
 
         if (!result.Success || string.IsNullOrEmpty(result.Output))

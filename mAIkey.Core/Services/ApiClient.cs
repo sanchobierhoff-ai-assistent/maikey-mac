@@ -196,12 +196,14 @@ public class ApiClient
         string? consolidatedLessons = null,
         AIParameters? aiParameters = null,
         string[]? imageUrls = null,
-        string[]? publicIds = null)
+        string[]? publicIds = null,
+        string? promptId = null)
     {
         var payload = new
         {
             text,
             model,
+            promptId,
             customPrompt,
             styleProfile,
             userInstructions,
