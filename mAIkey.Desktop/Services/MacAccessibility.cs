@@ -1,39 +1,29 @@
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace mAIkey.Desktop.Services;
 
 /// <summary>
-/// Controleert (en vraagt) de macOS Toegankelijkheids-toestemming. Die is nodig
-/// om Cmd+C/Cmd+V in andere apps te simuleren (het pakken van de selectie en het
-/// terugplakken van het resultaat). De hotkey-registratie zelf heeft dit NIET nodig.
+/// Controleert de macOS Toegankelijkheids-toestemming. Die is nodig om Cmd+C/Cmd+V
+/// in andere apps te simuleren (de selectie pakken en het resultaat terugplakken).
+/// De hotkey-registratie zelf heeft dit NIET nodig.
+///
+/// We gebruiken bewust alleen de parameterloze AXIsProcessTrusted() (een simpele
+/// bool-aanroep) en openen zo nodig het instellingen-paneel. De variant met opties
+/// (AXIsProcessTrustedWithOptions) vereist een handmatig opgebouwde CFDictionary en
+/// crashte in de praktijk — die vermijden we.
 /// </summary>
 public static class MacAccessibility
 {
     private const string AppServices =
         "/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices";
-    private const string CoreFoundation =
-        "/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation";
-    private const uint kCFStringEncodingUTF8 = 0x08000100;
 
     [DllImport(AppServices)]
     private static extern bool AXIsProcessTrusted();
 
-    [DllImport(AppServices)]
-    private static extern bool AXIsProcessTrustedWithOptions(IntPtr options);
-
-    [DllImport(CoreFoundation)]
-    private static extern IntPtr CFStringCreateWithCString(IntPtr alloc, string cStr, uint encoding);
-
-    [DllImport(CoreFoundation)]
-    private static extern IntPtr CFDictionaryCreate(
-        IntPtr allocator, IntPtr[] keys, IntPtr[] values, long numValues,
-        IntPtr keyCallBacks, IntPtr valueCallBacks);
-
-    [DllImport(CoreFoundation)]
-    private static extern void CFRelease(IntPtr cf);
-
     private static bool IsMac => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+    private static bool _settingsOpened;
 
     /// <summary>Is de app al vertrouwd (Toegankelijkheid aan)?</summary>
     public static bool IsTrusted()
@@ -44,37 +34,32 @@ public static class MacAccessibility
     }
 
     /// <summary>
-    /// Controleert de toestemming en toont, indien nog niet verleend, de
-    /// systeemprompt (voegt mAIkey toe aan de Toegankelijkheids-lijst en biedt een
-    /// knop naar de instellingen). Retourneert true als al vertrouwd.
+    /// True als de toestemming er is. Zo niet, dan wordt (één keer) het
+    /// Toegankelijkheids-paneel geopend zodat de gebruiker mAIkey kan aanzetten.
     /// </summary>
     public static bool EnsureTrusted()
     {
-        if (!IsMac) return true;
-        try
+        if (IsTrusted()) return true;
+
+        if (!_settingsOpened)
         {
-            if (AXIsProcessTrusted()) return true;
-
-            // options = { kAXTrustedCheckOptionPrompt: true }
-            IntPtr key = CFStringCreateWithCString(IntPtr.Zero, "AXTrustedCheckOptionPrompt", kCFStringEncodingUTF8);
-            IntPtr val = GetCFBooleanTrue();
-            IntPtr dict = CFDictionaryCreate(IntPtr.Zero, new[] { key }, new[] { val }, 1, IntPtr.Zero, IntPtr.Zero);
-
-            bool trusted = AXIsProcessTrustedWithOptions(dict);
-
-            if (dict != IntPtr.Zero) CFRelease(dict);
-            if (key != IntPtr.Zero) CFRelease(key);
-            return trusted;
+            _settingsOpened = true;
+            OpenAccessibilitySettings();
         }
-        catch
-        {
-            return false;
-        }
+        return false;
     }
 
-    private static IntPtr GetCFBooleanTrue()
+    private static void OpenAccessibilitySettings()
     {
-        var lib = NativeLibrary.Load(CoreFoundation);
-        return Marshal.ReadIntPtr(NativeLibrary.GetExport(lib, "kCFBooleanTrue"));
+        try
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "open",
+                Arguments = "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility",
+                UseShellExecute = false
+            });
+        }
+        catch { /* nooit crashen op het openen van instellingen */ }
     }
 }
