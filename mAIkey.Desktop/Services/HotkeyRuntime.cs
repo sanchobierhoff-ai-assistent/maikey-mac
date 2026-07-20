@@ -52,24 +52,45 @@ public class HotkeyRuntime
         _byId.Clear();
         _nextId = 1;
 
+        int count = 0;
         foreach (var hk in _config.Hotkeys)
         {
-            if (!hk.Enabled || hk.Key == 0) continue;
+            if (!hk.Enabled || hk.Key == 0)
+            {
+                Log($"overslaan '{hk.Name}' (enabled={hk.Enabled}, key={hk.Key})");
+                continue;
+            }
 
             int id = _nextId++;
-            if (_hotkeys.RegisterHotkey(id, (HotkeyModifiers)hk.ModifierKeys, hk.Key))
-                _byId[id] = hk;
+            bool ok = _hotkeys.RegisterHotkey(id, (HotkeyModifiers)hk.ModifierKeys, hk.Key);
+            if (ok) { _byId[id] = hk; count++; }
+            Log($"registreren '{hk.Name}' mods={hk.ModifierKeys} key={hk.Key} -> {(ok ? "OK" : "MISLUKT")}");
         }
+        Log($"totaal geregistreerd: {count}");
+    }
+
+    private static void Log(string msg)
+    {
+        try
+        {
+            var dir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            if (string.IsNullOrEmpty(dir)) dir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            System.IO.File.AppendAllText(
+                System.IO.Path.Combine(dir, "maikey-hotkey.log"),
+                $"{DateTime.Now:HH:mm:ss}  {msg}\n");
+        }
+        catch { }
     }
 
     private async void OnHotkeyPressed(object? sender, HotkeyPressedEventArgs e)
     {
-        if (_busy) return;
-        if (!_byId.TryGetValue(e.HotkeyId, out var hk)) return;
+        Log($"--- hotkey ingedrukt (id={e.HotkeyId}) ---");
+        if (_busy) { Log("bezig, genegeerd"); return; }
+        if (!_byId.TryGetValue(e.HotkeyId, out var hk)) { Log("onbekend id"); return; }
 
         _busy = true;
         try { await RunAsync(hk); }
-        catch { /* een fout in de actie mag de app nooit laten crashen */ }
+        catch (Exception ex) { Log($"FOUT: {ex.Message}"); }
         finally { _busy = false; }
     }
 
@@ -77,9 +98,14 @@ public class HotkeyRuntime
     {
         // Toegankelijkheid nodig om de selectie te pakken en terug te plakken.
         if (!MacAccessibility.EnsureTrusted())
-            return; // gebruiker moet eerst toestemming geven (systeemprompt is getoond)
+        {
+            Log("geen Toegankelijkheids-toestemming -> instellingen geopend, gestopt");
+            return;
+        }
+        Log("toestemming OK");
 
         var text = await _clipboard.GetSelectedTextAsync();
+        Log($"geselecteerde tekst: {(text == null ? "null" : text.Length + " tekens")}");
         if (string.IsNullOrWhiteSpace(text))
             return;
 
@@ -89,6 +115,7 @@ public class HotkeyRuntime
             customPrompt: hk.CustomPrompt,
             outputMode: hk.OutputMode,
             prefixLanguage: hk.PrefixLanguage);
+        Log($"API resultaat: success={result.Success} error={result.Error} output={(result.Output?.Length ?? 0)} tekens");
 
         if (!result.Success || string.IsNullOrEmpty(result.Output))
             return;
@@ -97,5 +124,7 @@ public class HotkeyRuntime
             await _clipboard.SetTextAsync(result.Output);
         else
             await _clipboard.ReplaceSelectedTextAsync(result.Output);
+
+        Log($"klaar (mode={hk.OutputMode})");
     }
 }
