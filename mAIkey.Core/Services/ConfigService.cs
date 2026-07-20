@@ -8,10 +8,32 @@ public class ConfigService
 {
     public const string CURRENT_VERSION = "Beta-v1.4-mac";
 
-    private static readonly string ConfigDirectory =
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "mAIkey");
+    private static readonly string ConfigDirectory = ResolveConfigDirectory();
 
     private static readonly string ConfigFile = Path.Combine(ConfigDirectory, "config.json");
+
+    /// <summary>
+    /// Bepaalt een schrijfbare configmap. Op macOS geeft
+    /// GetFolderPath(ApplicationData) bij een Finder-start soms een lege string,
+    /// waardoor het pad naar de (read-only) schijfroot zou wijzen. Daarom vallen
+    /// we terug op de home-map en als laatste redmiddel op de temp-map.
+    /// </summary>
+    private static string ResolveConfigDirectory()
+    {
+        string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+        if (string.IsNullOrEmpty(baseDir))
+        {
+            string home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            if (string.IsNullOrEmpty(home))
+                home = Environment.GetEnvironmentVariable("HOME") ?? string.Empty;
+            if (string.IsNullOrEmpty(home))
+                home = Path.GetTempPath();
+            baseDir = Path.Combine(home, ".config");
+        }
+
+        return Path.Combine(baseDir, "mAIkey");
+    }
 
     private AppConfig _config;
     private readonly ITokenProtection? _tokenProtection;
@@ -20,8 +42,15 @@ public class ConfigService
     {
         _tokenProtection = tokenProtection;
 
-        if (!Directory.Exists(ConfigDirectory))
-            Directory.CreateDirectory(ConfigDirectory);
+        try
+        {
+            if (!Directory.Exists(ConfigDirectory))
+                Directory.CreateDirectory(ConfigDirectory);
+        }
+        catch
+        {
+            // Nooit crashen op de configmap — de app draait desnoods zonder opslag.
+        }
 
         _config = LoadConfig();
     }
