@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace mAIkey.Core.Models;
 
 public class ApiResponse
@@ -30,6 +32,8 @@ public class RefreshTokenResponse : ApiResponse
 
 public class AnalyzeResponse : ApiResponse
 {
+    // De backend stuurt het AI-resultaat in het veld "response".
+    [JsonPropertyName("response")]
     public string? Output { get; set; }
     public int? TokensUsed { get; set; }
     public string? Model { get; set; }
