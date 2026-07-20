@@ -9,6 +9,17 @@ public partial class App : Application
 {
     public static ConfigService Config { get; private set; } = null!;
     public static ApiClient Api { get; private set; } = null!;
+    public static Services.HotkeyRuntime? Hotkeys { get; private set; }
+
+    private static void StartHotkeys()
+    {
+        try
+        {
+            Hotkeys ??= new Services.HotkeyRuntime(Config, Api);
+            Hotkeys.Start();
+        }
+        catch { /* hotkeys mogen de app nooit blokkeren */ }
+    }
 
     public override void Initialize()
     {
@@ -38,12 +49,14 @@ public partial class App : Application
                     desktop.MainWindow = new MainWindow();
                     desktop.MainWindow.Show();
                     login.Close();
+                    StartHotkeys();
                 };
                 desktop.MainWindow = login;
             }
             else
             {
                 desktop.MainWindow = new MainWindow();
+                StartHotkeys();
             }
         }
 

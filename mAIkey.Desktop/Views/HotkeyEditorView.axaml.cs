@@ -240,6 +240,7 @@ public partial class HotkeyEditorView : UserControl
             hotkeys[idx] = _selectedHotkey;
         _config.Hotkeys = hotkeys.ToArray();
 
+        App.Hotkeys?.RegisterAll();  // hotkeys direct opnieuw aanmelden bij het systeem
         PopulateHotkeyList();
     }
 
@@ -249,6 +250,7 @@ public partial class HotkeyEditorView : UserControl
 
         var hotkeys = _config.Hotkeys.Where(h => h.Id != _selectedHotkey.Id).ToArray();
         _config.Hotkeys = hotkeys;
+        App.Hotkeys?.RegisterAll();  // verwijderde hotkey ook bij het systeem afmelden
 
         _selectedHotkey = null;
         _selectedListItem = null;
