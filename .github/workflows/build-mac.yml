@@ -1,9 +1,13 @@
 name: Build macOS app
 
-# Bouwt de Mac-app (Avalonia mAIkey.Desktop) op een gratis macOS-runner en zet
-# een kant-en-klare .app klaar als download-artifact. Zo hoef je vanaf Windows
-# alleen te pushen; op de Mac download je de .app. (Ad-hoc ondertekend, niet
-# genotariseerd — de ontvangende Mac moet Gatekeeper één keer toestaan.)
+# Bouwt de Mac-app (Avalonia mAIkey.Desktop) op een gratis macOS-runner en doet twee dingen:
+#  1) zet een kant-en-klare .app klaar als download-artifact (voor een snelle losse test);
+#  2) publiceert een Velopack-update-release naar de Releases van deze repo, zodat een
+#     éénmaal geïnstalleerde app zichzelf bijwerkt (install once → update).
+#
+# LET OP: voor auto-update moet deze repo openbaar zijn (de app leest de releases zonder
+# token). De broncode bevat geen geheimen. Zonder notarisatie (Apple Developer ID) vraagt
+# de eerste installatie nog één keer om Gatekeeper toe te staan.
 
 on:
   push:
@@ -12,13 +16,17 @@ on:
       - 'mAIkey.Desktop/**'
       - 'mAIkey.Core/**'
       - '.github/workflows/build-mac.yml'
-  workflow_dispatch:   # handmatig starten via de Actions-tab
+  workflow_dispatch:
+
+permissions:
+  contents: write   # nodig om Releases te maken met de ingebouwde GITHUB_TOKEN
 
 jobs:
   build:
-    runs-on: macos-14   # Apple Silicon-runner
+    runs-on: macos-14
     strategy:
       fail-fast: false
+      max-parallel: 1        # niet parallel: voorkomt race bij het aanmaken van releases
       matrix:
         rid: [osx-arm64, osx-x64]
 
@@ -36,6 +44,7 @@ jobs:
           -c Release -r ${{ matrix.rid }} --self-contained true
           -o publish -nologo
 
+      # ── 1) Losse .app als download-artifact ──
       - name: .app-bundel maken
         run: |
           set -e
@@ -47,24 +56,7 @@ jobs:
           sed "s/__VERSION__/$VERSION/g" mAIkey.Desktop/Info.plist > "$APP/Contents/Info.plist"
           chmod +x "$APP/Contents/MacOS/mAIkey.Desktop"
 
-      - name: Icoon toevoegen (.ico -> .icns)
-        run: |
-          set -e
-          ICO="mAIkey.Desktop/Resources/maikey.ico"
-          if [ -f "$ICO" ]; then
-            # Grootste frame uit de .ico halen en naar .icns converteren
-            sips -s format png "$ICO" --out icon.png >/dev/null 2>&1 || true
-            if [ -f icon.png ]; then
-              mkdir -p icon.iconset
-              for s in 16 32 64 128 256 512; do
-                sips -z $s $s icon.png --out "icon.iconset/icon_${s}x${s}.png" >/dev/null 2>&1 || true
-                d=$((s*2)); sips -z $d $d icon.png --out "icon.iconset/icon_${s}x${s}@2x.png" >/dev/null 2>&1 || true
-              done
-              iconutil -c icns icon.iconset -o "mAIkey.app/Contents/Resources/maikey.icns" || true
-            fi
-          fi
-
-      - name: Ad-hoc ondertekenen (gratis; laat de app draaien op Apple Silicon)
+      - name: Ad-hoc ondertekenen
         run: codesign --force --deep --sign - "mAIkey.app"
 
       - name: Inpakken
@@ -76,3 +68,37 @@ jobs:
           name: mAIkey-${{ matrix.rid }}
           path: mAIkey-${{ matrix.rid }}.zip
           retention-days: 30
+
+      # ── 2) Velopack-update-release publiceren ──
+      - name: vpk installeren
+        run: dotnet tool install -g vpk --version 1.2.0
+
+      - name: Vorige release ophalen (voor delta-updates)
+        run: |
+          export PATH="$PATH:$HOME/.dotnet/tools"
+          mkdir -p Releases
+          vpk download github --repoUrl "https://github.com/${{ github.repository }}" \
+            --channel ${{ matrix.rid }} --outputDir Releases \
+            --token ${{ secrets.GITHUB_TOKEN }} || echo "(geen vorige release — eerste voor dit kanaal)"
+
+      - name: Velopack-pakket maken
+        run: |
+          export PATH="$PATH:$HOME/.dotnet/tools"
+          vpk pack \
+            --packId mAIkey \
+            --packVersion 1.0.${{ github.run_number }} \
+            --packDir publish \
+            --mainExe mAIkey.Desktop \
+            --packTitle mAIkey \
+            --channel ${{ matrix.rid }} \
+            --outputDir Releases
+
+      - name: Update publiceren naar Releases
+        run: |
+          export PATH="$PATH:$HOME/.dotnet/tools"
+          vpk upload github --repoUrl "https://github.com/${{ github.repository }}" \
+            --channel ${{ matrix.rid }} --outputDir Releases \
+            --token ${{ secrets.GITHUB_TOKEN }} \
+            --publish true --merge true \
+            --releaseName "mAIkey (${{ matrix.rid }}) 1.0.${{ github.run_number }}" \
+            --tag ${{ matrix.rid }}-1.0.${{ github.run_number }}

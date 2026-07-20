@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using mAIkey.Core.Services;
@@ -32,7 +33,11 @@ public class UpdateInfo
 public static class UpdateService
 {
     // Releases-repo voor de desktop-app (gedeeld met de Windows-app).
-    private const string GithubRepoUrl = "https://github.com/sanchobierhoff-ai-assistent/ai-assistent";
+    private const string GithubRepoUrl = "https://github.com/sanchobierhoff-ai-assistent/maikey-mac";
+
+    // Kanaal per processor, zodat een Intel-Mac geen Apple-Silicon-pakket haalt (en andersom).
+    private static string Channel =>
+        RuntimeInformation.ProcessArchitecture == Architecture.Arm64 ? "osx-arm64" : "osx-x64";
 
     /// <summary>
     /// Check of er een nieuwere macOS-versie beschikbaar is via Velopack.
@@ -46,7 +51,7 @@ public static class UpdateService
         {
             var mgr = new UpdateManager(
                 new GithubSource(GithubRepoUrl, accessToken: null, prerelease: false),
-                new UpdateOptions { ExplicitChannel = "osx" });
+                new UpdateOptions { ExplicitChannel = Channel });
 
             // Niet via Velopack geïnstalleerd (dev-build) → geen auto-update.
             if (!mgr.IsInstalled)
