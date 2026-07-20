@@ -278,8 +278,12 @@ public partial class HotkeyEditorView : UserControl
             e.Key == Key.LWin || e.Key == Key.RWin)
             return;
 
-        // Map Avalonia key to virtual key code
-        int vk = (int)e.Key;
+        // Zet de Avalonia-toets om naar een Windows virtual-key-code. Zo staat de
+        // config in hetzelfde formaat als de Windows-app en kan de macOS-hotkeydienst
+        // hem correct naar een macOS-toetscode vertalen.
+        int vk = AvaloniaKeyToVk(e.Key);
+        if (vk == 0) return; // niet-ondersteunde toets, negeren
+
         _recordedModifiers = mods;
         _recordedKey = vk;
 
@@ -289,10 +293,60 @@ public partial class HotkeyEditorView : UserControl
         if ((mods & 1) != 0) parts.Add("Alt");
         if ((mods & 4) != 0) parts.Add("Shift");
         if ((mods & 8) != 0) parts.Add("Cmd");
-        parts.Add(e.Key.ToString());
+        parts.Add(VkToDisplay(vk));
 
         HotkeyComboBox.Text = string.Join(" + ", parts);
     }
+
+    /// <summary>
+    /// Avalonia Key -> Windows virtual-key-code. Gebruikt de (aaneengesloten,
+    /// geordende) enum-reeksen zodat het niet afhangt van absolute enum-waarden.
+    /// Retourneert 0 voor niet-ondersteunde toetsen.
+    /// </summary>
+    private static int AvaloniaKeyToVk(Key key)
+    {
+        if (key >= Key.A && key <= Key.Z) return 0x41 + (key - Key.A);
+        if (key >= Key.D0 && key <= Key.D9) return 0x30 + (key - Key.D0);
+        if (key >= Key.NumPad0 && key <= Key.NumPad9) return 0x30 + (key - Key.NumPad0);
+        if (key >= Key.F1 && key <= Key.F12) return 0x70 + (key - Key.F1);
+
+        return key switch
+        {
+            Key.Space => 0x20,
+            Key.Enter => 0x0D,
+            Key.Escape => 0x1B,
+            Key.Tab => 0x09,
+            Key.Back => 0x08,
+            Key.Left => 0x25,
+            Key.Up => 0x26,
+            Key.Right => 0x27,
+            Key.Down => 0x28,
+            Key.OemComma => 0xBC,
+            Key.OemPeriod => 0xBE,
+            Key.OemQuestion => 0xBF,
+            Key.OemSemicolon => 0xBA,
+            Key.OemMinus => 0xBD,
+            Key.OemPlus => 0xBB,
+            Key.OemTilde => 0xC0,
+            Key.OemOpenBrackets => 0xDB,
+            Key.OemCloseBrackets => 0xDD,
+            Key.OemPipe => 0xDC,
+            _ => 0
+        };
+    }
+
+    /// <summary>Windows virtual-key-code -> leesbare weergave (identiek aan het dashboard).</summary>
+    private static string VkToDisplay(int vk) => vk switch
+    {
+        >= 0x30 and <= 0x39 => ((char)vk).ToString(),
+        >= 0x41 and <= 0x5A => ((char)vk).ToString(),
+        >= 0x70 and <= 0x7B => $"F{vk - 0x6F}",
+        0x20 => "Space",
+        0x0D => "Enter",
+        0x1B => "Esc",
+        0x09 => "Tab",
+        _ => $"Key{vk}"
+    };
 
     // ═══ MODELS & STYLES ═══
 
