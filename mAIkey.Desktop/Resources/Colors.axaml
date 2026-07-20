@@ -188,8 +188,8 @@
 
   <!-- ═══════════ Thema-onafhankelijke tokens ═══════════ -->
   <!-- Lettertypen -->
-  <FontFamily x:Key="FontUi">avares://mAIkey.Desktop/Resources/Fonts#Geist</FontFamily>
-  <FontFamily x:Key="FontMono">avares://mAIkey.Desktop/Resources/Fonts#JetBrains Mono</FontFamily>
+  <FontFamily x:Key="FontUi">avares://mAIkey.Desktop/Resources/Fonts#Geist, Helvetica Neue, Arial, sans-serif</FontFamily>
+  <FontFamily x:Key="FontMono">avares://mAIkey.Desktop/Resources/Fonts#JetBrains Mono, Menlo, Courier New, monospace</FontFamily>
 
   <!-- Corner radius -->
   <CornerRadius x:Key="RadiusSm">6</CornerRadius>
