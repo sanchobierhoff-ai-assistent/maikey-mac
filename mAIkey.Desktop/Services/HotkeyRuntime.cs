@@ -21,6 +21,7 @@ public class HotkeyRuntime
     private readonly IHotkeyService _hotkeys;
     private readonly IClipboardService _clipboard;
 
+    private readonly ProcessingIndicator _indicator = new();
     private readonly Dictionary<int, HotkeyConfig> _byId = new();
     private int _nextId = 1;
     private bool _busy;
@@ -104,28 +105,50 @@ public class HotkeyRuntime
         }
         Log("toestemming OK");
 
+        // Onthoud de app die vooraan stond, zodat we die na de indicator kunnen
+        // heractiveren (anders belandt Cmd+V in het indicator-venster).
+        IntPtr targetApp = _clipboard.GetForegroundWindow();
+
         var text = await _clipboard.GetSelectedTextAsync();
         Log($"geselecteerde tekst: {(text == null ? "null" : text.Length + " tekens")}");
         if (string.IsNullOrWhiteSpace(text))
             return;
 
-        var result = await _api.AnalyzeAsync(
-            text,
-            model: hk.Model,
-            customPrompt: hk.CustomPrompt,
-            outputMode: hk.OutputMode,
-            prefixLanguage: hk.PrefixLanguage,
-            promptId: hk.PromptId);
-        Log($"API resultaat: success={result.Success} error={result.Error} output={(result.Output?.Length ?? 0)} tekens");
+        bool showIndicator = _config.ShowAiIndicator;
+        if (showIndicator) _indicator.Show();
 
-        if (!result.Success || string.IsNullOrEmpty(result.Output))
-            return;
+        try
+        {
+            var result = await _api.AnalyzeAsync(
+                text,
+                model: hk.Model,
+                customPrompt: hk.CustomPrompt,
+                outputMode: hk.OutputMode,
+                prefixLanguage: hk.PrefixLanguage,
+                promptId: hk.PromptId);
+            Log($"API resultaat: success={result.Success} error={result.Error} output={(result.Output?.Length ?? 0)} tekens");
 
-        if (hk.OutputMode == "clipboard")
-            await _clipboard.SetTextAsync(result.Output);
-        else
-            await _clipboard.ReplaceSelectedTextAsync(result.Output);
+            if (!result.Success || string.IsNullOrEmpty(result.Output))
+                return;
 
-        Log($"klaar (mode={hk.OutputMode})");
+            // Indicator weg + oorspronkelijke app terug naar voren vóór het plakken.
+            if (showIndicator)
+            {
+                _indicator.Hide();
+                _clipboard.SetForegroundWindow(targetApp);
+                await Task.Delay(150);
+            }
+
+            if (hk.OutputMode == "clipboard")
+                await _clipboard.SetTextAsync(result.Output);
+            else
+                await _clipboard.ReplaceSelectedTextAsync(result.Output);
+
+            Log($"klaar (mode={hk.OutputMode})");
+        }
+        finally
+        {
+            if (showIndicator) _indicator.Hide();
+        }
     }
 }
