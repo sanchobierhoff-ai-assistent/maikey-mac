@@ -5,13 +5,13 @@
   <Grid ColumnDefinitions="260,*">
 
     <!-- ═══ LEFT: HOTKEY LIST ═══ -->
-    <Border Grid.Column="0" Background="#0B0B0D" BorderBrush="#26262C"
+    <Border Grid.Column="0" Background="{DynamicResource Bg0}" BorderBrush="{DynamicResource Border1}"
             BorderThickness="0,0,1,0">
       <DockPanel>
         <StackPanel DockPanel.Dock="Top" Margin="16,16,16,0" Spacing="12">
           <TextBlock Text="Hotkeys" FontSize="16" FontWeight="SemiBold"
-                     Foreground="#F2F2F5"/>
-          <Separator Background="#26262C" Height="1"/>
+                     Foreground="{DynamicResource Text1}"/>
+          <Separator Background="{DynamicResource Border1}" Height="1"/>
         </StackPanel>
 
         <Button DockPanel.Dock="Bottom" Classes="accent" Content="+ Nieuwe hotkey"
@@ -26,13 +26,13 @@
     </Border>
 
     <!-- ═══ RIGHT: EDITOR ═══ -->
-    <Border Grid.Column="1" Background="#111114">
+    <Border Grid.Column="1" Background="{DynamicResource Bg1}">
       <DockPanel>
         <!-- Top Bar -->
         <Border DockPanel.Dock="Top" Height="52" Padding="16,0"
-                BorderBrush="#26262C" BorderThickness="0,0,0,1">
+                BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
           <Grid>
-            <TextBlock Text="← Hotkeys" FontSize="13" Foreground="#9A9AA3"
+            <TextBlock Text="← Hotkeys" FontSize="13" Foreground="{DynamicResource Text2}"
                        VerticalAlignment="Center" HorizontalAlignment="Left"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
                         VerticalAlignment="Center" Spacing="8">
@@ -49,9 +49,9 @@
                     HorizontalAlignment="Center" Spacing="12"
                     Margin="0,0,0,60">
           <TextBlock Text="⚡" FontSize="48" HorizontalAlignment="Center"
-                     Foreground="#5E5E66"/>
+                     Foreground="{DynamicResource Text3}"/>
           <TextBlock Text="Selecteer een hotkey of maak een nieuwe aan"
-                     FontSize="14" Foreground="#9A9AA3"
+                     FontSize="14" Foreground="{DynamicResource Text2}"
                      HorizontalAlignment="Center"/>
         </StackPanel>
 
@@ -69,17 +69,17 @@
             <Border Classes="card">
               <StackPanel Spacing="12">
                 <TextBlock Text="Trigger" FontSize="13" FontWeight="SemiBold"
-                           Foreground="#F2F2F5"/>
+                           Foreground="{DynamicResource Text1}"/>
 
                 <StackPanel Spacing="6">
-                  <TextBlock Text="Toetscombo" FontSize="11" Foreground="#9A9AA3"/>
+                  <TextBlock Text="Toetscombo" FontSize="11" Foreground="{DynamicResource Text2}"/>
                   <TextBox Name="HotkeyComboBox" IsReadOnly="True"
                            Watermark="Klik hier en druk een combinatie"
                            Height="40" FontSize="13"
-                           Background="#1F1F24" Cursor="Hand"
+                           Background="{DynamicResource Bg3}" Cursor="Hand"
                            KeyDown="HotkeyCombo_KeyDown"/>
                   <TextBlock Text="Klik op het veld en druk een combinatie in (bijv. Ctrl+Alt+1)"
-                             FontSize="10" Foreground="#5E5E66"/>
+                             FontSize="10" Foreground="{DynamicResource Text3}"/>
                 </StackPanel>
               </StackPanel>
             </Border>
@@ -88,11 +88,11 @@
             <Border Classes="card">
               <StackPanel Spacing="12">
                 <TextBlock Text="AI Prompt" FontSize="13" FontWeight="SemiBold"
-                           Foreground="#F2F2F5"/>
+                           Foreground="{DynamicResource Text1}"/>
 
                 <StackPanel Spacing="6">
                   <TextBlock Text="Instructie voor de AI" FontSize="11"
-                             Foreground="#9A9AA3"/>
+                             Foreground="{DynamicResource Text2}"/>
                   <TextBox Name="PromptBox" AcceptsReturn="True"
                            TextWrapping="Wrap" MinHeight="80" MaxHeight="200"
                            Watermark="Bijv: Verbeter de tekst en maak deze professioneler..."
@@ -101,14 +101,14 @@
 
                 <!-- Model -->
                 <StackPanel Spacing="6">
-                  <TextBlock Text="AI Model" FontSize="11" Foreground="#9A9AA3"/>
+                  <TextBlock Text="AI Model" FontSize="11" Foreground="{DynamicResource Text2}"/>
                   <ComboBox Name="ModelComboBox" HorizontalAlignment="Stretch"
                             FontSize="13"/>
                 </StackPanel>
 
                 <!-- Writing style -->
                 <StackPanel Spacing="6">
-                  <TextBlock Text="Schrijfstijl" FontSize="11" Foreground="#9A9AA3"/>
+                  <TextBlock Text="Schrijfstijl" FontSize="11" Foreground="{DynamicResource Text2}"/>
                   <ComboBox Name="StyleComboBox" HorizontalAlignment="Stretch"
                             FontSize="13"/>
                 </StackPanel>
@@ -119,10 +119,10 @@
             <Border Classes="card">
               <StackPanel Spacing="12">
                 <TextBlock Text="Gedrag" FontSize="13" FontWeight="SemiBold"
-                           Foreground="#F2F2F5"/>
+                           Foreground="{DynamicResource Text1}"/>
 
                 <StackPanel Spacing="6">
-                  <TextBlock Text="Output modus" FontSize="11" Foreground="#9A9AA3"/>
+                  <TextBlock Text="Output modus" FontSize="11" Foreground="{DynamicResource Text2}"/>
                   <ComboBox Name="OutputModeComboBox" HorizontalAlignment="Stretch"
                             FontSize="13">
                     <ComboBoxItem Content="Vervangen (replace)" Tag="replace"/>
@@ -141,15 +141,15 @@
 
             <!-- Section: Geavanceerd -->
             <Expander Header="Geavanceerde AI-parameters" FontSize="12"
-                      Foreground="#9A9AA3" Margin="0,0,0,20">
+                      Foreground="{DynamicResource Text2}" Margin="0,0,0,20">
               <Border Classes="card" Margin="0,8,0,0">
                 <StackPanel Spacing="16">
                   <!-- Temperature -->
                   <StackPanel Spacing="4">
                     <Grid ColumnDefinitions="*,Auto">
-                      <TextBlock Text="Temperature" FontSize="11" Foreground="#9A9AA3"/>
+                      <TextBlock Text="Temperature" FontSize="11" Foreground="{DynamicResource Text2}"/>
                       <TextBlock Name="TempValueText" Grid.Column="1" Text="0.7"
-                                 FontSize="11" Foreground="#F2F2F5"/>
+                                 FontSize="11" Foreground="{DynamicResource Text1}"/>
                     </Grid>
                     <Slider Name="TempSlider" Minimum="0" Maximum="2"
                             Value="0.7" TickFrequency="0.1"
@@ -159,9 +159,9 @@
                   <!-- Max tokens -->
                   <StackPanel Spacing="4">
                     <Grid ColumnDefinitions="*,Auto">
-                      <TextBlock Text="Max Tokens" FontSize="11" Foreground="#9A9AA3"/>
+                      <TextBlock Text="Max Tokens" FontSize="11" Foreground="{DynamicResource Text2}"/>
                       <TextBlock Name="TokensValueText" Grid.Column="1" Text="8000"
-                                 FontSize="11" Foreground="#F2F2F5"/>
+                                 FontSize="11" Foreground="{DynamicResource Text1}"/>
                     </Grid>
                     <Slider Name="TokensSlider" Minimum="2000" Maximum="16000"
                             Value="8000" TickFrequency="1000"

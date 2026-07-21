@@ -15,7 +15,7 @@
       <Border Classes="card">
         <StackPanel Spacing="12">
           <TextBlock Text="Taal" FontSize="13" FontWeight="SemiBold"
-                     Foreground="#F2F2F5"/>
+                     Foreground="{DynamicResource Text1}"/>
           <ComboBox Name="LanguageComboBox" HorizontalAlignment="Stretch" FontSize="13">
             <ComboBoxItem Content="Nederlands" Tag="nl"/>
             <ComboBoxItem Content="English" Tag="en"/>
@@ -40,7 +40,7 @@
       <Border Classes="card">
         <StackPanel Spacing="12">
           <TextBlock Text="Gedrag" FontSize="13" FontWeight="SemiBold"
-                     Foreground="#F2F2F5"/>
+                     Foreground="{DynamicResource Text1}"/>
           <CheckBox Name="MinimizeToTrayCheck" Content="Minimaliseren naar system tray"
                     FontSize="12"/>
           <CheckBox Name="ShowIndicatorCheck" Content="Toon AI-indicator bij verwerking"
@@ -54,11 +54,11 @@
       <Border Classes="card">
         <StackPanel Spacing="12">
           <TextBlock Text="Content limieten" FontSize="13" FontWeight="SemiBold"
-                     Foreground="#F2F2F5"/>
+                     Foreground="{DynamicResource Text1}"/>
 
           <StackPanel Spacing="6">
             <TextBlock Text="Max afbeeldingen per verzoek" FontSize="11"
-                       Foreground="#9A9AA3"/>
+                       Foreground="{DynamicResource Text2}"/>
             <StackPanel Orientation="Horizontal" Spacing="8">
               <Button Content="-" Width="32" Height="32" Classes="ghost"
                       Padding="0" HorizontalContentAlignment="Center"
@@ -74,7 +74,7 @@
 
           <StackPanel Spacing="6">
             <TextBlock Text="Max tekens per verzoek" FontSize="11"
-                       Foreground="#9A9AA3"/>
+                       Foreground="{DynamicResource Text2}"/>
             <TextBox Name="MaxCharsBox" Width="120" HorizontalAlignment="Left"
                      FontSize="13"/>
           </StackPanel>
@@ -85,13 +85,13 @@
       <Border Classes="card">
         <StackPanel Spacing="12">
           <TextBlock Text="Account" FontSize="13" FontWeight="SemiBold"
-                     Foreground="#F2F2F5"/>
+                     Foreground="{DynamicResource Text1}"/>
           <StackPanel Spacing="4">
-            <TextBlock FontSize="12" Foreground="#9A9AA3">
+            <TextBlock FontSize="12" Foreground="{DynamicResource Text2}">
               <Run Text="E-mail: "/>
-              <Run Name="AccountEmailRun" Text="laden..." Foreground="#F2F2F5"/>
+              <Run Name="AccountEmailRun" Text="laden..." Foreground="{DynamicResource Text1}"/>
             </TextBlock>
-            <TextBlock FontSize="12" Foreground="#9A9AA3">
+            <TextBlock FontSize="12" Foreground="{DynamicResource Text2}">
               <Run Text="Abonnement: "/>
               <Run Name="AccountTierRun" Text="laden..." Foreground="#F5A524"/>
             </TextBlock>
@@ -100,7 +100,7 @@
       </Border>
 
       <!-- Version -->
-      <TextBlock Text="mAIkey Beta-v1.4-mac" FontSize="10" Foreground="#5E5E66"
+      <TextBlock Text="mAIkey Beta-v1.4-mac" FontSize="10" Foreground="{DynamicResource Text3}"
                  HorizontalAlignment="Center" Margin="0,8"/>
     </StackPanel>
   </ScrollViewer>

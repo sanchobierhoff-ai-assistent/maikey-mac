@@ -27,71 +27,71 @@
 
         <!-- Hotkeys -->
         <Border Grid.Column="0" Classes="stat-card"
-                Background="#18181C" BorderBrush="#26262C" BorderThickness="1">
+                Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource Border1}" BorderThickness="1">
           <StackPanel Spacing="6">
             <StackPanel Orientation="Horizontal" Spacing="6">
               <Border Background="#1E3A5F" CornerRadius="6" Padding="4">
                 <TextBlock Text="⚡" FontSize="12"/>
               </Border>
-              <TextBlock Text="Hotkeys" FontSize="11" Foreground="#9A9AA3"
+              <TextBlock Text="Hotkeys" FontSize="11" Foreground="{DynamicResource Text2}"
                          VerticalAlignment="Center"/>
             </StackPanel>
             <TextBlock Name="HotkeyCountText" Text="0" FontSize="28" FontWeight="Bold"
                        Foreground="#60A5FA"/>
-            <TextBlock Text="actief" FontSize="11" Foreground="#5E5E66"/>
+            <TextBlock Text="actief" FontSize="11" Foreground="{DynamicResource Text3}"/>
           </StackPanel>
         </Border>
 
         <!-- Vandaag -->
         <Border Grid.Column="1" Classes="stat-card"
-                Background="#18181C" BorderBrush="#26262C" BorderThickness="1">
+                Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource Border1}" BorderThickness="1">
           <StackPanel Spacing="6">
             <StackPanel Orientation="Horizontal" Spacing="6">
               <Border Background="#1E3F3A" CornerRadius="6" Padding="4">
                 <TextBlock Text="📊" FontSize="12"/>
               </Border>
-              <TextBlock Text="Vandaag" FontSize="11" Foreground="#9A9AA3"
+              <TextBlock Text="Vandaag" FontSize="11" Foreground="{DynamicResource Text2}"
                          VerticalAlignment="Center"/>
             </StackPanel>
             <TextBlock Name="TodayCountText" Text="0" FontSize="28" FontWeight="Bold"
                        Foreground="#10B981"/>
-            <TextBlock Text="verzoeken" FontSize="11" Foreground="#5E5E66"/>
+            <TextBlock Text="verzoeken" FontSize="11" Foreground="{DynamicResource Text3}"/>
           </StackPanel>
         </Border>
 
         <!-- Stijlen -->
         <Border Grid.Column="2" Classes="stat-card"
-                Background="#18181C" BorderBrush="#26262C" BorderThickness="1">
+                Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource Border1}" BorderThickness="1">
           <StackPanel Spacing="6">
             <StackPanel Orientation="Horizontal" Spacing="6">
               <Border Background="#2D1E5F" CornerRadius="6" Padding="4">
                 <TextBlock Text="✍️" FontSize="12"/>
               </Border>
-              <TextBlock Text="Stijlen" FontSize="11" Foreground="#9A9AA3"
+              <TextBlock Text="Stijlen" FontSize="11" Foreground="{DynamicResource Text2}"
                          VerticalAlignment="Center"/>
             </StackPanel>
             <TextBlock Name="StyleCountText" Text="0" FontSize="28" FontWeight="Bold"
                        Foreground="#A78BFA"/>
-            <TextBlock Text="opgeslagen" FontSize="11" Foreground="#5E5E66"/>
+            <TextBlock Text="opgeslagen" FontSize="11" Foreground="{DynamicResource Text3}"/>
           </StackPanel>
         </Border>
 
         <!-- Abonnement -->
         <Border Grid.Column="3" Classes="stat-card"
-                Background="#18181C" BorderBrush="#26262C" BorderThickness="1"
+                Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource Border1}" BorderThickness="1"
                 Margin="0">
           <StackPanel Spacing="6">
             <StackPanel Orientation="Horizontal" Spacing="6">
               <Border Background="#3F3A1E" CornerRadius="6" Padding="4">
                 <TextBlock Text="👑" FontSize="12"/>
               </Border>
-              <TextBlock Text="Abonnement" FontSize="11" Foreground="#9A9AA3"
+              <TextBlock Text="Abonnement" FontSize="11" Foreground="{DynamicResource Text2}"
                          VerticalAlignment="Center"/>
             </StackPanel>
             <TextBlock Name="TierText" Text="Free" FontSize="28" FontWeight="Bold"
                        Foreground="#F5A524"/>
             <TextBlock Name="UsageText" Text="0 / 0 verzoeken" FontSize="11"
-                       Foreground="#5E5E66"/>
+                       Foreground="{DynamicResource Text3}"/>
           </StackPanel>
         </Border>
       </Grid>
@@ -104,8 +104,8 @@
           <DockPanel>
             <StackPanel DockPanel.Dock="Top" Spacing="12" Margin="0,0,0,12">
               <TextBlock Text="Jouw hotkeys" FontSize="13" FontWeight="SemiBold"
-                         Foreground="#F2F2F5"/>
-              <Separator Background="#26262C" Height="1" Margin="0"/>
+                         Foreground="{DynamicResource Text1}"/>
+              <Separator Background="{DynamicResource Border1}" Height="1" Margin="0"/>
             </StackPanel>
 
             <!-- Hotkey items -->
@@ -115,11 +115,11 @@
                       HorizontalAlignment="Center">
                 <StackPanel Spacing="12" HorizontalAlignment="Center">
                   <TextBlock Text="⚡" FontSize="32" HorizontalAlignment="Center"
-                             Foreground="#5E5E66"/>
+                             Foreground="{DynamicResource Text3}"/>
                   <TextBlock Text="Nog geen hotkeys" FontSize="14"
-                             Foreground="#9A9AA3" HorizontalAlignment="Center"/>
+                             Foreground="{DynamicResource Text2}" HorizontalAlignment="Center"/>
                   <TextBlock Text="Maak je eerste AI-sneltoets aan"
-                             FontSize="12" Foreground="#5E5E66"
+                             FontSize="12" Foreground="{DynamicResource Text3}"
                              HorizontalAlignment="Center"/>
                   <Button Classes="accent" Content="+ Eerste hotkey maken"
                           HorizontalAlignment="Center" Padding="16,8"
@@ -142,7 +142,7 @@
                          FontWeight="SemiBold" Foreground="#F5A524"/>
               <TextBlock Name="UsageWarningText"
                          Text="Je hebt 80% van je maandlimiet gebruikt."
-                         FontSize="11" Foreground="#9A9AA3" TextWrapping="Wrap"/>
+                         FontSize="11" Foreground="{DynamicResource Text2}" TextWrapping="Wrap"/>
               <Button Classes="accent" Content="Upgrade plan"
                       FontSize="11" Padding="12,6" HorizontalAlignment="Left"/>
             </StackPanel>
@@ -152,8 +152,8 @@
           <Border Classes="card">
             <StackPanel Spacing="12">
               <TextBlock Text="Tips" FontSize="13" FontWeight="SemiBold"
-                         Foreground="#F2F2F5"/>
-              <Separator Background="#26262C" Height="1" Margin="0"/>
+                         Foreground="{DynamicResource Text1}"/>
+              <Separator Background="{DynamicResource Border1}" Height="1" Margin="0"/>
 
               <StackPanel Spacing="12">
                 <StackPanel Spacing="4">
@@ -163,12 +163,12 @@
                                Foreground="#F5A524"/>
                   </Border>
                   <TextBlock Text="Sneltoets instellen" FontSize="12"
-                             FontWeight="Medium" Foreground="#F2F2F5"/>
-                  <TextBlock FontSize="11" Foreground="#9A9AA3" TextWrapping="Wrap"
+                             FontWeight="Medium" Foreground="{DynamicResource Text1}"/>
+                  <TextBlock FontSize="11" Foreground="{DynamicResource Text2}" TextWrapping="Wrap"
                              Text="Ga naar Hotkeys en maak je eerste AI-sneltoets. Selecteer tekst, druk de toets, en mAIkey doet de rest."/>
                 </StackPanel>
 
-                <Separator Background="#26262C" Height="1" Margin="0"/>
+                <Separator Background="{DynamicResource Border1}" Height="1" Margin="0"/>
 
                 <StackPanel Spacing="4">
                   <Border Background="#60A5FA18" CornerRadius="4" Padding="4,2"
@@ -177,8 +177,8 @@
                                Foreground="#60A5FA"/>
                   </Border>
                   <TextBlock Text="Schrijfstijl" FontSize="12"
-                             FontWeight="Medium" Foreground="#F2F2F5"/>
-                  <TextBlock FontSize="11" Foreground="#9A9AA3" TextWrapping="Wrap"
+                             FontWeight="Medium" Foreground="{DynamicResource Text1}"/>
+                  <TextBlock FontSize="11" Foreground="{DynamicResource Text2}" TextWrapping="Wrap"
                              Text="Voeg voorbeeldteksten toe en mAIkey leert automatisch je stijl. AI-antwoorden klinken dan als jij."/>
                 </StackPanel>
               </StackPanel>

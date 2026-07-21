@@ -8,7 +8,7 @@
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="40"
-        Background="#0B0B0D">
+        Background="{DynamicResource Bg0}">
 
   <DockPanel>
     <!-- Title bar -->
@@ -16,11 +16,11 @@
             Background="Transparent">
       <Grid>
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
-                   FontSize="12" Foreground="#5E5E66">mAIkey</TextBlock>
+                   FontSize="12" Foreground="{DynamicResource Text3}">mAIkey</TextBlock>
         <Button HorizontalAlignment="Right" VerticalAlignment="Top"
                 Width="46" Height="40" Content="✕"
                 Background="Transparent" BorderThickness="0" CornerRadius="0"
-                Foreground="#9A9AA3" FontSize="10"
+                Foreground="{DynamicResource Text2}" FontSize="10"
                 Click="CloseBtn_Click" Name="LoginCloseBtn"/>
       </Grid>
     </Border>
@@ -31,24 +31,24 @@
 
         <!-- Logo -->
         <StackPanel HorizontalAlignment="Center" Spacing="12">
-          <Border Background="#18181C" BorderBrush="#32323A" BorderThickness="1"
+          <Border Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource BorderStrong}" BorderThickness="1"
                   CornerRadius="12" Width="80" Height="60"
                   HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
                         VerticalAlignment="Center" Spacing="1">
               <TextBlock Text="m" FontSize="14" FontWeight="ExtraBold"
-                         Foreground="#F2F2F5" VerticalAlignment="Center"/>
+                         Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
               <TextBlock Text="AI" FontSize="20" FontWeight="ExtraBold"
                          Foreground="#F5A524" VerticalAlignment="Center"/>
               <TextBlock Text="key" FontSize="14" FontWeight="ExtraBold"
-                         Foreground="#F2F2F5" VerticalAlignment="Center"/>
+                         Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
             </StackPanel>
           </Border>
 
           <TextBlock Text="Welkom terug" FontSize="22" FontWeight="SemiBold"
-                     Foreground="#F2F2F5" HorizontalAlignment="Center"/>
+                     Foreground="{DynamicResource Text1}" HorizontalAlignment="Center"/>
           <TextBlock Text="Log in om mAIkey te gebruiken"
-                     FontSize="13" Foreground="#9A9AA3" HorizontalAlignment="Center"/>
+                     FontSize="13" Foreground="{DynamicResource Text2}" HorizontalAlignment="Center"/>
         </StackPanel>
 
         <!-- Error message -->
@@ -62,7 +62,7 @@
         <!-- Email -->
         <StackPanel Spacing="6">
           <TextBlock Text="E-mailadres" FontSize="12" FontWeight="Medium"
-                     Foreground="#9A9AA3"/>
+                     Foreground="{DynamicResource Text2}"/>
           <TextBox Name="EmailBox" Watermark="naam@voorbeeld.nl"
                    FontSize="13"/>
         </StackPanel>
@@ -70,7 +70,7 @@
         <!-- Password -->
         <StackPanel Spacing="6">
           <TextBlock Text="Wachtwoord" FontSize="12" FontWeight="Medium"
-                     Foreground="#9A9AA3"/>
+                     Foreground="{DynamicResource Text2}"/>
           <TextBox Name="PasswordBox" PasswordChar="●"
                    Watermark="••••••••" FontSize="13"/>
         </StackPanel>
@@ -83,18 +83,18 @@
         <!-- Loading -->
         <StackPanel Name="LoadingPanel" IsVisible="False"
                     HorizontalAlignment="Center" Spacing="8">
-          <TextBlock Text="Inloggen..." FontSize="12" Foreground="#9A9AA3"
+          <TextBlock Text="Inloggen..." FontSize="12" Foreground="{DynamicResource Text2}"
                      HorizontalAlignment="Center"/>
         </StackPanel>
 
         <!-- Forgot password link -->
         <Button Name="ForgotBtn" Classes="ghost" Content="Wachtwoord vergeten?"
                 HorizontalAlignment="Center" FontSize="12"
-                Padding="12,6" BorderThickness="0" Foreground="#9A9AA3"/>
+                Padding="12,6" BorderThickness="0" Foreground="{DynamicResource Text2}"/>
 
         <!-- Register link -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="4">
-          <TextBlock Text="Nog geen account?" FontSize="12" Foreground="#5E5E66"
+          <TextBlock Text="Nog geen account?" FontSize="12" Foreground="{DynamicResource Text3}"
                      VerticalAlignment="Center"/>
           <Button Name="RegisterBtn" Content="Registreer"
                   Background="Transparent" BorderThickness="0"
@@ -103,7 +103,7 @@
         </StackPanel>
 
         <!-- Version -->
-        <TextBlock Text="Beta-v1.4-mac" FontSize="10" Foreground="#5E5E66"
+        <TextBlock Text="Beta-v1.4-mac" FontSize="10" Foreground="{DynamicResource Text3}"
                    HorizontalAlignment="Center" Margin="0,8,0,0"/>
       </StackPanel>
     </ScrollViewer>
