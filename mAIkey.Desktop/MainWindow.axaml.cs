@@ -73,7 +73,7 @@ public partial class MainWindow : Window
     private void NavStyles_Click(object? sender, RoutedEventArgs e)
     {
         SetActiveNav(NavStyles);
-        NavigateTo(Placeholder("Stijl Library"));
+        NavigateTo(new Views.StyleLibraryView());
     }
 
     private void NavTemplates_Click(object? sender, RoutedEventArgs e)
@@ -85,13 +85,13 @@ public partial class MainWindow : Window
     private void NavIntegrations_Click(object? sender, RoutedEventArgs e)
     {
         SetActiveNav(NavIntegrations);
-        NavigateTo(Placeholder("Integraties"));
+        NavigateTo(new Views.IntegrationsView());
     }
 
     private void NavCloudSync_Click(object? sender, RoutedEventArgs e)
     {
         SetActiveNav(NavCloudSync);
-        NavigateTo(Placeholder("Cloud Sync"));
+        NavigateTo(new Views.CloudSyncView());
     }
 
     private void NavSettings_Click(object? sender, RoutedEventArgs e)

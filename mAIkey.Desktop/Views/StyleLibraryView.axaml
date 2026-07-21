@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="mAIkey.Desktop.Views.StyleLibraryView">
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Margin="28,8,28,28" Spacing="20" MaxWidth="860">
+
+      <!-- Header -->
+      <StackPanel Spacing="4">
+        <TextBlock Classes="eyebrow" Text="STIJL LIBRARY"/>
+        <TextBlock Classes="title" Text="Schrijfstijlen"/>
+        <TextBlock Classes="subtitle"
+                   Text="Leer mAIkey jouw schrijfstijl. Koppel een stijl aan een hotkey."/>
+      </StackPanel>
+
+      <!-- Nieuwe stijl -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <TextBlock Classes="CardTitle" Text="Nieuwe stijl trainen"/>
+          <TextBox Name="NameBox" Watermark="Naam (bijv. Zakelijke e-mails)"/>
+          <TextBox Name="ExamplesBox" Watermark="Plak hier één of meer voorbeeldteksten (scheid ze met een lege regel)…"
+                   AcceptsReturn="True" TextWrapping="Wrap" Height="120"
+                   VerticalContentAlignment="Top"/>
+          <Button Name="GenerateBtn" Classes="accent" Content="Genereer stijlprofiel"
+                  HorizontalAlignment="Left" Click="Generate_Click"/>
+          <TextBlock Name="StatusText" Classes="muted" IsVisible="False"/>
+        </StackPanel>
+      </Border>
+
+      <!-- Bestaande stijlen -->
+      <TextBlock Classes="eyebrow" Text="MIJN STIJLEN" Margin="4,8,0,0"/>
+      <StackPanel Name="StylesPanel" Spacing="12"/>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

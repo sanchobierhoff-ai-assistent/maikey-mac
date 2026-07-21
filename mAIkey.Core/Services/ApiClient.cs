@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -85,6 +86,27 @@ public class ApiClient
 
             throw new ApiException(errorMsg, statusCode, responseBody, isRetryable);
         }
+
+        return JsonSerializer.Deserialize<T>(responseBody, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+    }
+
+    private async Task<T> PutAsync<T>(string endpoint, object payload)
+    {
+        var json = JsonSerializer.Serialize(payload, new JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+        });
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PutAsync(endpoint, content);
+        var responseBody = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+            throw new ApiException($"Request failed ({(int)response.StatusCode})",
+                (int)response.StatusCode, responseBody);
 
         return JsonSerializer.Deserialize<T>(responseBody, new JsonSerializerOptions
         {
@@ -233,6 +255,53 @@ public class ApiClient
     public async Task<RemotePromptTemplatesResponse> GetPromptTemplatesAsync(string lang = "nl")
     {
         return await GetAsync<RemotePromptTemplatesResponse>($"/prompts/templates?lang={lang}");
+    }
+
+    // ============================================
+    // INTEGRATIES
+    // ============================================
+
+    public async Task<Integration[]?> GetIntegrationsAsync()
+    {
+        var response = await GetAsync<GetIntegrationsResponse>("/integrations");
+        return response?.Integrations;
+    }
+
+    // ============================================
+    // CLOUD SYNC
+    // ============================================
+
+    public async Task<ApiResponse> SyncHotkeysToCloudAsync(HotkeyConfig[] hotkeys, WritingStyle[] allStyles)
+    {
+        var payload = new
+        {
+            hotkeys = hotkeys.Select(h =>
+            {
+                string? styleProfile = h.StyleProfile;
+                if (styleProfile == null && h.StyleId != null)
+                    styleProfile = allStyles.FirstOrDefault(s => s.Id == h.StyleId)?.StyleProfile;
+
+                return new
+                {
+                    id = h.Id,
+                    name = h.Name,
+                    enabled = h.Enabled,
+                    key = h.Key,
+                    modifierKeys = h.ModifierKeys,
+                    customPrompt = h.CustomPrompt,
+                    model = h.Model,
+                    outputMode = h.OutputMode,
+                    askForContext = h.AskForContext,
+                    includeImages = h.IncludeImages,
+                    styleId = h.StyleId,
+                    consolidatedLessons = styleProfile,
+                    prefixLanguage = h.PrefixLanguage,
+                    integrationType = h.IntegrationType,
+                    aiParameters = h.CustomAIParameters
+                };
+            }).ToArray()
+        };
+        return await PutAsync<ApiResponse>("/hotkeys/desktop", payload);
     }
 
     // ============================================

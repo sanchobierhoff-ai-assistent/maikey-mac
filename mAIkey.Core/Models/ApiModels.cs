@@ -80,6 +80,18 @@ public class RemotePromptTemplatesResponse
     public string? UpdatedAt { get; set; }
 }
 
+public class Integration
+{
+    public string Id { get; set; } = "";
+    public string IntegrationType { get; set; } = "";
+    public bool IsActive { get; set; }
+}
+
+public class GetIntegrationsResponse : ApiResponse
+{
+    public Integration[]? Integrations { get; set; }
+}
+
 public class SubscriptionStatusResponse : ApiResponse
 {
     public string? Tier { get; set; }

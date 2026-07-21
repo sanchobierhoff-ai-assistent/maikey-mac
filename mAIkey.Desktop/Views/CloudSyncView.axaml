@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="mAIkey.Desktop.Views.CloudSyncView">
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Margin="28,8,28,28" Spacing="20" MaxWidth="680">
+
+      <StackPanel Spacing="4">
+        <TextBlock Classes="eyebrow" Text="CLOUD SYNC"/>
+        <TextBlock Classes="title" Text="Synchroniseren"/>
+        <TextBlock Classes="subtitle"
+                   Text="Bewaar je hotkeys en stijlen in de cloud, zodat je ze op elk apparaat hebt."/>
+      </StackPanel>
+
+      <Border Classes="card">
+        <StackPanel Spacing="14">
+          <TextBlock Classes="CardTitle" Text="Nu synchroniseren"/>
+          <TextBlock Classes="muted"
+                     Text="Uploadt je huidige hotkeys (met ingesloten stijlprofielen) naar je account."/>
+          <Button Name="SyncBtn" Classes="accent" Content="Sync nu"
+                  HorizontalAlignment="Left" Click="Sync_Click"/>
+          <TextBlock Name="StatusText" Classes="muted" IsVisible="False"/>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
