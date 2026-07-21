@@ -37,6 +37,25 @@ public partial class SettingsView : UserControl
             }
         };
 
+        // Thema
+        foreach (ComboBoxItem item in ThemeComboBox.Items)
+        {
+            if (item.Tag?.ToString() == (_config.Theme ?? "Dark"))
+            {
+                ThemeComboBox.SelectedItem = item;
+                break;
+            }
+        }
+        ThemeComboBox.SelectionChanged += (s, e) =>
+        {
+            if (ThemeComboBox.SelectedItem is ComboBoxItem item)
+            {
+                var theme = item.Tag?.ToString() ?? "Dark";
+                _config.Theme = theme;
+                App.ApplyTheme(theme);
+            }
+        };
+
         // Checkboxes
         MinimizeToTrayCheck.IsChecked = _config.MinimizeToTray;
         ShowIndicatorCheck.IsChecked = _config.ShowAiIndicator;

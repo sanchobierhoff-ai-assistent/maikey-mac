@@ -24,6 +24,18 @@
         </StackPanel>
       </Border>
 
+      <!-- Thema -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <TextBlock Text="Thema" FontSize="13" FontWeight="SemiBold"
+                     Foreground="{DynamicResource Text1}"/>
+          <ComboBox Name="ThemeComboBox" HorizontalAlignment="Stretch" FontSize="13">
+            <ComboBoxItem Content="Donker (zwart)" Tag="Dark"/>
+            <ComboBoxItem Content="Taupe (licht)" Tag="Light"/>
+          </ComboBox>
+        </StackPanel>
+      </Border>
+
       <!-- Gedrag -->
       <Border Classes="card">
         <StackPanel Spacing="12">

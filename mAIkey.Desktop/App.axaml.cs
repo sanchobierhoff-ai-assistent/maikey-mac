@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Styling;
 using mAIkey.Core.Services;
 
 namespace mAIkey.Desktop;
@@ -10,6 +11,16 @@ public partial class App : Application
     public static ConfigService Config { get; private set; } = null!;
     public static ApiClient Api { get; private set; } = null!;
     public static Services.HotkeyRuntime? Hotkeys { get; private set; }
+
+    /// <summary>Zet het app-thema op donker (standaard) of taupe/licht.</summary>
+    public static void ApplyTheme(string? theme)
+    {
+        if (Current != null)
+            Current.RequestedThemeVariant =
+                string.Equals(theme, "Light", StringComparison.OrdinalIgnoreCase)
+                    ? ThemeVariant.Light
+                    : ThemeVariant.Dark;
+    }
 
     private static void StartHotkeys()
     {
@@ -34,6 +45,9 @@ public partial class App : Application
 
         // Apply localization
         L.Apply(Config.InterfaceLanguage);
+
+        // Pas het opgeslagen thema toe (donker is de standaard).
+        ApplyTheme(Config.Theme);
 
         // Restore auth token if available
         if (!string.IsNullOrEmpty(Config.AuthToken))
