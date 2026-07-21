@@ -79,7 +79,7 @@ public partial class MainWindow : Window
     private void NavTemplates_Click(object? sender, RoutedEventArgs e)
     {
         SetActiveNav(NavTemplates);
-        NavigateTo(Placeholder("Templates"));
+        NavigateTo(new Views.PromptTemplatesView());
     }
 
     private void NavIntegrations_Click(object? sender, RoutedEventArgs e)

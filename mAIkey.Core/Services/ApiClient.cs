@@ -227,6 +227,15 @@ public class ApiClient
     }
 
     // ============================================
+    // PROMPT TEMPLATES
+    // ============================================
+
+    public async Task<RemotePromptTemplatesResponse> GetPromptTemplatesAsync(string lang = "nl")
+    {
+        return await GetAsync<RemotePromptTemplatesResponse>($"/prompts/templates?lang={lang}");
+    }
+
+    // ============================================
     // MODELS
     // ============================================
 

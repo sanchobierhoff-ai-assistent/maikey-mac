@@ -39,6 +39,47 @@ public class AnalyzeResponse : ApiResponse
     public string? Model { get; set; }
 }
 
+public class RemoteTemplateVariable
+{
+    public string Key { get; set; } = "";
+    public string Label { get; set; } = "";
+    public string Placeholder { get; set; } = "";
+}
+
+public class RemoteIntegrationAction
+{
+    public string Action { get; set; } = "";
+    public bool ShowReviewWindow { get; set; } = true;
+}
+
+public class RemotePromptTemplate
+{
+    public string Id { get; set; } = "";
+    public string Name { get; set; } = "";
+    public string Category { get; set; } = "";
+    public string Description { get; set; } = "";
+    public string CustomPrompt { get; set; } = "";
+    public string Model { get; set; } = "gpt-4o-mini";
+    public string OutputMode { get; set; } = "clipboard";
+    public float Temperature { get; set; } = 0.5f;
+    public int MaxTokens { get; set; } = 8000;
+    public bool RequiresContext { get; set; }
+    public bool RequiresStyleWarning { get; set; }
+    public List<RemoteTemplateVariable> TemplateVariables { get; set; } = new();
+    public bool IncludeImages { get; set; } = true;
+    public int SortOrder { get; set; }
+    public string? IntegrationType { get; set; }
+    public RemoteIntegrationAction? IntegrationAction { get; set; }
+    public bool UseScreenCapture { get; set; }
+}
+
+public class RemotePromptTemplatesResponse
+{
+    public List<RemotePromptTemplate> Templates { get; set; } = new();
+    public int Count { get; set; }
+    public string? UpdatedAt { get; set; }
+}
+
 public class SubscriptionStatusResponse : ApiResponse
 {
     public string? Tier { get; set; }
