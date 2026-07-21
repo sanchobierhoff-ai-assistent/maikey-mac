@@ -48,10 +48,10 @@ public partial class IntegrationsView : UserControl
 
         IntegrationsPanel.Children.Clear();
         foreach (var (type, name) in Supported)
-            IntegrationsPanel.Children.Add(BuildRow(name, connected.Contains(type)));
+            IntegrationsPanel.Children.Add(BuildRow(type, name, connected.Contains(type)));
     }
 
-    private Control BuildRow(string name, bool isConnected)
+    private Control BuildRow(string type, string name, bool isConnected)
     {
         var title = new TextBlock
         {
@@ -65,21 +65,50 @@ public partial class IntegrationsView : UserControl
         {
             Text = isConnected ? "Verbonden" : "Niet verbonden",
             FontSize = 12,
+            Margin = new Avalonia.Thickness(0, 0, 14, 0),
             VerticalAlignment = VerticalAlignment.Center,
             Foreground = new SolidColorBrush(Color.Parse(isConnected ? "#10B981" : "#9A9AA3"))
         };
 
-        var grid = new Grid
+        var configBtn = new Button
         {
-            ColumnDefinitions = new ColumnDefinitions("*,Auto")
+            Content = isConnected ? "Wijzigen" : "Configureren",
+            VerticalAlignment = VerticalAlignment.Center
         };
+        configBtn.Classes.Add("ghost");
+
+        // Alleen Jira is nu volledig geport; de rest volgt.
+        if (type == "jira")
+            configBtn.Click += async (_, _) => await OpenJiraConfig();
+        else
+        {
+            configBtn.IsEnabled = false;
+            configBtn.Content = "Binnenkort";
+        }
+
+        var right = new StackPanel { Orientation = Orientation.Horizontal };
+        right.Children.Add(status);
+        right.Children.Add(configBtn);
+
+        var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto") };
         grid.Children.Add(title);
-        Grid.SetColumn(status, 1);
-        grid.Children.Add(status);
+        Grid.SetColumn(right, 1);
+        grid.Children.Add(right);
 
         var card = new Border { Child = grid };
         card.Classes.Add("card");
-        card.Padding = new Avalonia.Thickness(16, 14);
+        card.Padding = new Avalonia.Thickness(16, 12);
         return card;
+    }
+
+    private async System.Threading.Tasks.Task OpenJiraConfig()
+    {
+        var owner = TopLevel.GetTopLevel(this) as Window;
+        if (owner == null) return;
+
+        var dialog = new Windows.JiraConfigWindow();
+        var saved = await dialog.ShowDialog<bool>(owner);
+        if (saved)
+            await LoadAsync(); // status verversen
     }
 }

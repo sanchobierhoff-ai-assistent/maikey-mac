@@ -267,6 +267,38 @@ public class ApiClient
         return response?.Integrations;
     }
 
+    // ── Jira ──
+
+    public async Task<bool> TestJiraConnectionAsync(string jiraUrl, string email, string apiToken)
+    {
+        var r = await PostAsync<ApiResponse>("/integrations/jira/test", new { jiraUrl, email, apiToken });
+        return r?.Success ?? false;
+    }
+
+    public async Task<JiraProject[]?> GetJiraProjectsWithCredentialsAsync(string jiraUrl, string email, string apiToken)
+    {
+        var r = await PostAsync<GetJiraProjectsResponse>("/integrations/jira/projects",
+            new { jiraUrl, email, apiToken });
+        return r?.Projects;
+    }
+
+    public async Task<JiraIssueType[]?> GetJiraIssueTypesWithCredentialsAsync(
+        string jiraUrl, string email, string apiToken, string projectKey)
+    {
+        var r = await PostAsync<GetJiraIssueTypesResponse>("/integrations/jira/issue-types",
+            new { jiraUrl, email, apiToken, projectKey });
+        return r?.IssueTypes;
+    }
+
+    public async Task<bool> SaveJiraIntegrationAsync(string jiraUrl, string email, string? apiToken,
+        string? defaultProject = null, string? defaultIssueType = null,
+        string? customPrompt = null, string? model = null)
+    {
+        var r = await PostAsync<ApiResponse>("/integrations/jira/save",
+            new { jiraUrl, email, apiToken, defaultProject, defaultIssueType, customPrompt, model });
+        return r?.Success ?? false;
+    }
+
     // ============================================
     // CLOUD SYNC
     // ============================================

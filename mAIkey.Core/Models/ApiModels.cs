@@ -92,6 +92,32 @@ public class GetIntegrationsResponse : ApiResponse
     public Integration[]? Integrations { get; set; }
 }
 
+public class JiraProject
+{
+    public string Id { get; set; } = "";
+    public string Key { get; set; } = "";
+    public string Name { get; set; } = "";
+    public override string ToString() => Name;
+}
+
+public class JiraIssueType
+{
+    public string Id { get; set; } = "";
+    public string Name { get; set; } = "";
+    public string? Description { get; set; }
+    public override string ToString() => Name;
+}
+
+public class GetJiraProjectsResponse : ApiResponse
+{
+    public JiraProject[]? Projects { get; set; }
+}
+
+public class GetJiraIssueTypesResponse : ApiResponse
+{
+    public JiraIssueType[]? IssueTypes { get; set; }
+}
+
 public class SubscriptionStatusResponse : ApiResponse
 {
     public string? Tier { get; set; }

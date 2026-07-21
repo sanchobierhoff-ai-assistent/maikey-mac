@@ -1,0 +1,60 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="mAIkey.Desktop.Windows.JiraConfigWindow"
+        Title="Jira verbinden"
+        Width="480" Height="620"
+        CanResize="False"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource Bg1}">
+
+  <ScrollViewer>
+    <StackPanel Margin="28" Spacing="16">
+
+      <StackPanel Spacing="4">
+        <TextBlock Classes="eyebrow" Text="INTEGRATIE"/>
+        <TextBlock Classes="title" Text="Jira" FontSize="24"/>
+        <TextBlock Classes="subtitle" FontSize="13"
+                   Text="Verbind met een API-token. Aanmaken kan via id.atlassian.com → Beveiliging → API-tokens."/>
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Text="Jira-URL" Classes="muted"/>
+        <TextBox Name="UrlBox" Watermark="https://jouwbedrijf.atlassian.net"/>
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Text="E-mail" Classes="muted"/>
+        <TextBox Name="EmailBox" Watermark="jij@bedrijf.nl"/>
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Text="API-token" Classes="muted"/>
+        <TextBox Name="TokenBox" PasswordChar="●" Watermark="Plak je API-token"/>
+      </StackPanel>
+
+      <Button Name="TestBtn" Classes="ghost" Content="Test verbinding"
+              HorizontalAlignment="Left" Click="Test_Click"/>
+
+      <!-- Verschijnt na een gelukte test -->
+      <StackPanel Name="ProjectSection" Spacing="12" IsVisible="False">
+        <StackPanel Spacing="6">
+          <TextBlock Text="Standaardproject" Classes="muted"/>
+          <ComboBox Name="ProjectCombo" HorizontalAlignment="Stretch"
+                    SelectionChanged="Project_Changed"/>
+        </StackPanel>
+        <StackPanel Spacing="6">
+          <TextBlock Text="Standaard issue-type" Classes="muted"/>
+          <ComboBox Name="IssueTypeCombo" HorizontalAlignment="Stretch"/>
+        </StackPanel>
+      </StackPanel>
+
+      <TextBlock Name="StatusText" Classes="muted" IsVisible="False" TextWrapping="Wrap"/>
+
+      <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,8,0,0">
+        <Button Name="SaveBtn" Classes="accent" Content="Opslaan" Click="Save_Click" IsEnabled="False"/>
+        <Button Classes="ghost" Content="Annuleren" Click="Cancel_Click"/>
+      </StackPanel>
+
+    </StackPanel>
+  </ScrollViewer>
+</Window>
