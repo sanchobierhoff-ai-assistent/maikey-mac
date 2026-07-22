@@ -96,8 +96,7 @@ public partial class IntegrationsView : UserControl
         grid.Children.Add(right);
 
         var card = new Border { Child = grid };
-        card.Classes.Add("card");
-        card.Padding = new Avalonia.Thickness(16, 12);
+        card.Classes.Add("tile");
         return card;
     }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -10,6 +11,8 @@ namespace mAIkey.Desktop.Views;
 
 public partial class PromptTemplatesView : UserControl
 {
+    private List<RemotePromptTemplate> _all = new();
+
     public PromptTemplatesView()
     {
         InitializeComponent();
@@ -21,34 +24,16 @@ public partial class PromptTemplatesView : UserControl
         try
         {
             var resp = await App.Api.GetPromptTemplatesAsync(App.Config.InterfaceLanguage);
-            var templates = resp?.Templates ?? new();
+            _all = resp?.Templates ?? new();
 
-            if (templates.Count == 0)
+            if (_all.Count == 0)
             {
                 StatusText.Text = "Geen templates gevonden.";
                 return;
             }
 
             StatusText.IsVisible = false;
-            TemplatesPanel.Children.Clear();
-
-            // Groepeer op categorie, gesorteerd op sort_order.
-            var groups = templates
-                .OrderBy(t => t.SortOrder)
-                .GroupBy(t => string.IsNullOrWhiteSpace(t.Category) ? "Algemeen" : t.Category);
-
-            foreach (var group in groups)
-            {
-                TemplatesPanel.Children.Add(new TextBlock
-                {
-                    Text = group.Key,
-                    Classes = { "eyebrow" },
-                    Margin = new Avalonia.Thickness(4, 12, 0, 0)
-                });
-
-                foreach (var t in group)
-                    TemplatesPanel.Children.Add(BuildCard(t));
-            }
+            Render(null);
         }
         catch (Exception ex)
         {
@@ -57,31 +42,101 @@ public partial class PromptTemplatesView : UserControl
         }
     }
 
+    private void Search_Changed(object? sender, TextChangedEventArgs e) =>
+        Render(SearchBox.Text?.Trim());
+
+    private void Render(string? query)
+    {
+        CategoriesPanel.Children.Clear();
+        bool searching = !string.IsNullOrEmpty(query);
+
+        IEnumerable<RemotePromptTemplate> items = _all.OrderBy(t => t.SortOrder);
+        if (searching)
+        {
+            var q = query!.ToLowerInvariant();
+            items = items.Where(t =>
+                (t.Name + " " + t.Description + " " + t.Category).ToLowerInvariant().Contains(q));
+
+            // Bij zoeken: platte lijst met tegels.
+            foreach (var t in items)
+                CategoriesPanel.Children.Add(BuildCard(t));
+            return;
+        }
+
+        // Anders: per categorie een uitklap-sectie.
+        foreach (var group in items.GroupBy(t => string.IsNullOrWhiteSpace(t.Category) ? "Overig" : t.Category))
+        {
+            var inner = new StackPanel { Margin = new Avalonia.Thickness(12, 4, 0, 12) };
+            foreach (var t in group)
+                inner.Children.Add(BuildCard(t));
+
+            CategoriesPanel.Children.Add(new Expander
+            {
+                Header = $"{IconFor(group.Key)}  {group.Key}",
+                IsExpanded = false,
+                Margin = new Avalonia.Thickness(0, 0, 0, 10),
+                Content = inner
+            });
+        }
+    }
+
+    private static string IconFor(string category) => category.ToUpperInvariant() switch
+    {
+        "PRODUCTIVITEIT" or "PRODUCTIVITY" => "⚡",
+        "COMMUNICATIE" or "COMMUNICATION" => "💬",
+        "ONTWIKKELING" or "DEVELOPMENT" => "💻",
+        "CREATIEF" or "CREATIVE" => "🎨",
+        "ANALYSE" or "ANALYSIS" => "🔍",
+        "INTEGRATIES" or "INTEGRATIONS" => "🔗",
+        _ => "📁"
+    };
+
+    private static string OutputLabel(string mode) => mode switch
+    {
+        "replace" => "Vervangen",
+        "clipboard" => "Klembord",
+        "window" or "prompt" => "Venster",
+        _ => mode
+    };
+
     private Control BuildCard(RemotePromptTemplate t)
     {
-        var title = new TextBlock { Text = t.Name, FontSize = 15, FontWeight = FontWeight.SemiBold };
-        title.Classes.Add("CardTitle");
+        var accent = new SolidColorBrush(Color.Parse("#F5A524"));
+
+        var title = new TextBlock
+        {
+            Text = t.Name, FontSize = 14, FontWeight = FontWeight.SemiBold,
+            Margin = new Avalonia.Thickness(0, 0, 0, 5)
+        };
 
         var desc = new TextBlock
         {
             Text = string.IsNullOrWhiteSpace(t.Description) ? t.CustomPrompt : t.Description,
-            TextWrapping = TextWrapping.Wrap,
-            MaxLines = 3,
-            TextTrimming = TextTrimming.CharacterEllipsis
+            FontSize = 12, TextWrapping = TextWrapping.Wrap, MaxLines = 3,
+            TextTrimming = TextTrimming.CharacterEllipsis,
+            Margin = new Avalonia.Thickness(0, 0, 0, 8)
         };
         desc.Classes.Add("muted");
 
-        var useBtn = new Button { Content = "Gebruik als hotkey", HorizontalAlignment = HorizontalAlignment.Left };
-        useBtn.Classes.Add("accent");
-        useBtn.Click += (_, _) => UseTemplate(t);
+        // Meta: Output • Model
+        var meta = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Avalonia.Thickness(0, 0, 0, 10) };
+        meta.Children.Add(new TextBlock { Text = "Output: ", FontSize = 11, Classes = { "dimmed" } });
+        meta.Children.Add(new TextBlock { Text = OutputLabel(t.OutputMode), FontSize = 11, FontWeight = FontWeight.SemiBold, Foreground = accent });
+        meta.Children.Add(new TextBlock { Text = "  •  Model: ", FontSize = 11, Classes = { "dimmed" } });
+        meta.Children.Add(new TextBlock { Text = t.Model, FontSize = 11, FontWeight = FontWeight.SemiBold, Foreground = accent });
 
-        var stack = new StackPanel { Spacing = 8 };
+        var btn = new Button { Content = "Toevoegen", Height = 30, HorizontalAlignment = HorizontalAlignment.Left, FontSize = 12 };
+        btn.Classes.Add("ghost");
+        btn.Click += (_, _) => UseTemplate(t);
+
+        var stack = new StackPanel();
         stack.Children.Add(title);
         stack.Children.Add(desc);
-        stack.Children.Add(useBtn);
+        stack.Children.Add(meta);
+        stack.Children.Add(btn);
 
         var card = new Border { Child = stack };
-        card.Classes.Add("card");
+        card.Classes.Add("tile");
         return card;
     }
 
@@ -96,7 +151,7 @@ public partial class PromptTemplatesView : UserControl
             OutputMode = t.OutputMode,
             PrefixLanguage = App.Config.InterfaceLanguage?.ToUpperInvariant() ?? "NL",
             Enabled = true,
-            Key = 0,          // gebruiker kiest de toets in de hotkey-editor
+            Key = 0,
             ModifierKeys = 0
         };
 
@@ -105,6 +160,6 @@ public partial class PromptTemplatesView : UserControl
 
         StatusText.IsVisible = true;
         StatusText.Foreground = new SolidColorBrush(Color.Parse("#F5A524"));
-        StatusText.Text = $"'{t.Name}' toegevoegd als hotkey. Ga naar Hotkeys om een toets te kiezen.";
+        StatusText.Text = $"'{t.Name}' toegevoegd. Ga naar Hotkeys om een toets te kiezen.";
     }
 }

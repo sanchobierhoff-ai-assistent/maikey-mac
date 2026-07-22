@@ -241,6 +241,16 @@
     <Setter Property="BoxShadow" Value="0 5 20 0 #40000000" />
   </Style>
 
+  <!-- Tegel — WPF: TplCard (lichter dan .card, strakke padding) -->
+  <Style Selector="Border.tile">
+    <Setter Property="Background" Value="{DynamicResource Bg2}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Border1}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="Padding" Value="16,14" />
+    <Setter Property="Margin" Value="0,0,0,10" />
+  </Style>
+
   <!-- Stat card — WPF: StatCard -->
   <Style Selector="Border.StatCard">
     <Setter Property="BorderBrush" Value="{DynamicResource Border1}" />

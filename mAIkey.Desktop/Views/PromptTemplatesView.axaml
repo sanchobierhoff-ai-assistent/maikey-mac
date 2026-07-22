@@ -1,23 +1,26 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="mAIkey.Desktop.Views.PromptTemplatesView">
+             x:Class="mAIkey.Desktop.Views.PromptTemplatesView"
+             Background="{DynamicResource Bg1}">
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto">
-    <StackPanel Margin="28,8,28,28" Spacing="20" MaxWidth="860">
+  <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="36,32,36,40">
+    <StackPanel MaxWidth="760">
 
       <!-- Header -->
-      <StackPanel Spacing="4">
-        <TextBlock Classes="eyebrow" Text="TEMPLATES"/>
-        <TextBlock Classes="title" Text="Prompt-templates"/>
-        <TextBlock Classes="subtitle"
-                   Text="Kant-en-klare prompts. Kies er een om als hotkey te gebruiken."/>
-      </StackPanel>
+      <TextBlock Text="PROMPTS" FontSize="11" FontWeight="SemiBold"
+                 Foreground="{DynamicResource Text3}" Margin="0,0,0,6"/>
+      <TextBlock Text="Custom Prompts" FontSize="28" FontWeight="SemiBold"
+                 Foreground="{DynamicResource Text1}" Margin="0,0,0,4"/>
+      <TextBlock Text="Kies een template en voeg toe aan je hotkeys"
+                 FontSize="13" Foreground="{DynamicResource Text3}" Margin="0,0,0,24"/>
 
-      <!-- Status / melding -->
+      <!-- Zoeken -->
+      <TextBox Name="SearchBox" Height="40" FontSize="13" Margin="0,0,0,20"
+               Watermark="Zoek je favoriete template…"
+               VerticalContentAlignment="Center" TextChanged="Search_Changed"/>
+
       <TextBlock Name="StatusText" Classes="muted" Text="Templates laden..."/>
-
-      <!-- Dynamisch gevulde lijst -->
-      <StackPanel Name="TemplatesPanel" Spacing="12"/>
+      <StackPanel Name="CategoriesPanel" Spacing="0"/>
 
     </StackPanel>
   </ScrollViewer>

@@ -63,7 +63,7 @@ public partial class StyleLibraryView : UserControl
         stack.Children.Add(delBtn);
 
         var card = new Border { Child = stack };
-        card.Classes.Add("card");
+        card.Classes.Add("tile");
         return card;
     }
 
