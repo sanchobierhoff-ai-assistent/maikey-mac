@@ -82,6 +82,8 @@ public partial class IntegrationsView : UserControl
             configBtn.Click += async (_, _) => await OpenConfig(new Windows.JiraConfigWindow());
         else if (type == "github")
             configBtn.Click += async (_, _) => await OpenConfig(new Windows.GitHubConfigWindow());
+        else if (type == "slack")
+            configBtn.Click += async (_, _) => await OpenConfig(new Windows.SlackConfigWindow());
         else
         {
             configBtn.IsEnabled = false;

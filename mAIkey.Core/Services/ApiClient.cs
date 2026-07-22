@@ -336,6 +336,26 @@ public class ApiClient
         return r?.Issue;
     }
 
+    // ── Slack (webhook) ──
+
+    public async Task<bool> TestSlackConnectionAsync(string webhookUrl)
+    {
+        var r = await PostAsync<ApiResponse>("/integrations/slack/test", new { webhookUrl });
+        return r?.Success ?? false;
+    }
+
+    public async Task<bool> SaveSlackIntegrationAsync(string? webhookUrl, string? defaultChannel = null)
+    {
+        var r = await PostAsync<ApiResponse>("/integrations/slack/save", new { webhookUrl, defaultChannel });
+        return r?.Success ?? false;
+    }
+
+    public async Task<bool> SendSlackMessageAsync(string message)
+    {
+        var r = await PostAsync<ApiResponse>("/integrations/slack/send", new { message });
+        return r?.Success ?? false;
+    }
+
     // ============================================
     // CLOUD SYNC
     // ============================================

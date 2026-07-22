@@ -22,7 +22,7 @@
     </StackPanel>
 
     <StackPanel Spacing="12">
-      <StackPanel Spacing="6">
+      <StackPanel Name="TitleSection" Spacing="6">
         <TextBlock Name="TitleLabel" Text="Titel" Classes="muted"/>
         <TextBox Name="TitleBox"/>
       </StackPanel>

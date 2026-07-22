@@ -132,6 +132,8 @@
                     <ComboBoxItem Content="Jira – Direct aanmaken" Tag="jira_direct"/>
                     <ComboBoxItem Content="GitHub – Met review venster" Tag="github_review"/>
                     <ComboBoxItem Content="GitHub – Direct aanmaken" Tag="github_direct"/>
+                    <ComboBoxItem Content="Slack – Met preview" Tag="slack_review"/>
+                    <ComboBoxItem Content="Slack – Direct versturen" Tag="slack_direct"/>
                   </ComboBox>
                 </StackPanel>
 

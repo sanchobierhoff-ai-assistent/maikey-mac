@@ -1,0 +1,42 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="mAIkey.Desktop.Windows.SlackConfigWindow"
+        Title="Slack verbinden"
+        Width="480" Height="460"
+        CanResize="False"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource Bg1}">
+
+  <ScrollViewer>
+    <StackPanel Margin="28" Spacing="16">
+
+      <StackPanel Spacing="4">
+        <TextBlock Classes="eyebrow" Text="INTEGRATIE"/>
+        <TextBlock Classes="title" Text="Slack" FontSize="24"/>
+        <TextBlock Classes="subtitle" FontSize="13"
+                   Text="Verbind via een Incoming Webhook-URL. Aanmaken via api.slack.com/apps → Incoming Webhooks."/>
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Text="Webhook-URL" Classes="muted"/>
+        <TextBox Name="WebhookBox" Watermark="https://hooks.slack.com/services/…"/>
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Text="Standaardkanaal (optioneel)" Classes="muted"/>
+        <TextBox Name="ChannelBox" Watermark="#algemeen"/>
+      </StackPanel>
+
+      <Button Name="TestBtn" Classes="ghost" Content="Test verbinding"
+              HorizontalAlignment="Left" Click="Test_Click"/>
+
+      <TextBlock Name="StatusText" Classes="muted" IsVisible="False" TextWrapping="Wrap"/>
+
+      <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,8,0,0">
+        <Button Name="SaveBtn" Classes="accent" Content="Opslaan" Click="Save_Click" IsEnabled="False"/>
+        <Button Classes="ghost" Content="Annuleren" Click="Cancel_Click"/>
+      </StackPanel>
+
+    </StackPanel>
+  </ScrollViewer>
+</Window>

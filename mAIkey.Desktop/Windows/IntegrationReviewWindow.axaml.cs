@@ -14,24 +14,29 @@ public partial class IntegrationReviewWindow : Window
 {
     private readonly Func<string, string, Task<string?>> _create;
 
+    private readonly bool _showTitle;
+
     public IntegrationReviewWindow(
         string eyebrow, string heading, string titleLabel, string createButton,
-        string title, string body, Func<string, string, Task<string?>> create)
+        string title, string body, Func<string, string, Task<string?>> create,
+        bool showTitle = true)
     {
         InitializeComponent();
         _create = create;
+        _showTitle = showTitle;
         Eyebrow.Text = eyebrow;
         Heading.Text = heading;
         TitleLabel.Text = titleLabel;
         CreateBtn.Content = createButton;
         TitleBox.Text = title;
         BodyBox.Text = body;
+        TitleSection.IsVisible = showTitle;
     }
 
     private async void Create_Click(object? sender, RoutedEventArgs e)
     {
-        var title = TitleBox.Text?.Trim();
-        if (string.IsNullOrEmpty(title))
+        var title = TitleBox.Text?.Trim() ?? "";
+        if (_showTitle && string.IsNullOrEmpty(title))
         {
             Status("Vul een titel in.", error: true);
             return;

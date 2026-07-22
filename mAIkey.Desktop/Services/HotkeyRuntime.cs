@@ -141,6 +141,29 @@ public class HotkeyRuntime
         });
     }
 
+    /// <summary>Slack-bericht versturen via de opgeslagen webhook.</summary>
+    private async Task SendToSlackAsync(string content, bool direct)
+    {
+        if (direct)
+        {
+            try
+            {
+                bool ok = await _api.SendSlackMessageAsync(content);
+                Log(ok ? "slack: verstuurd" : "slack: versturen mislukt");
+            }
+            catch (Exception ex) { Log("slack: fout: " + ex.Message); }
+            return;
+        }
+
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            new Windows.IntegrationReviewWindow(
+                "SLACK", "Bericht nakijken", "", "Versturen", "", content,
+                async (_, b) => await _api.SendSlackMessageAsync(b) ? "verstuurd" : null,
+                showTitle: false).Show();
+        });
+    }
+
     private static void Log(string msg)
     {
         try
@@ -190,6 +213,7 @@ public class HotkeyRuntime
         {
             "jira_review" or "jira_direct" => "jira",
             "github_review" or "github_direct" => "github",
+            "slack_review" or "slack_direct" => "slack",
             _ => ""
         };
         bool isIntegration = integration.Length > 0;
@@ -220,6 +244,7 @@ public class HotkeyRuntime
                 if (showIndicator) _indicator.Hide();
                 if (integration == "jira") await SendToJiraAsync(result.Output, directSend);
                 else if (integration == "github") await SendToGitHubAsync(result.Output, directSend);
+                else if (integration == "slack") await SendToSlackAsync(result.Output, directSend);
                 Log($"{integration}: {(directSend ? "direct" : "review")}");
                 return;
             }
