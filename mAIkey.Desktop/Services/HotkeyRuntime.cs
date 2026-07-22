@@ -72,7 +72,7 @@ public class HotkeyRuntime
         Log($"totaal geregistreerd: {count}");
     }
 
-    private async Task SendToJiraAsync(string content)
+    private async Task SendToJiraAsync(string content, bool direct)
     {
         Integration? jira = null;
         try
@@ -93,6 +93,17 @@ public class HotkeyRuntime
         var summary = content.Split('\n').Select(l => l.Trim())
             .FirstOrDefault(l => l.Length > 0) ?? "mAIkey ticket";
         if (summary.Length > 200) summary = summary.Substring(0, 200);
+
+        if (direct)
+        {
+            try
+            {
+                var ticket = await _api.CreateJiraTicketAsync(project!, issueType!, summary, content);
+                Log(ticket != null ? $"jira: ticket {ticket.Key} aangemaakt" : "jira: aanmaken mislukt");
+            }
+            catch (Exception ex) { Log("jira: aanmaken fout: " + ex.Message); }
+            return;
+        }
 
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
@@ -144,6 +155,10 @@ public class HotkeyRuntime
         if (string.IsNullOrWhiteSpace(text))
             return;
 
+        bool isJira = hk.OutputMode == "jira_review" || hk.OutputMode == "jira_direct";
+        // Voor Jira genereert de AI de ticket-inhoud als een "window"-antwoord.
+        string apiMode = isJira ? "window" : hk.OutputMode;
+
         bool showIndicator = _config.ShowAiIndicator;
         if (showIndicator) _indicator.Show();
 
@@ -153,7 +168,7 @@ public class HotkeyRuntime
                 text,
                 model: hk.Model,
                 customPrompt: hk.CustomPrompt,
-                outputMode: hk.OutputMode,
+                outputMode: apiMode,
                 prefixLanguage: hk.PrefixLanguage,
                 promptId: hk.PromptId);
             Log($"API resultaat: success={result.Success} error={result.Error} output={(result.Output?.Length ?? 0)} tekens");
@@ -161,12 +176,12 @@ public class HotkeyRuntime
             if (!result.Success || string.IsNullOrEmpty(result.Output))
                 return;
 
-            // Integratie? Toon het review-venster i.p.v. terug te plakken.
-            if (hk.IntegrationType == "jira")
+            // Jira? Ticket aanmaken i.p.v. terug te plakken.
+            if (isJira)
             {
                 if (showIndicator) _indicator.Hide();
-                await SendToJiraAsync(result.Output);
-                Log("jira: review-venster getoond");
+                await SendToJiraAsync(result.Output, direct: hk.OutputMode == "jira_direct");
+                Log($"jira: {(hk.OutputMode == "jira_direct" ? "direct aangemaakt" : "review getoond")}");
                 return;
             }
 
