@@ -1,0 +1,41 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="mAIkey.Desktop.Windows.GenericTokenConfigWindow"
+        Title="Verbinden"
+        Width="480" Height="440"
+        CanResize="False"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource Bg1}">
+
+  <ScrollViewer>
+    <StackPanel Margin="28" Spacing="16">
+
+      <StackPanel Spacing="4">
+        <TextBlock Classes="eyebrow" Text="INTEGRATIE"/>
+        <TextBlock Name="Heading" Classes="title" Text="Verbinden" FontSize="24"/>
+        <TextBlock Name="Sub" Classes="subtitle" FontSize="13"/>
+      </StackPanel>
+
+      <StackPanel Spacing="6">
+        <TextBlock Name="Field1Label" Text="Token" Classes="muted"/>
+        <TextBox Name="Field1Box" PasswordChar="●"/>
+      </StackPanel>
+
+      <StackPanel Name="Field2Section" Spacing="6" IsVisible="False">
+        <TextBlock Name="Field2Label" Text="" Classes="muted"/>
+        <TextBox Name="Field2Box" PasswordChar="●"/>
+      </StackPanel>
+
+      <Button Name="TestBtn" Classes="ghost" Content="Test verbinding"
+              HorizontalAlignment="Left" Click="Test_Click"/>
+
+      <TextBlock Name="StatusText" Classes="muted" IsVisible="False" TextWrapping="Wrap"/>
+
+      <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,8,0,0">
+        <Button Name="SaveBtn" Classes="accent" Content="Opslaan" Click="Save_Click" IsEnabled="False"/>
+        <Button Classes="ghost" Content="Annuleren" Click="Cancel_Click"/>
+      </StackPanel>
+
+    </StackPanel>
+  </ScrollViewer>
+</Window>

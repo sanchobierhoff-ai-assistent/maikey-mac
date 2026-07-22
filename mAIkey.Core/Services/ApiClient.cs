@@ -376,6 +376,24 @@ public class ApiClient
         return r?.Success ?? false;
     }
 
+    // ── Todoist (token) ──
+    public async Task<bool> TestTodoistConnectionAsync(string token)
+        => (await PostAsync<ApiResponse>("/integrations/todoist/test", new { token }))?.Success ?? false;
+    public async Task<bool> SaveTodoistIntegrationAsync(string? token)
+        => (await PostAsync<ApiResponse>("/integrations/todoist/save", new { token }))?.Success ?? false;
+
+    // ── Trello (key + token) ──
+    public async Task<bool> TestTrelloConnectionAsync(string apiKey, string token)
+        => (await PostAsync<ApiResponse>("/integrations/trello/test", new { apiKey, token }))?.Success ?? false;
+    public async Task<bool> SaveTrelloIntegrationAsync(string? apiKey, string? token)
+        => (await PostAsync<ApiResponse>("/integrations/trello/save", new { apiKey, token }))?.Success ?? false;
+
+    // ── Zapier (webhook) ──
+    public async Task<bool> TestZapierConnectionAsync(string webhookUrl)
+        => (await PostAsync<ApiResponse>("/integrations/zapier/test", new { webhookUrl }))?.Success ?? false;
+    public async Task<bool> SaveZapierIntegrationAsync(string? webhookUrl, string? webhookName = null)
+        => (await PostAsync<ApiResponse>("/integrations/zapier/save", new { webhookUrl, webhookName }))?.Success ?? false;
+
     // ============================================
     // CLOUD SYNC
     // ============================================

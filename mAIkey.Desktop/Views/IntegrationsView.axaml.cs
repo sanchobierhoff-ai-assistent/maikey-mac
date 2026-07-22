@@ -90,6 +90,24 @@ public partial class IntegrationsView : UserControl
             configBtn.Click += async (_, _) => await OpenConfig(new Windows.GoogleConfigWindow("gcalendar", "Google Calendar"));
         else if (type == "gtasks")
             configBtn.Click += async (_, _) => await OpenConfig(new Windows.GoogleConfigWindow("gtasks", "Google Tasks"));
+        else if (type == "todoist")
+            configBtn.Click += async (_, _) => await OpenConfig(new Windows.GenericTokenConfigWindow(
+                "Todoist", "Verbind met je Todoist API-token (Instellingen → Integraties → API-token).",
+                "API-token", null,
+                (t, _) => App.Api.TestTodoistConnectionAsync(t),
+                (t, _) => App.Api.SaveTodoistIntegrationAsync(t)));
+        else if (type == "trello")
+            configBtn.Click += async (_, _) => await OpenConfig(new Windows.GenericTokenConfigWindow(
+                "Trello", "Verbind met je Trello API-key en token (trello.com/app-key).",
+                "API-key", "Token",
+                (k, t) => App.Api.TestTrelloConnectionAsync(k, t),
+                (k, t) => App.Api.SaveTrelloIntegrationAsync(k, t)));
+        else if (type == "zapier")
+            configBtn.Click += async (_, _) => await OpenConfig(new Windows.GenericTokenConfigWindow(
+                "Zapier / Make", "Verbind via een webhook-URL uit je Zap of Make-scenario.",
+                "Webhook-URL", null,
+                (u, _) => App.Api.TestZapierConnectionAsync(u),
+                (u, _) => App.Api.SaveZapierIntegrationAsync(u)));
         else
         {
             configBtn.IsEnabled = false;
