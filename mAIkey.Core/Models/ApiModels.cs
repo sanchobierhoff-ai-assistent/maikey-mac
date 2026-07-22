@@ -80,11 +80,30 @@ public class RemotePromptTemplatesResponse
     public string? UpdatedAt { get; set; }
 }
 
+public class IntegrationConfig
+{
+    public string? DefaultProject { get; set; }
+    public string? DefaultIssueType { get; set; }
+}
+
 public class Integration
 {
     public string Id { get; set; } = "";
     public string IntegrationType { get; set; } = "";
     public bool IsActive { get; set; }
+    public IntegrationConfig? Config { get; set; }
+}
+
+public class JiraTicket
+{
+    public string Key { get; set; } = "";
+    public string Id { get; set; } = "";
+    public string Url { get; set; } = "";
+}
+
+public class CreateJiraTicketResponse : ApiResponse
+{
+    public JiraTicket? Ticket { get; set; }
 }
 
 public class GetIntegrationsResponse : ApiResponse

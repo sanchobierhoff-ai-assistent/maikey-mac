@@ -164,6 +164,17 @@ public partial class HotkeyEditorView : UserControl
             }
         }
 
+        // Integratie
+        IntegrationComboBox.SelectedIndex = 0;
+        foreach (ComboBoxItem item in IntegrationComboBox.Items)
+        {
+            if (item.Tag?.ToString() == (hk.IntegrationType ?? ""))
+            {
+                IntegrationComboBox.SelectedItem = item;
+                break;
+            }
+        }
+
         // AI parameters
         if (hk.CustomAIParameters != null)
         {
@@ -225,6 +236,13 @@ public partial class HotkeyEditorView : UserControl
         // Output mode
         if (OutputModeComboBox.SelectedItem is ComboBoxItem modeItem)
             _selectedHotkey.OutputMode = modeItem.Tag?.ToString() ?? "replace";
+
+        // Integratie
+        if (IntegrationComboBox.SelectedItem is ComboBoxItem intItem)
+        {
+            var it = intItem.Tag?.ToString();
+            _selectedHotkey.IntegrationType = string.IsNullOrEmpty(it) ? null : it;
+        }
 
         // AI parameters
         _selectedHotkey.CustomAIParameters = new AIParameters

@@ -131,6 +131,14 @@
                   </ComboBox>
                 </StackPanel>
 
+                <StackPanel Spacing="6">
+                  <TextBlock Text="Stuur naar integratie" FontSize="11" Foreground="{DynamicResource Text2}"/>
+                  <ComboBox Name="IntegrationComboBox" HorizontalAlignment="Stretch" FontSize="13">
+                    <ComboBoxItem Content="Geen" Tag=""/>
+                    <ComboBoxItem Content="Jira" Tag="jira"/>
+                  </ComboBox>
+                </StackPanel>
+
                 <CheckBox Name="AskContextCheck" Content="Vraag om extra context"
                           FontSize="12"/>
                 <CheckBox Name="UseInputCheck"

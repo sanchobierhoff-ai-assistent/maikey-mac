@@ -299,6 +299,14 @@ public class ApiClient
         return r?.Success ?? false;
     }
 
+    public async Task<JiraTicket?> CreateJiraTicketAsync(
+        string projectKey, string issueTypeId, string summary, string description)
+    {
+        var r = await PostAsync<CreateJiraTicketResponse>("/integrations/jira/create-ticket",
+            new { projectKey, issueTypeId, summary, description });
+        return r?.Ticket;
+    }
+
     // ============================================
     // CLOUD SYNC
     // ============================================

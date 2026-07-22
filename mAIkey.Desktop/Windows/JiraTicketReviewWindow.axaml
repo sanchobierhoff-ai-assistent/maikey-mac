@@ -1,0 +1,37 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="mAIkey.Desktop.Windows.JiraTicketReviewWindow"
+        Title="Jira-ticket nakijken"
+        Width="560" Height="600"
+        WindowStartupLocation="CenterScreen"
+        Topmost="True"
+        Background="{DynamicResource Bg1}">
+
+  <DockPanel Margin="24">
+    <StackPanel DockPanel.Dock="Top" Spacing="4" Margin="0,0,0,16">
+      <TextBlock Classes="eyebrow" Text="JIRA"/>
+      <TextBlock Classes="title" Text="Ticket nakijken" FontSize="22"/>
+      <TextBlock Classes="subtitle" FontSize="13"
+                 Text="Controleer en pas aan voordat je het ticket aanmaakt."/>
+    </StackPanel>
+
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="10" Margin="0,16,0,0">
+      <Button Name="CreateBtn" Classes="accent" Content="Ticket aanmaken" Click="Create_Click"/>
+      <Button Classes="ghost" Content="Annuleren" Click="Cancel_Click"/>
+      <TextBlock Name="StatusText" Classes="muted" IsVisible="False"
+                 VerticalAlignment="Center" TextWrapping="Wrap"/>
+    </StackPanel>
+
+    <StackPanel Spacing="12">
+      <StackPanel Spacing="6">
+        <TextBlock Text="Samenvatting (titel)" Classes="muted"/>
+        <TextBox Name="SummaryBox"/>
+      </StackPanel>
+      <StackPanel Spacing="6">
+        <TextBlock Text="Omschrijving" Classes="muted"/>
+        <TextBox Name="DescriptionBox" AcceptsReturn="True" TextWrapping="Wrap"
+                 Height="300" VerticalContentAlignment="Top"/>
+      </StackPanel>
+    </StackPanel>
+  </DockPanel>
+</Window>

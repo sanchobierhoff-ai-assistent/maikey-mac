@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using mAIkey.Core.Interfaces;
 using mAIkey.Core.Models;
 using mAIkey.Core.Services;
@@ -70,6 +72,34 @@ public class HotkeyRuntime
         Log($"totaal geregistreerd: {count}");
     }
 
+    private async Task SendToJiraAsync(string content)
+    {
+        Integration? jira = null;
+        try
+        {
+            var integrations = await _api.GetIntegrationsAsync();
+            jira = integrations?.FirstOrDefault(i => i.IntegrationType == "jira" && i.IsActive);
+        }
+        catch (Exception ex) { Log("jira: integraties ophalen mislukt: " + ex.Message); }
+
+        var project = jira?.Config?.DefaultProject;
+        var issueType = jira?.Config?.DefaultIssueType;
+        if (string.IsNullOrEmpty(project) || string.IsNullOrEmpty(issueType))
+        {
+            Log("jira: geen standaardproject/issue-type ingesteld — configureer Jira eerst");
+            return;
+        }
+
+        var summary = content.Split('\n').Select(l => l.Trim())
+            .FirstOrDefault(l => l.Length > 0) ?? "mAIkey ticket";
+        if (summary.Length > 200) summary = summary.Substring(0, 200);
+
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            new Windows.JiraTicketReviewWindow(project!, issueType!, summary, content).Show();
+        });
+    }
+
     private static void Log(string msg)
     {
         try
@@ -130,6 +160,15 @@ public class HotkeyRuntime
 
             if (!result.Success || string.IsNullOrEmpty(result.Output))
                 return;
+
+            // Integratie? Toon het review-venster i.p.v. terug te plakken.
+            if (hk.IntegrationType == "jira")
+            {
+                if (showIndicator) _indicator.Hide();
+                await SendToJiraAsync(result.Output);
+                Log("jira: review-venster getoond");
+                return;
+            }
 
             // Indicator weg + oorspronkelijke app terug naar voren vóór het plakken.
             if (showIndicator)
