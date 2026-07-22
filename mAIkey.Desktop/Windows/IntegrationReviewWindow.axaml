@@ -1,0 +1,36 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="mAIkey.Desktop.Windows.IntegrationReviewWindow"
+        Title="Nakijken"
+        Width="560" Height="600"
+        WindowStartupLocation="CenterScreen"
+        Topmost="True"
+        Background="{DynamicResource Bg1}">
+
+  <DockPanel Margin="24">
+    <StackPanel DockPanel.Dock="Top" Spacing="4" Margin="0,0,0,16">
+      <TextBlock Name="Eyebrow" Classes="eyebrow" Text="INTEGRATIE"/>
+      <TextBlock Name="Heading" Classes="title" Text="Nakijken" FontSize="22"/>
+      <TextBlock Classes="subtitle" FontSize="13" Text="Controleer en pas aan voordat je verstuurt."/>
+    </StackPanel>
+
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="10" Margin="0,16,0,0">
+      <Button Name="CreateBtn" Classes="accent" Content="Versturen" Click="Create_Click"/>
+      <Button Classes="ghost" Content="Annuleren" Click="Cancel_Click"/>
+      <TextBlock Name="StatusText" Classes="muted" IsVisible="False"
+                 VerticalAlignment="Center" TextWrapping="Wrap"/>
+    </StackPanel>
+
+    <StackPanel Spacing="12">
+      <StackPanel Spacing="6">
+        <TextBlock Name="TitleLabel" Text="Titel" Classes="muted"/>
+        <TextBox Name="TitleBox"/>
+      </StackPanel>
+      <StackPanel Spacing="6">
+        <TextBlock Text="Inhoud" Classes="muted"/>
+        <TextBox Name="BodyBox" AcceptsReturn="True" TextWrapping="Wrap"
+                 Height="300" VerticalContentAlignment="Top"/>
+      </StackPanel>
+    </StackPanel>
+  </DockPanel>
+</Window>

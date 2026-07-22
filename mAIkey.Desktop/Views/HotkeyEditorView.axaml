@@ -130,6 +130,8 @@
                     <ComboBoxItem Content="Venster (window)" Tag="window"/>
                     <ComboBoxItem Content="Jira – Met review venster" Tag="jira_review"/>
                     <ComboBoxItem Content="Jira – Direct aanmaken" Tag="jira_direct"/>
+                    <ComboBoxItem Content="GitHub – Met review venster" Tag="github_review"/>
+                    <ComboBoxItem Content="GitHub – Direct aanmaken" Tag="github_direct"/>
                   </ComboBox>
                 </StackPanel>
 

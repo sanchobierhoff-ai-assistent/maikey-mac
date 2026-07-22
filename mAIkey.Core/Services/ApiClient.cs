@@ -307,6 +307,35 @@ public class ApiClient
         return r?.Ticket;
     }
 
+    // ── GitHub ──
+
+    public async Task<bool> TestGitHubConnectionAsync(string token)
+    {
+        var r = await PostAsync<ApiResponse>("/integrations/github/test", new { token });
+        return r?.Success ?? false;
+    }
+
+    public async Task<GitHubRepo[]?> GetGitHubReposAsync(string token)
+    {
+        var r = await PostAsync<GetGitHubReposResponse>("/integrations/github/repos", new { token });
+        return r?.Repos;
+    }
+
+    public async Task<bool> SaveGitHubIntegrationAsync(string? token,
+        string? defaultRepo = null, string? defaultLabels = null)
+    {
+        var r = await PostAsync<ApiResponse>("/integrations/github/save",
+            new { token, defaultRepo, defaultLabels });
+        return r?.Success ?? false;
+    }
+
+    public async Task<GitHubIssue?> CreateGitHubIssueAsync(string title, string body, string[]? labels = null)
+    {
+        var r = await PostAsync<CreateGitHubIssueResponse>("/integrations/github/create-issue",
+            new { title, body, labels });
+        return r?.Issue;
+    }
+
     // ============================================
     // CLOUD SYNC
     // ============================================

@@ -111,6 +111,36 @@ public class HotkeyRuntime
         });
     }
 
+    /// <summary>GitHub-issue aanmaken (server gebruikt de opgeslagen standaard-repo).</summary>
+    private async Task SendToGitHubAsync(string content, bool direct)
+    {
+        var title = content.Split('\n').Select(l => l.Trim())
+            .FirstOrDefault(l => l.Length > 0) ?? "mAIkey issue";
+        if (title.Length > 200) title = title.Substring(0, 200);
+
+        if (direct)
+        {
+            try
+            {
+                var issue = await _api.CreateGitHubIssueAsync(title, content);
+                Log(issue != null ? $"github: issue #{issue.Number} aangemaakt" : "github: aanmaken mislukt");
+            }
+            catch (Exception ex) { Log("github: aanmaken fout: " + ex.Message); }
+            return;
+        }
+
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            new Windows.IntegrationReviewWindow(
+                "GITHUB", "Issue nakijken", "Titel", "Issue aanmaken", title, content,
+                async (t, b) =>
+                {
+                    var i = await _api.CreateGitHubIssueAsync(t, b);
+                    return i != null ? $"#{i.Number}" : null;
+                }).Show();
+        });
+    }
+
     private static void Log(string msg)
     {
         try
@@ -155,9 +185,17 @@ public class HotkeyRuntime
         if (string.IsNullOrWhiteSpace(text))
             return;
 
-        bool isJira = hk.OutputMode == "jira_review" || hk.OutputMode == "jira_direct";
-        // Voor Jira genereert de AI de ticket-inhoud als een "window"-antwoord.
-        string apiMode = isJira ? "window" : hk.OutputMode;
+        // Integratie-modus? (bijv. jira_review, github_direct)
+        string integration = hk.OutputMode switch
+        {
+            "jira_review" or "jira_direct" => "jira",
+            "github_review" or "github_direct" => "github",
+            _ => ""
+        };
+        bool isIntegration = integration.Length > 0;
+        bool directSend = hk.OutputMode.EndsWith("_direct");
+        // Voor integraties genereert de AI de inhoud als een "window"-antwoord.
+        string apiMode = isIntegration ? "window" : hk.OutputMode;
 
         bool showIndicator = _config.ShowAiIndicator;
         if (showIndicator) _indicator.Show();
@@ -176,12 +214,13 @@ public class HotkeyRuntime
             if (!result.Success || string.IsNullOrEmpty(result.Output))
                 return;
 
-            // Jira? Ticket aanmaken i.p.v. terug te plakken.
-            if (isJira)
+            // Integratie? Versturen/aanmaken i.p.v. terug te plakken.
+            if (isIntegration)
             {
                 if (showIndicator) _indicator.Hide();
-                await SendToJiraAsync(result.Output, direct: hk.OutputMode == "jira_direct");
-                Log($"jira: {(hk.OutputMode == "jira_direct" ? "direct aangemaakt" : "review getoond")}");
+                if (integration == "jira") await SendToJiraAsync(result.Output, directSend);
+                else if (integration == "github") await SendToGitHubAsync(result.Output, directSend);
+                Log($"{integration}: {(directSend ? "direct" : "review")}");
                 return;
             }
 

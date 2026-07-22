@@ -84,6 +84,8 @@ public class IntegrationConfig
 {
     public string? DefaultProject { get; set; }
     public string? DefaultIssueType { get; set; }
+    public string? DefaultRepo { get; set; }
+    public string? DefaultLabels { get; set; }
 }
 
 public class Integration
@@ -104,6 +106,30 @@ public class JiraTicket
 public class CreateJiraTicketResponse : ApiResponse
 {
     public JiraTicket? Ticket { get; set; }
+}
+
+public class GitHubRepo
+{
+    public string FullName { get; set; } = "";
+    public string Name { get; set; } = "";
+    public override string ToString() => FullName;
+}
+
+public class GitHubIssue
+{
+    public int Number { get; set; }
+    public string HtmlUrl { get; set; } = "";
+    public string Title { get; set; } = "";
+}
+
+public class GetGitHubReposResponse : ApiResponse
+{
+    public GitHubRepo[]? Repos { get; set; }
+}
+
+public class CreateGitHubIssueResponse : ApiResponse
+{
+    public GitHubIssue? Issue { get; set; }
 }
 
 public class GetIntegrationsResponse : ApiResponse

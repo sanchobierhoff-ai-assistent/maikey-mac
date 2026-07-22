@@ -77,9 +77,11 @@ public partial class IntegrationsView : UserControl
         };
         configBtn.Classes.Add("ghost");
 
-        // Alleen Jira is nu volledig geport; de rest volgt.
+        // Geport: Jira en GitHub. De rest volgt.
         if (type == "jira")
-            configBtn.Click += async (_, _) => await OpenJiraConfig();
+            configBtn.Click += async (_, _) => await OpenConfig(new Windows.JiraConfigWindow());
+        else if (type == "github")
+            configBtn.Click += async (_, _) => await OpenConfig(new Windows.GitHubConfigWindow());
         else
         {
             configBtn.IsEnabled = false;
@@ -100,12 +102,11 @@ public partial class IntegrationsView : UserControl
         return card;
     }
 
-    private async System.Threading.Tasks.Task OpenJiraConfig()
+    private async System.Threading.Tasks.Task OpenConfig(Window dialog)
     {
         var owner = TopLevel.GetTopLevel(this) as Window;
         if (owner == null) return;
 
-        var dialog = new Windows.JiraConfigWindow();
         var saved = await dialog.ShowDialog<bool>(owner);
         if (saved)
             await LoadAsync(); // status verversen
