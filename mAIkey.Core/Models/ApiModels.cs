@@ -132,6 +132,17 @@ public class CreateGitHubIssueResponse : ApiResponse
     public GitHubIssue? Issue { get; set; }
 }
 
+public class StartGoogleOAuthResponse : ApiResponse
+{
+    public string? Url { get; set; }
+}
+
+public class GoogleOAuthStatusResponse : ApiResponse
+{
+    public bool IsConnected { get; set; }
+    public string? Email { get; set; }
+}
+
 public class GetIntegrationsResponse : ApiResponse
 {
     public Integration[]? Integrations { get; set; }

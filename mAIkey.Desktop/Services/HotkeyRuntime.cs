@@ -164,6 +164,20 @@ public class HotkeyRuntime
         });
     }
 
+    /// <summary>Gmail: onderwerp = eerste regel, bericht = rest; altijd via review-venster.</summary>
+    private async Task SendToGmailAsync(string content)
+    {
+        var lines = content.Split('\n');
+        var subject = lines.Select(l => l.Trim()).FirstOrDefault(l => l.Length > 0) ?? "";
+        if (subject.Length > 200) subject = subject.Substring(0, 200);
+        var body = content;
+
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            new Windows.GmailReviewWindow(subject, body).Show();
+        });
+    }
+
     private static void Log(string msg)
     {
         try
@@ -214,6 +228,7 @@ public class HotkeyRuntime
             "jira_review" or "jira_direct" => "jira",
             "github_review" or "github_direct" => "github",
             "slack_review" or "slack_direct" => "slack",
+            "gmail_review" => "gmail",
             _ => ""
         };
         bool isIntegration = integration.Length > 0;
@@ -245,6 +260,7 @@ public class HotkeyRuntime
                 if (integration == "jira") await SendToJiraAsync(result.Output, directSend);
                 else if (integration == "github") await SendToGitHubAsync(result.Output, directSend);
                 else if (integration == "slack") await SendToSlackAsync(result.Output, directSend);
+                else if (integration == "gmail") await SendToGmailAsync(result.Output);
                 Log($"{integration}: {(directSend ? "direct" : "review")}");
                 return;
             }

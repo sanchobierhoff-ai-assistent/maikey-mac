@@ -1,0 +1,29 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="mAIkey.Desktop.Windows.GoogleConfigWindow"
+        Title="Google verbinden"
+        Width="460" Height="360"
+        CanResize="False"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource Bg1}">
+
+  <StackPanel Margin="28" Spacing="18">
+
+    <StackPanel Spacing="4">
+      <TextBlock Classes="eyebrow" Text="INTEGRATIE"/>
+      <TextBlock Name="Heading" Classes="title" Text="Google" FontSize="24"/>
+      <TextBlock Name="Sub" Classes="subtitle" FontSize="13"
+                 Text="Verbind je Google-account via je browser."/>
+    </StackPanel>
+
+    <Button Name="ConnectBtn" Classes="accent" Content="Verbinden met Google"
+            HorizontalAlignment="Left" Click="Connect_Click"/>
+
+    <TextBlock Name="StatusText" Classes="muted" IsVisible="False" TextWrapping="Wrap"/>
+
+    <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Bottom">
+      <Button Name="DoneBtn" Classes="ghost" Content="Sluiten" Click="Done_Click"/>
+    </StackPanel>
+
+  </StackPanel>
+</Window>

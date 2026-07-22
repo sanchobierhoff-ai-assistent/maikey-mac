@@ -1,0 +1,44 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="mAIkey.Desktop.Windows.GmailReviewWindow"
+        Title="E-mail nakijken"
+        Width="560" Height="620"
+        WindowStartupLocation="CenterScreen"
+        Topmost="True"
+        Background="{DynamicResource Bg1}">
+
+  <DockPanel Margin="24">
+    <StackPanel DockPanel.Dock="Top" Spacing="4" Margin="0,0,0,16">
+      <TextBlock Classes="eyebrow" Text="GMAIL"/>
+      <TextBlock Classes="title" Text="E-mail nakijken" FontSize="22"/>
+      <TextBlock Classes="subtitle" FontSize="13" Text="Controleer en vul de ontvanger in."/>
+    </StackPanel>
+
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="10" Margin="0,16,0,0">
+      <Button Name="SendBtn" Classes="accent" Content="Versturen" Click="Send_Click"/>
+      <Button Classes="ghost" Content="Annuleren" Click="Cancel_Click"/>
+      <TextBlock Name="StatusText" Classes="muted" IsVisible="False"
+                 VerticalAlignment="Center" TextWrapping="Wrap"/>
+    </StackPanel>
+
+    <StackPanel Spacing="12">
+      <StackPanel Spacing="6">
+        <TextBlock Text="Aan" Classes="muted"/>
+        <TextBox Name="ToBox" Watermark="ontvanger@voorbeeld.nl"/>
+      </StackPanel>
+      <StackPanel Spacing="6">
+        <TextBlock Text="CC (optioneel)" Classes="muted"/>
+        <TextBox Name="CcBox"/>
+      </StackPanel>
+      <StackPanel Spacing="6">
+        <TextBlock Text="Onderwerp" Classes="muted"/>
+        <TextBox Name="SubjectBox"/>
+      </StackPanel>
+      <StackPanel Spacing="6">
+        <TextBlock Text="Bericht" Classes="muted"/>
+        <TextBox Name="BodyBox" AcceptsReturn="True" TextWrapping="Wrap"
+                 Height="220" VerticalContentAlignment="Top"/>
+      </StackPanel>
+    </StackPanel>
+  </DockPanel>
+</Window>

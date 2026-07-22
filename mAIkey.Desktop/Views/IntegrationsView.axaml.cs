@@ -84,6 +84,12 @@ public partial class IntegrationsView : UserControl
             configBtn.Click += async (_, _) => await OpenConfig(new Windows.GitHubConfigWindow());
         else if (type == "slack")
             configBtn.Click += async (_, _) => await OpenConfig(new Windows.SlackConfigWindow());
+        else if (type == "gmail")
+            configBtn.Click += async (_, _) => await OpenConfig(new Windows.GoogleConfigWindow("gmail", "Gmail"));
+        else if (type == "gcalendar")
+            configBtn.Click += async (_, _) => await OpenConfig(new Windows.GoogleConfigWindow("gcalendar", "Google Calendar"));
+        else if (type == "gtasks")
+            configBtn.Click += async (_, _) => await OpenConfig(new Windows.GoogleConfigWindow("gtasks", "Google Tasks"));
         else
         {
             configBtn.IsEnabled = false;

@@ -356,6 +356,26 @@ public class ApiClient
         return r?.Success ?? false;
     }
 
+    // ── Google OAuth (Gmail / Agenda / Taken) ──
+
+    public async Task<string?> StartGoogleOAuthAsync(string integrationType)
+    {
+        var r = await PostAsync<StartGoogleOAuthResponse>("/oauth/google/start", new { integrationType });
+        return r?.Url;
+    }
+
+    public async Task<(bool isConnected, string? email)> GetGoogleOAuthStatusAsync(string integrationType)
+    {
+        var r = await GetAsync<GoogleOAuthStatusResponse>($"/oauth/google/status/{integrationType}");
+        return (r?.IsConnected ?? false, r?.Email);
+    }
+
+    public async Task<bool> SendGmailAsync(string to, string subject, string body, string? cc = null)
+    {
+        var r = await PostAsync<ApiResponse>("/integrations/gmail/send", new { to, subject, body, cc });
+        return r?.Success ?? false;
+    }
+
     // ============================================
     // CLOUD SYNC
     // ============================================
