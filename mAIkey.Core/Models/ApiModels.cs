@@ -143,6 +143,33 @@ public class GoogleOAuthStatusResponse : ApiResponse
     public string? Email { get; set; }
 }
 
+public class CalendarEventDraft
+{
+    public string Title { get; set; } = "";
+    public string StartDateTime { get; set; } = "";
+    public string EndDateTime { get; set; } = "";
+    public string Description { get; set; } = "";
+    public string Attendees { get; set; } = "";
+    public string Location { get; set; } = "";
+}
+
+public class GenerateCalendarEventResponse : ApiResponse
+{
+    public CalendarEventDraft? Event { get; set; }
+}
+
+public class CalendarEvent
+{
+    public string Id { get; set; } = "";
+    public string HtmlLink { get; set; } = "";
+    public string Summary { get; set; } = "";
+}
+
+public class CreateCalendarEventResponse : ApiResponse
+{
+    public CalendarEvent? Event { get; set; }
+}
+
 public class GetIntegrationsResponse : ApiResponse
 {
     public Integration[]? Integrations { get; set; }

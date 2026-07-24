@@ -376,6 +376,23 @@ public class ApiClient
         return r?.Success ?? false;
     }
 
+    // ── Google Agenda ──
+
+    public async Task<CalendarEventDraft?> GenerateCalendarEventAsync(string text)
+    {
+        var r = await PostAsync<GenerateCalendarEventResponse>("/ai/generate-calendar-event", new { text });
+        return r?.Event;
+    }
+
+    public async Task<CalendarEvent?> CreateCalendarEventAsync(string title,
+        string startDateTime, string endDateTime,
+        string? description = null, string? attendees = null, string? location = null)
+    {
+        var r = await PostAsync<CreateCalendarEventResponse>("/integrations/calendar/create-event",
+            new { title, startDateTime, endDateTime, description, attendees, location });
+        return r?.Event;
+    }
+
     // ── Todoist (token) ──
     public async Task<bool> TestTodoistConnectionAsync(string token)
         => (await PostAsync<ApiResponse>("/integrations/todoist/test", new { token }))?.Success ?? false;

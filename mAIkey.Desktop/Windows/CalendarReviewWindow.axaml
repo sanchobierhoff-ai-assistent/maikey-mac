@@ -1,0 +1,54 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="mAIkey.Desktop.Windows.CalendarReviewWindow"
+        Title="Agenda-afspraak nakijken"
+        Width="560" Height="640"
+        WindowStartupLocation="CenterScreen"
+        Topmost="True"
+        Background="{DynamicResource Bg1}">
+
+  <DockPanel Margin="24">
+    <StackPanel DockPanel.Dock="Top" Spacing="4" Margin="0,0,0,16">
+      <TextBlock Classes="eyebrow" Text="GOOGLE AGENDA"/>
+      <TextBlock Classes="title" Text="Afspraak nakijken" FontSize="22"/>
+      <TextBlock Classes="subtitle" FontSize="13" Text="Controleer de gegevens voordat je de afspraak aanmaakt."/>
+    </StackPanel>
+
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="10" Margin="0,16,0,0">
+      <Button Name="CreateBtn" Classes="accent" Content="Afspraak aanmaken" Click="Create_Click"/>
+      <Button Classes="ghost" Content="Annuleren" Click="Cancel_Click"/>
+      <TextBlock Name="StatusText" Classes="muted" IsVisible="False"
+                 VerticalAlignment="Center" TextWrapping="Wrap"/>
+    </StackPanel>
+
+    <StackPanel Spacing="12">
+      <StackPanel Spacing="6">
+        <TextBlock Text="Titel" Classes="muted"/>
+        <TextBox Name="TitleBox"/>
+      </StackPanel>
+      <Grid ColumnDefinitions="*,12,*">
+        <StackPanel Grid.Column="0" Spacing="6">
+          <TextBlock Text="Begin (bijv. 2026-07-25 14:00)" Classes="muted"/>
+          <TextBox Name="StartBox"/>
+        </StackPanel>
+        <StackPanel Grid.Column="2" Spacing="6">
+          <TextBlock Text="Eind" Classes="muted"/>
+          <TextBox Name="EndBox"/>
+        </StackPanel>
+      </Grid>
+      <StackPanel Spacing="6">
+        <TextBlock Text="Locatie (optioneel)" Classes="muted"/>
+        <TextBox Name="LocationBox"/>
+      </StackPanel>
+      <StackPanel Spacing="6">
+        <TextBlock Text="Genodigden (komma-gescheiden, optioneel)" Classes="muted"/>
+        <TextBox Name="AttendeesBox"/>
+      </StackPanel>
+      <StackPanel Spacing="6">
+        <TextBlock Text="Omschrijving" Classes="muted"/>
+        <TextBox Name="DescriptionBox" AcceptsReturn="True" TextWrapping="Wrap"
+                 Height="120" VerticalContentAlignment="Top"/>
+      </StackPanel>
+    </StackPanel>
+  </DockPanel>
+</Window>

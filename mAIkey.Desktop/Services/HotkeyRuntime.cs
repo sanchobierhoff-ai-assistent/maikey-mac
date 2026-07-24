@@ -178,6 +178,21 @@ public class HotkeyRuntime
         });
     }
 
+    /// <summary>Google Agenda: genereer een gestructureerd event en toon het review-venster.</summary>
+    private async Task SendToCalendarAsync(string text)
+    {
+        var draft = await _api.GenerateCalendarEventAsync(text);
+        if (draft == null)
+        {
+            Log("calendar: geen concept gegenereerd");
+            return;
+        }
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            new Windows.CalendarReviewWindow(draft).Show();
+        });
+    }
+
     private static void Log(string msg)
     {
         try
@@ -221,6 +236,17 @@ public class HotkeyRuntime
         Log($"geselecteerde tekst: {(text == null ? "null" : text.Length + " tekens")}");
         if (string.IsNullOrWhiteSpace(text))
             return;
+
+        // Google Agenda gebruikt een apart generate-endpoint (gestructureerd event).
+        if (hk.OutputMode == "calendar_review")
+        {
+            bool ind = _config.ShowAiIndicator;
+            if (ind) _indicator.Show();
+            try { await SendToCalendarAsync(text); }
+            catch (Exception ex) { Log("calendar: " + ex.Message); }
+            finally { if (ind) _indicator.Hide(); }
+            return;
+        }
 
         // Integratie-modus? (bijv. jira_review, github_direct)
         string integration = hk.OutputMode switch

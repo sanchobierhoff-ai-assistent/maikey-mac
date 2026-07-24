@@ -135,6 +135,7 @@
                     <ComboBoxItem Content="Slack – Met preview" Tag="slack_review"/>
                     <ComboBoxItem Content="Slack – Direct versturen" Tag="slack_direct"/>
                     <ComboBoxItem Content="Gmail – Met review venster" Tag="gmail_review"/>
+                    <ComboBoxItem Content="Google Agenda – Met review" Tag="calendar_review"/>
                   </ComboBox>
                 </StackPanel>
 
