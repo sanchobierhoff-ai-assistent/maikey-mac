@@ -108,6 +108,18 @@ public partial class IntegrationsView : UserControl
                 "Webhook-URL", null,
                 (u, _) => App.Api.TestZapierConnectionAsync(u),
                 (u, _) => App.Api.SaveZapierIntegrationAsync(u)));
+        else if (type == "teams")
+            configBtn.Click += async (_, _) => await OpenConfig(new Windows.GenericTokenConfigWindow(
+                "Microsoft Teams", "Verbind via een Incoming Webhook-URL van je Teams-kanaal.",
+                "Webhook-URL", null,
+                (u, _) => App.Api.TestTeamsConnectionAsync(u),
+                (u, _) => App.Api.SaveTeamsIntegrationAsync(u)));
+        else if (type == "asana")
+            configBtn.Click += async (_, _) => await OpenConfig(new Windows.GenericTokenConfigWindow(
+                "Asana", "Verbind met een Personal Access Token (Asana → Settings → Apps → PAT).",
+                "Personal Access Token", null,
+                (t, _) => App.Api.TestAsanaConnectionAsync(t),
+                (t, _) => App.Api.SaveAsanaIntegrationAsync(t)));
         else
         {
             configBtn.IsEnabled = false;

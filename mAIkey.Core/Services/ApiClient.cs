@@ -394,6 +394,18 @@ public class ApiClient
     public async Task<bool> SaveZapierIntegrationAsync(string? webhookUrl, string? webhookName = null)
         => (await PostAsync<ApiResponse>("/integrations/zapier/save", new { webhookUrl, webhookName }))?.Success ?? false;
 
+    // ── Microsoft Teams (webhook) ──
+    public async Task<bool> TestTeamsConnectionAsync(string webhookUrl)
+        => (await PostAsync<ApiResponse>("/integrations/teams/test", new { webhookUrl }))?.Success ?? false;
+    public async Task<bool> SaveTeamsIntegrationAsync(string? webhookUrl, string? defaultChannel = null)
+        => (await PostAsync<ApiResponse>("/integrations/teams/save", new { webhookUrl, defaultChannel }))?.Success ?? false;
+
+    // ── Asana (token) ──
+    public async Task<bool> TestAsanaConnectionAsync(string token)
+        => (await PostAsync<ApiResponse>("/integrations/asana/test", new { token }))?.Success ?? false;
+    public async Task<bool> SaveAsanaIntegrationAsync(string? token)
+        => (await PostAsync<ApiResponse>("/integrations/asana/save", new { token }))?.Success ?? false;
+
     // ============================================
     // CLOUD SYNC
     // ============================================
