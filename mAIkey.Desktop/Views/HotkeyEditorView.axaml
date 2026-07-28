@@ -91,6 +91,15 @@
                 <TextBlock Text="AI Prompt" FontSize="13" FontWeight="SemiBold"
                            Foreground="{DynamicResource Text1}"/>
 
+                <!-- Sneller instellen met een template -->
+                <StackPanel Spacing="6">
+                  <TextBlock Text="Sneller instellen met een template" FontSize="11"
+                             Foreground="{DynamicResource Text2}"/>
+                  <ComboBox Name="TemplatePickerCombo" HorizontalAlignment="Stretch" FontSize="13"
+                            PlaceholderText="Kies een template…"
+                            SelectionChanged="TemplatePicker_Changed"/>
+                </StackPanel>
+
                 <StackPanel Spacing="6">
                   <TextBlock Text="Instructie voor de AI" FontSize="11"
                              Foreground="{DynamicResource Text2}"/>

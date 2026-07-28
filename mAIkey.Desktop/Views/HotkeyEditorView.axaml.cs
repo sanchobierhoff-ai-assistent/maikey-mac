@@ -43,6 +43,42 @@ public partial class HotkeyEditorView : UserControl
         PopulateHotkeyList();
         LoadModels();
         LoadStyles();
+        _ = LoadTemplatesAsync();
+    }
+
+    // ═══ TEMPLATE-PICKER ═══
+
+    private bool _applyingTemplate;
+
+    private async System.Threading.Tasks.Task LoadTemplatesAsync()
+    {
+        try
+        {
+            var resp = await _api.GetPromptTemplatesAsync(_config.InterfaceLanguage);
+            var templates = resp?.Templates;
+            if (templates == null) return;
+
+            TemplatePickerCombo.Items.Clear();
+            foreach (var t in templates.OrderBy(t => t.SortOrder))
+                TemplatePickerCombo.Items.Add(new ComboBoxItem { Content = t.Name, Tag = t });
+        }
+        catch { /* templates zijn optioneel */ }
+    }
+
+    private void TemplatePicker_Changed(object? sender, SelectionChangedEventArgs e)
+    {
+        if (_applyingTemplate) return;
+        if (TemplatePickerCombo.SelectedItem is not ComboBoxItem item) return;
+        if (item.Tag is not RemotePromptTemplate t) return;
+
+        // Vul de prompt + kies model/output op basis van het template.
+        PromptBox.Text = t.CustomPrompt;
+
+        foreach (ComboBoxItem mi in ModelComboBox.Items)
+            if (mi.Tag?.ToString() == t.Model) { ModelComboBox.SelectedItem = mi; break; }
+
+        foreach (ComboBoxItem oi in OutputModeComboBox.Items)
+            if (oi.Tag?.ToString() == t.OutputMode) { OutputModeComboBox.SelectedItem = oi; break; }
     }
 
     // ═══ HOTKEY LIST ═══
