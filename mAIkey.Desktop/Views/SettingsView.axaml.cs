@@ -7,26 +7,26 @@ namespace mAIkey.Desktop.Views;
 public partial class SettingsView : UserControl
 {
     private readonly ConfigService _config;
+    private bool _loading;
 
     public SettingsView()
     {
         InitializeComponent();
         _config = App.Config;
-
         Loaded += SettingsView_Loaded;
     }
 
     private void SettingsView_Loaded(object? sender, RoutedEventArgs e)
     {
-        // Language
+        _loading = true;
+
+        // Taal
         foreach (ComboBoxItem item in LanguageComboBox.Items)
-        {
             if (item.Tag?.ToString() == _config.InterfaceLanguage)
             {
                 LanguageComboBox.SelectedItem = item;
                 break;
             }
-        }
         LanguageComboBox.SelectionChanged += (s, e) =>
         {
             if (LanguageComboBox.SelectedItem is ComboBoxItem item)
@@ -37,38 +37,23 @@ public partial class SettingsView : UserControl
             }
         };
 
-        // Thema
-        foreach (ComboBoxItem item in ThemeComboBox.Items)
-        {
-            if (item.Tag?.ToString() == (_config.Theme ?? "Dark"))
-            {
-                ThemeComboBox.SelectedItem = item;
-                break;
-            }
-        }
-        ThemeComboBox.SelectionChanged += (s, e) =>
-        {
-            if (ThemeComboBox.SelectedItem is ComboBoxItem item)
-            {
-                var theme = item.Tag?.ToString() ?? "Dark";
-                _config.Theme = theme;
-                App.ApplyTheme(theme);
-            }
-        };
+        // Thema (radio)
+        bool isLight = string.Equals(_config.Theme, "Light", System.StringComparison.OrdinalIgnoreCase);
+        ThemeLightRadio.IsChecked = isLight;
+        ThemeDarkRadio.IsChecked = !isLight;
+        ThemeDarkRadio.IsCheckedChanged += (s, e) => { if (ThemeDarkRadio.IsChecked == true) SetTheme("Dark"); };
+        ThemeLightRadio.IsCheckedChanged += (s, e) => { if (ThemeLightRadio.IsChecked == true) SetTheme("Light"); };
 
-        // Checkboxes
-        MinimizeToTrayCheck.IsChecked = _config.MinimizeToTray;
+        // Gedrag + venster
         ShowIndicatorCheck.IsChecked = _config.ShowAiIndicator;
         SoundCheck.IsChecked = _config.SoundOnComplete;
+        MinimizeToTrayCheck.IsChecked = _config.MinimizeToTray;
 
-        MinimizeToTrayCheck.IsCheckedChanged += (s, e) =>
-            _config.MinimizeToTray = MinimizeToTrayCheck.IsChecked ?? true;
-        ShowIndicatorCheck.IsCheckedChanged += (s, e) =>
-            _config.ShowAiIndicator = ShowIndicatorCheck.IsChecked ?? true;
-        SoundCheck.IsCheckedChanged += (s, e) =>
-            _config.SoundOnComplete = SoundCheck.IsChecked ?? false;
+        ShowIndicatorCheck.IsCheckedChanged += (s, e) => _config.ShowAiIndicator = ShowIndicatorCheck.IsChecked ?? true;
+        SoundCheck.IsCheckedChanged += (s, e) => _config.SoundOnComplete = SoundCheck.IsChecked ?? false;
+        MinimizeToTrayCheck.IsCheckedChanged += (s, e) => _config.MinimizeToTray = MinimizeToTrayCheck.IsChecked ?? true;
 
-        // Content limits
+        // Contentlimieten
         MaxImagesText.Text = _config.MaxImages.ToString();
         MaxCharsBox.Text = _config.MaxCharacters.ToString();
         MaxCharsBox.LostFocus += (s, e) =>
@@ -80,24 +65,31 @@ public partial class SettingsView : UserControl
         // Account
         AccountEmailRun.Text = _config.UserEmail ?? "onbekend";
         AccountTierRun.Text = (_config.SubscriptionTier ?? "free").ToUpperInvariant();
+
+        _loading = false;
+    }
+
+    private void SetTheme(string theme)
+    {
+        if (_loading) return;
+        _config.Theme = theme;
+        App.ApplyTheme(theme);
     }
 
     private void ImgMinus_Click(object? sender, RoutedEventArgs e)
     {
-        var val = _config.MaxImages;
-        if (val > 0)
+        if (_config.MaxImages > 0)
         {
-            _config.MaxImages = val - 1;
+            _config.MaxImages -= 1;
             MaxImagesText.Text = _config.MaxImages.ToString();
         }
     }
 
     private void ImgPlus_Click(object? sender, RoutedEventArgs e)
     {
-        var val = _config.MaxImages;
-        if (val < 10)
+        if (_config.MaxImages < 10)
         {
-            _config.MaxImages = val + 1;
+            _config.MaxImages += 1;
             MaxImagesText.Text = _config.MaxImages.ToString();
         }
     }

@@ -1,92 +1,176 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="mAIkey.Desktop.Views.SettingsView">
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
+             x:Class="mAIkey.Desktop.Views.SettingsView"
+             Background="{DynamicResource Bg1}">
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto">
-    <StackPanel Margin="28,8,28,28" Spacing="24" MaxWidth="680">
+  <UserControl.Styles>
+    <!-- Sectiekaart met icoon-kop, zoals Windows -->
+    <Style Selector="Border.section">
+      <Setter Property="Background" Value="{DynamicResource Bg2}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Border1}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="14"/>
+      <Setter Property="Margin" Value="0,0,0,16"/>
+    </Style>
+    <Style Selector="Border.section-head">
+      <Setter Property="Padding" Value="20,16"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Border1}"/>
+      <Setter Property="BorderThickness" Value="0,0,0,1"/>
+    </Style>
+    <Style Selector="TextBlock.section-title">
+      <Setter Property="FontSize" Value="14"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Foreground" Value="{DynamicResource Text1}"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="TextBlock.row-label">
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="FontWeight" Value="Medium"/>
+      <Setter Property="Foreground" Value="{DynamicResource Text1}"/>
+    </Style>
+    <Style Selector="TextBlock.row-sub">
+      <Setter Property="FontSize" Value="11.5"/>
+      <Setter Property="Foreground" Value="{DynamicResource Text3}"/>
+      <Setter Property="Margin" Value="0,2,0,0"/>
+      <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+  </UserControl.Styles>
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="32,28,32,40">
+    <StackPanel MaxWidth="760">
 
       <!-- Header -->
-      <StackPanel Spacing="4">
+      <StackPanel Spacing="4" Margin="0,0,0,24">
         <TextBlock Classes="eyebrow" Text="INSTELLINGEN"/>
         <TextBlock Classes="title" Text="Voorkeursinstellingen"/>
       </StackPanel>
 
-      <!-- Taal -->
-      <Border Classes="card">
-        <StackPanel Spacing="12">
-          <TextBlock Text="Taal" FontSize="13" FontWeight="SemiBold"
-                     Foreground="{DynamicResource Text1}"/>
-          <ComboBox Name="LanguageComboBox" HorizontalAlignment="Stretch" FontSize="13">
-            <ComboBoxItem Content="Nederlands" Tag="nl"/>
-            <ComboBoxItem Content="English" Tag="en"/>
-            <ComboBoxItem Content="Deutsch" Tag="de"/>
-          </ComboBox>
-        </StackPanel>
-      </Border>
-
       <!-- Thema -->
-      <Border Classes="card">
-        <StackPanel Spacing="12">
-          <TextBlock Text="Thema" FontSize="13" FontWeight="SemiBold"
-                     Foreground="{DynamicResource Text1}"/>
-          <ComboBox Name="ThemeComboBox" HorizontalAlignment="Stretch" FontSize="13">
-            <ComboBoxItem Content="Donker (zwart)" Tag="Dark"/>
-            <ComboBoxItem Content="Taupe (licht)" Tag="Light"/>
-          </ComboBox>
+      <Border Classes="section">
+        <StackPanel>
+          <Border Classes="section-head">
+            <StackPanel Orientation="Horizontal">
+              <i:Icon Value="mdi-theme-light-dark" FontSize="16" Foreground="{DynamicResource Accent}"
+                      Margin="0,0,9,0" VerticalAlignment="Center"/>
+              <TextBlock Classes="section-title" Text="Thema"/>
+            </StackPanel>
+          </Border>
+          <StackPanel Orientation="Horizontal" Margin="20,16,20,20" Spacing="24">
+            <RadioButton Name="ThemeDarkRadio" Content="Donker (zwart)" GroupName="ThemeGroup"/>
+            <RadioButton Name="ThemeLightRadio" Content="Taupe (licht)" GroupName="ThemeGroup"/>
+          </StackPanel>
         </StackPanel>
       </Border>
 
-      <!-- Gedrag -->
-      <Border Classes="card">
-        <StackPanel Spacing="12">
-          <TextBlock Text="Gedrag" FontSize="13" FontWeight="SemiBold"
-                     Foreground="{DynamicResource Text1}"/>
-          <CheckBox Name="MinimizeToTrayCheck" Content="Minimaliseren naar system tray"
-                    FontSize="12"/>
-          <CheckBox Name="ShowIndicatorCheck" Content="Toon AI-indicator bij verwerking"
-                    FontSize="12"/>
-          <CheckBox Name="SoundCheck" Content="Geluid bij voltooiing"
-                    FontSize="12"/>
-        </StackPanel>
-      </Border>
+      <!-- 2 kolommen: Gedrag | Taal -->
+      <Grid ColumnDefinitions="*,16,*" Margin="0,0,0,16">
 
-      <!-- Content limieten -->
-      <Border Classes="card">
-        <StackPanel Spacing="12">
-          <TextBlock Text="Content limieten" FontSize="13" FontWeight="SemiBold"
-                     Foreground="{DynamicResource Text1}"/>
-
-          <StackPanel Spacing="6">
-            <TextBlock Text="Max afbeeldingen per verzoek" FontSize="11"
-                       Foreground="{DynamicResource Text2}"/>
-            <StackPanel Orientation="Horizontal" Spacing="8">
-              <Button Content="-" Width="32" Height="32" Classes="ghost"
-                      Padding="0" HorizontalContentAlignment="Center"
-                      Name="ImgMinusBtn" Click="ImgMinus_Click"/>
-              <TextBlock Name="MaxImagesText" Text="3" FontSize="14"
-                         FontWeight="SemiBold" VerticalAlignment="Center"
-                         Width="30" TextAlignment="Center"/>
-              <Button Content="+" Width="32" Height="32" Classes="ghost"
-                      Padding="0" HorizontalContentAlignment="Center"
-                      Name="ImgPlusBtn" Click="ImgPlus_Click"/>
+        <Border Grid.Column="0" Classes="section" Margin="0">
+          <StackPanel>
+            <Border Classes="section-head">
+              <StackPanel Orientation="Horizontal">
+                <i:Icon Value="mdi-tune-variant" FontSize="16" Foreground="{DynamicResource Accent}"
+                        Margin="0,0,9,0" VerticalAlignment="Center"/>
+                <TextBlock Classes="section-title" Text="Gedrag"/>
+              </StackPanel>
+            </Border>
+            <StackPanel Margin="20,16,20,20" Spacing="12">
+              <CheckBox Name="ShowIndicatorCheck" Content="Toon AI-indicator bij verwerking" FontSize="12"/>
+              <CheckBox Name="SoundCheck" Content="Geluid bij voltooiing" FontSize="12"/>
             </StackPanel>
           </StackPanel>
+        </Border>
 
-          <StackPanel Spacing="6">
-            <TextBlock Text="Max tekens per verzoek" FontSize="11"
-                       Foreground="{DynamicResource Text2}"/>
-            <TextBox Name="MaxCharsBox" Width="120" HorizontalAlignment="Left"
-                     FontSize="13"/>
+        <Border Grid.Column="2" Classes="section" Margin="0">
+          <StackPanel>
+            <Border Classes="section-head">
+              <StackPanel Orientation="Horizontal">
+                <i:Icon Value="mdi-translate" FontSize="16" Foreground="{DynamicResource Accent}"
+                        Margin="0,0,9,0" VerticalAlignment="Center"/>
+                <TextBlock Classes="section-title" Text="Taal"/>
+              </StackPanel>
+            </Border>
+            <StackPanel Margin="20,16,20,20" Spacing="6">
+              <TextBlock Classes="row-label" Text="Taal interface"/>
+              <TextBlock Classes="row-sub" Text="Taal van menu's, labels en berichten"/>
+              <ComboBox Name="LanguageComboBox" HorizontalAlignment="Stretch" FontSize="13" Margin="0,6,0,0">
+                <ComboBoxItem Content="Nederlands" Tag="nl"/>
+                <ComboBoxItem Content="English" Tag="en"/>
+                <ComboBoxItem Content="Deutsch" Tag="de"/>
+              </ComboBox>
+            </StackPanel>
+          </StackPanel>
+        </Border>
+      </Grid>
+
+      <!-- Contentlimieten -->
+      <Border Classes="section">
+        <StackPanel>
+          <Border Classes="section-head">
+            <StackPanel Orientation="Horizontal">
+              <i:Icon Value="mdi-image-multiple" FontSize="16" Foreground="{DynamicResource Accent}"
+                      Margin="0,0,9,0" VerticalAlignment="Center"/>
+              <TextBlock Classes="section-title" Text="Contentlimieten"/>
+            </StackPanel>
+          </Border>
+          <StackPanel Margin="20,16,20,20" Spacing="16">
+            <Grid ColumnDefinitions="*,Auto">
+              <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                <TextBlock Classes="row-label" Text="Max afbeeldingen per verzoek"/>
+                <TextBlock Classes="row-sub" Text="Hoeveel afbeeldingen mAIkey meestuurt"/>
+              </StackPanel>
+              <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <Button Content="-" Width="32" Height="32" Classes="ghost" Padding="0"
+                        HorizontalContentAlignment="Center" Name="ImgMinusBtn" Click="ImgMinus_Click"/>
+                <TextBlock Name="MaxImagesText" Text="3" FontSize="14" FontWeight="SemiBold"
+                           VerticalAlignment="Center" Width="30" TextAlignment="Center"/>
+                <Button Content="+" Width="32" Height="32" Classes="ghost" Padding="0"
+                        HorizontalContentAlignment="Center" Name="ImgPlusBtn" Click="ImgPlus_Click"/>
+              </StackPanel>
+            </Grid>
+            <Grid ColumnDefinitions="*,Auto">
+              <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                <TextBlock Classes="row-label" Text="Max tekens per verzoek"/>
+                <TextBlock Classes="row-sub" Text="Langere selecties worden afgekapt"/>
+              </StackPanel>
+              <TextBox Grid.Column="1" Name="MaxCharsBox" Width="120" FontSize="13" VerticalAlignment="Center"/>
+            </Grid>
           </StackPanel>
         </StackPanel>
       </Border>
 
-      <!-- Account info -->
-      <Border Classes="card">
-        <StackPanel Spacing="12">
-          <TextBlock Text="Account" FontSize="13" FontWeight="SemiBold"
-                     Foreground="{DynamicResource Text1}"/>
-          <StackPanel Spacing="4">
+      <!-- Venster -->
+      <Border Classes="section">
+        <StackPanel>
+          <Border Classes="section-head">
+            <StackPanel Orientation="Horizontal">
+              <i:Icon Value="mdi-dock-window" FontSize="16" Foreground="{DynamicResource Accent}"
+                      Margin="0,0,9,0" VerticalAlignment="Center"/>
+              <TextBlock Classes="section-title" Text="Venster"/>
+            </StackPanel>
+          </Border>
+          <Grid Margin="20,16,20,20" ColumnDefinitions="*,Auto">
+            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+              <TextBlock Classes="row-label" Text="Minimaliseren naar menubalk"/>
+              <TextBlock Classes="row-sub" Text="App blijft actief op de achtergrond bij sluiten"/>
+            </StackPanel>
+            <CheckBox Grid.Column="1" Name="MinimizeToTrayCheck" VerticalAlignment="Center"/>
+          </Grid>
+        </StackPanel>
+      </Border>
+
+      <!-- Account -->
+      <Border Classes="section">
+        <StackPanel>
+          <Border Classes="section-head">
+            <StackPanel Orientation="Horizontal">
+              <i:Icon Value="mdi-account-circle" FontSize="16" Foreground="{DynamicResource Accent}"
+                      Margin="0,0,9,0" VerticalAlignment="Center"/>
+              <TextBlock Classes="section-title" Text="Account"/>
+            </StackPanel>
+          </Border>
+          <StackPanel Margin="20,16,20,20" Spacing="4">
             <TextBlock FontSize="12" Foreground="{DynamicResource Text2}">
               <Run Text="E-mail: "/>
               <Run Name="AccountEmailRun" Text="laden..." Foreground="{DynamicResource Text1}"/>
@@ -99,7 +183,6 @@
         </StackPanel>
       </Border>
 
-      <!-- Version -->
       <TextBlock Text="mAIkey Beta-v1.4-mac" FontSize="10" Foreground="{DynamicResource Text3}"
                  HorizontalAlignment="Center" Margin="0,8"/>
     </StackPanel>
