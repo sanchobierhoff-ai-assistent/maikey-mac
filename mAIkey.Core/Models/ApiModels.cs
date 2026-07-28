@@ -83,9 +83,16 @@ public class RemotePromptTemplatesResponse
 public class IntegrationConfig
 {
     public string? DefaultProject { get; set; }
+    public string? DefaultProjectName { get; set; }
     public string? DefaultIssueType { get; set; }
     public string? DefaultRepo { get; set; }
     public string? DefaultLabels { get; set; }
+    public string? JiraUrl { get; set; }
+    public string? Email { get; set; }
+    public string? DefaultChannel { get; set; }
+    public string? GmailEmail { get; set; }
+    public string? DefaultBoardName { get; set; }
+    public string? WebhookName { get; set; }
 }
 
 public class Integration

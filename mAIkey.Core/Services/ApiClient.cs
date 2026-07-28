@@ -267,6 +267,16 @@ public class ApiClient
         return response?.Integrations;
     }
 
+    public async Task<bool> DeleteIntegrationAsync(string integrationId)
+    {
+        try
+        {
+            var response = await _httpClient.DeleteAsync($"/integrations/{integrationId}");
+            return response.IsSuccessStatusCode;
+        }
+        catch { return false; }
+    }
+
     // ── Jira ──
 
     public async Task<bool> TestJiraConnectionAsync(string jiraUrl, string email, string apiToken)

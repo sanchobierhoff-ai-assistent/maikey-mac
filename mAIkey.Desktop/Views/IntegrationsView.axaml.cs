@@ -35,13 +35,13 @@ public partial class IntegrationsView : UserControl
 
     private async Task LoadAsync()
     {
-        var connected = new System.Collections.Generic.HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var map = new System.Collections.Generic.Dictionary<string, mAIkey.Core.Models.Integration>(StringComparer.OrdinalIgnoreCase);
         try
         {
             var integrations = await App.Api.GetIntegrationsAsync();
             if (integrations != null)
                 foreach (var i in integrations.Where(i => i.IsActive))
-                    connected.Add(i.IntegrationType);
+                    map[i.IntegrationType] = i;
             StatusText.IsVisible = false;
         }
         catch
@@ -51,11 +51,27 @@ public partial class IntegrationsView : UserControl
 
         IntegrationsPanel.Children.Clear();
         foreach (var m in Supported)
-            IntegrationsPanel.Children.Add(BuildCard(m, connected.Contains(m.Type)));
+            IntegrationsPanel.Children.Add(BuildCard(m, map.TryGetValue(m.Type, out var it) ? it : null));
     }
 
-    private Control BuildCard((string Type, string Name, string Desc, string Icon, string Color) m, bool isConnected)
+    private static string? DetailFor(string type, mAIkey.Core.Models.IntegrationConfig? c)
     {
+        if (c == null) return null;
+        return type switch
+        {
+            "jira" => c.JiraUrl ?? c.Email,
+            "github" => c.DefaultRepo,
+            "slack" or "teams" => c.DefaultChannel,
+            "gmail" => c.GmailEmail,
+            "trello" => c.DefaultBoardName,
+            "zapier" => c.WebhookName,
+            _ => null
+        };
+    }
+
+    private Control BuildCard((string Type, string Name, string Desc, string Icon, string Color) m, mAIkey.Core.Models.Integration? integration)
+    {
+        bool isConnected = integration != null;
         var brand = new SolidColorBrush(Color.Parse(m.Color));
 
         // Logo-tegel (wit, afgerond, merkicoon)
@@ -97,20 +113,52 @@ public partial class IntegrationsView : UserControl
         var desc = new TextBlock { Text = m.Desc, FontSize = 13, TextWrapping = TextWrapping.Wrap, Height = 38 };
         desc.Classes.Add("muted");
 
-        var btn = new Button
-        {
-            Content = isConnected ? "Wijzigen" : "Verbinden",
-            Height = 32, FontSize = 12, HorizontalAlignment = HorizontalAlignment.Left,
-            Margin = new Avalonia.Thickness(0, 14, 0, 0)
-        };
-        btn.Classes.Add(isConnected ? "ghost" : "accent");
-        WireConfig(btn, m.Type);
-
         var stack = new StackPanel();
         stack.Children.Add(header);
         stack.Children.Add(name);
         stack.Children.Add(desc);
-        stack.Children.Add(btn);
+
+        // Details-regel bij verbonden koppeling
+        var detail = DetailFor(m.Type, integration?.Config);
+        if (isConnected && !string.IsNullOrEmpty(detail))
+        {
+            var d = new TextBlock
+            {
+                Text = detail, FontSize = 11.5, TextTrimming = TextTrimming.CharacterEllipsis,
+                Margin = new Avalonia.Thickness(0, 8, 0, 0),
+                Foreground = new SolidColorBrush(Color.Parse("#9A9AA3"))
+            };
+            stack.Children.Add(d);
+        }
+
+        var btn = new Button
+        {
+            Content = isConnected ? "Wijzigen" : "Verbinden",
+            Height = 32, FontSize = 12, VerticalAlignment = VerticalAlignment.Center
+        };
+        btn.Classes.Add(isConnected ? "ghost" : "accent");
+        WireConfig(btn, m.Type);
+
+        var actions = new StackPanel
+        {
+            Orientation = Orientation.Horizontal, Spacing = 8,
+            Margin = new Avalonia.Thickness(0, 14, 0, 0)
+        };
+        actions.Children.Add(btn);
+        if (isConnected)
+        {
+            var disc = new Button { Content = "Ontkoppelen", Height = 32, FontSize = 12, VerticalAlignment = VerticalAlignment.Center };
+            disc.Classes.Add("danger");
+            disc.Click += async (_, _) =>
+            {
+                disc.IsEnabled = false;
+                if (await App.Api.DeleteIntegrationAsync(integration!.Id))
+                    await LoadAsync();
+                else disc.IsEnabled = true;
+            };
+            actions.Children.Add(disc);
+        }
+        stack.Children.Add(actions);
 
         var card = new Border
         {
