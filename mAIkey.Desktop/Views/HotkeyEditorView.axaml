@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
              x:Class="mAIkey.Desktop.Views.HotkeyEditorView">
 
   <Grid ColumnDefinitions="260,*">
@@ -48,8 +49,8 @@
         <StackPanel Name="EmptyEditorState" VerticalAlignment="Center"
                     HorizontalAlignment="Center" Spacing="12"
                     Margin="0,0,0,60">
-          <TextBlock Text="⚡" FontSize="48" HorizontalAlignment="Center"
-                     Foreground="{DynamicResource Text3}"/>
+          <i:Icon Value="mdi-lightning-bolt" FontSize="48" HorizontalAlignment="Center"
+                  Foreground="{DynamicResource Text3}"/>
           <TextBlock Text="Selecteer een hotkey of maak een nieuwe aan"
                      FontSize="14" Foreground="{DynamicResource Text2}"
                      HorizontalAlignment="Center"/>
