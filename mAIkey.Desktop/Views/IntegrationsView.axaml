@@ -1,19 +1,22 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="mAIkey.Desktop.Views.IntegrationsView">
+             x:Class="mAIkey.Desktop.Views.IntegrationsView"
+             Background="{DynamicResource Bg1}">
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto">
-    <StackPanel Margin="28,8,28,28" Spacing="20" MaxWidth="860">
+  <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="32,28,32,40">
+    <StackPanel>
 
-      <StackPanel Spacing="4">
+      <StackPanel Spacing="4" Margin="0,0,0,24">
         <TextBlock Classes="eyebrow" Text="INTEGRATIES"/>
         <TextBlock Classes="title" Text="Koppelingen"/>
         <TextBlock Classes="subtitle"
                    Text="Stuur AI-resultaten rechtstreeks naar je favoriete tools."/>
       </StackPanel>
 
-      <TextBlock Name="StatusText" Classes="muted" Text="Status laden..."/>
-      <StackPanel Name="IntegrationsPanel" Spacing="10"/>
+      <TextBlock Name="StatusText" Classes="muted" Text="Status laden..." Margin="0,0,0,12"/>
+
+      <!-- Raster met integratie-kaarten -->
+      <WrapPanel Name="IntegrationsPanel"/>
 
     </StackPanel>
   </ScrollViewer>
