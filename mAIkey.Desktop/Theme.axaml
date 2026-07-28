@@ -241,6 +241,15 @@
     <Setter Property="BoxShadow" Value="0 5 20 0 #40000000" />
   </Style>
 
+  <!-- Stap-tegel (aan-de-slag) — WPF: StepTile -->
+  <Style Selector="Border.step">
+    <Setter Property="Background" Value="{DynamicResource Bg3}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Border1}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="12,10" />
+  </Style>
+
   <!-- Tegel — WPF: TplCard (lichter dan .card, strakke padding) -->
   <Style Selector="Border.tile">
     <Setter Property="Background" Value="{DynamicResource Bg2}" />
