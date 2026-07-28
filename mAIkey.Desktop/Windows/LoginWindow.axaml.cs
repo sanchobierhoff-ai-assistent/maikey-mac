@@ -36,6 +36,19 @@ public partial class LoginWindow : Window
             new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#E81123"));
         LoginCloseBtn.PointerExited += (s, e) => LoginCloseBtn.Background =
             Avalonia.Media.Brushes.Transparent;
+
+        RegisterBtn.Click += async (s, e) =>
+        {
+            var reg = new RegisterWindow();
+            bool created = await reg.ShowDialog<bool>(this);
+            if (created)
+                ShowError("Account aangemaakt. Log nu in.");
+        };
+
+        ForgotBtn.Click += async (s, e) =>
+        {
+            await new ForgotPasswordWindow().ShowDialog<bool>(this);
+        };
     }
 
     private void CloseBtn_Click(object? sender, RoutedEventArgs e)

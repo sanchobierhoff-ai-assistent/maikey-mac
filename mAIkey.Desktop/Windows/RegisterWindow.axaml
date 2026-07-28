@@ -1,0 +1,48 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="mAIkey.Desktop.Windows.RegisterWindow"
+        Title="mAIkey — Registreren"
+        Width="440" Height="560"
+        CanResize="False"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource Bg0}">
+
+  <ScrollViewer>
+    <StackPanel Margin="48,32,48,32" Spacing="18" MaxWidth="340" HorizontalAlignment="Center">
+
+      <StackPanel HorizontalAlignment="Center" Spacing="8">
+        <TextBlock Text="Account aanmaken" FontSize="22" FontWeight="SemiBold"
+                   Foreground="{DynamicResource Text1}" HorizontalAlignment="Center"/>
+        <TextBlock Text="Maak een gratis mAIkey-account"
+                   FontSize="13" Foreground="{DynamicResource Text2}" HorizontalAlignment="Center"/>
+      </StackPanel>
+
+      <Border Name="ErrorBorder" IsVisible="False"
+              Background="#2A1215" BorderBrush="#5C2D33" BorderThickness="1"
+              CornerRadius="10" Padding="12,10">
+        <TextBlock Name="ErrorText" Foreground="#EF4444" FontSize="12" TextWrapping="Wrap"/>
+      </Border>
+
+      <StackPanel Spacing="6">
+        <TextBlock Text="Naam" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource Text2}"/>
+        <TextBox Name="NameBox" Watermark="Je naam" FontSize="13"/>
+      </StackPanel>
+      <StackPanel Spacing="6">
+        <TextBlock Text="E-mailadres" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource Text2}"/>
+        <TextBox Name="EmailBox" Watermark="naam@voorbeeld.nl" FontSize="13"/>
+      </StackPanel>
+      <StackPanel Spacing="6">
+        <TextBlock Text="Wachtwoord" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource Text2}"/>
+        <TextBox Name="PasswordBox" PasswordChar="●" Watermark="Minimaal 8 tekens" FontSize="13"/>
+      </StackPanel>
+
+      <Button Name="RegisterBtn" Classes="accent" Content="Account aanmaken"
+              HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+              Height="44" FontSize="14" Click="Register_Click"/>
+
+      <Button Classes="ghost" Content="Terug naar inloggen" BorderThickness="0"
+              HorizontalAlignment="Center" FontSize="12" Foreground="{DynamicResource Text2}"
+              Click="Cancel_Click"/>
+    </StackPanel>
+  </ScrollViewer>
+</Window>
