@@ -10,6 +10,11 @@ public partial class CloudSyncView : UserControl
     public CloudSyncView()
     {
         InitializeComponent();
+        Loaded += (_, _) =>
+        {
+            HotkeyCountText.Text = App.Config.Hotkeys.Length.ToString();
+            StyleCountText.Text = App.Config.WritingStyles.Length.ToString();
+        };
     }
 
     private async void Sync_Click(object? sender, RoutedEventArgs e)

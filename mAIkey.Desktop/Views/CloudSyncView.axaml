@@ -1,25 +1,68 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="mAIkey.Desktop.Views.CloudSyncView">
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
+             x:Class="mAIkey.Desktop.Views.CloudSyncView"
+             Background="{DynamicResource Bg1}">
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto">
-    <StackPanel Margin="28,8,28,28" Spacing="20" MaxWidth="680">
+  <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="32,28,32,40">
+    <StackPanel MaxWidth="620">
 
-      <StackPanel Spacing="4">
+      <StackPanel Spacing="4" Margin="0,0,0,24">
         <TextBlock Classes="eyebrow" Text="CLOUD SYNC"/>
-        <TextBlock Classes="title" Text="Synchroniseren"/>
+        <TextBlock Classes="title" Text="Cloud sync"/>
         <TextBlock Classes="subtitle"
                    Text="Bewaar je hotkeys en stijlen in de cloud, zodat je ze op elk apparaat hebt."/>
       </StackPanel>
 
-      <Border Classes="card">
-        <StackPanel Spacing="14">
-          <TextBlock Classes="CardTitle" Text="Nu synchroniseren"/>
-          <TextBlock Classes="muted"
-                     Text="Uploadt je huidige hotkeys (met ingesloten stijlprofielen) naar je account."/>
-          <Button Name="SyncBtn" Classes="accent" Content="Sync nu"
-                  HorizontalAlignment="Left" Click="Sync_Click"/>
-          <TextBlock Name="StatusText" Classes="muted" IsVisible="False"/>
+      <!-- Export-kaart -->
+      <Border Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource Border1}"
+              BorderThickness="1" CornerRadius="14">
+        <StackPanel>
+          <Border Padding="20,16" BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
+            <StackPanel Orientation="Horizontal">
+              <i:Icon Value="mdi-cloud-upload-outline" FontSize="18" Foreground="{DynamicResource Accent}"
+                      Margin="0,0,10,0" VerticalAlignment="Center"/>
+              <TextBlock Classes="section-title" Text="Naar de cloud synchroniseren"
+                         FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource Text1}"
+                         VerticalAlignment="Center"/>
+            </StackPanel>
+          </Border>
+
+          <StackPanel Margin="20,18,20,20" Spacing="16">
+
+            <!-- Tellingen -->
+            <Grid ColumnDefinitions="*,*" >
+              <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                <Border Background="#1E3A5F" CornerRadius="8" Padding="8" VerticalAlignment="Center">
+                  <i:Icon Value="mdi-lightning-bolt" FontSize="16" Foreground="#60A5FA"/>
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                  <TextBlock Name="HotkeyCountText" Text="0" FontSize="20" FontWeight="Bold"
+                             Foreground="{DynamicResource Text1}"/>
+                  <TextBlock Text="Hotkeys" FontSize="11" Foreground="{DynamicResource Text3}"/>
+                </StackPanel>
+              </StackPanel>
+              <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                <Border Background="#2D1E5F" CornerRadius="8" Padding="8" VerticalAlignment="Center">
+                  <i:Icon Value="mdi-feather" FontSize="16" Foreground="#A78BFA"/>
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                  <TextBlock Name="StyleCountText" Text="0" FontSize="20" FontWeight="Bold"
+                             Foreground="{DynamicResource Text1}"/>
+                  <TextBlock Text="Schrijfstijlen" FontSize="11" Foreground="{DynamicResource Text3}"/>
+                </StackPanel>
+              </StackPanel>
+            </Grid>
+
+            <TextBlock Classes="muted"
+                       Text="Uploadt je huidige hotkeys (met ingesloten stijlprofielen) naar je account."/>
+
+            <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+              <Button Name="SyncBtn" Classes="accent" Content="Nu synchroniseren" Click="Sync_Click"/>
+              <TextBlock Name="StatusText" Classes="muted" IsVisible="False" VerticalAlignment="Center"/>
+            </StackPanel>
+
+          </StackPanel>
         </StackPanel>
       </Border>
 
