@@ -232,8 +232,17 @@ public class HotkeyRuntime
         // heractiveren (anders belandt Cmd+V in het indicator-venster).
         IntPtr targetApp = _clipboard.GetForegroundWindow();
 
-        var text = await _clipboard.GetSelectedTextAsync();
-        Log($"geselecteerde tekst: {(text == null ? "null" : text.Length + " tekens")}");
+        string? text;
+        if (hk.UseInputInsteadOfSelection)
+        {
+            text = await Windows.InputPromptWindow.PromptAsync(hk.Name);
+            Log($"invoer: {(text == null ? "geannuleerd" : text.Length + " tekens")}");
+        }
+        else
+        {
+            text = await _clipboard.GetSelectedTextAsync();
+            Log($"geselecteerde tekst: {(text == null ? "null" : text.Length + " tekens")}");
+        }
         if (string.IsNullOrWhiteSpace(text))
             return;
 

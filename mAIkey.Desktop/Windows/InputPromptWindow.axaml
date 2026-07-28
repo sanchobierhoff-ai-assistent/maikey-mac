@@ -1,0 +1,26 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="mAIkey.Desktop.Windows.InputPromptWindow"
+        Title="mAIkey"
+        Width="480" Height="300"
+        CanResize="False"
+        WindowStartupLocation="CenterScreen"
+        Topmost="True"
+        Background="{DynamicResource Bg1}">
+
+  <DockPanel Margin="24">
+    <StackPanel DockPanel.Dock="Top" Spacing="4" Margin="0,0,0,14">
+      <TextBlock Classes="eyebrow" Text="MAIKEY"/>
+      <TextBlock Name="Heading" Classes="title" Text="Wat wil je doen?" FontSize="20"/>
+    </StackPanel>
+
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="10" Margin="0,14,0,0">
+      <Button Name="OkBtn" Classes="accent" Content="Uitvoeren" Click="Ok_Click"/>
+      <Button Classes="ghost" Content="Annuleren" Click="Cancel_Click"/>
+    </StackPanel>
+
+    <TextBox Name="InputBox" AcceptsReturn="True" TextWrapping="Wrap"
+             VerticalContentAlignment="Top"
+             Watermark="Typ hier je tekst of instructie…"/>
+  </DockPanel>
+</Window>
