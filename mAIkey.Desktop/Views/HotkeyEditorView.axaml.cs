@@ -38,6 +38,10 @@ public partial class HotkeyEditorView : UserControl
         Loaded += HotkeyEditorView_Loaded;
     }
 
+    /// <summary>Haalt een thema-kleur op (past zich aan donker/licht aan).</summary>
+    private IBrush TB(string key) =>
+        this.TryFindResource(key, out var v) && v is IBrush b ? b : Brushes.Transparent;
+
     private void HotkeyEditorView_Loaded(object? sender, RoutedEventArgs e)
     {
         PopulateHotkeyList();
@@ -114,14 +118,14 @@ public partial class HotkeyEditorView : UserControl
             Text = hk.Name,
             FontSize = 13,
             FontWeight = FontWeight.Medium,
-            Foreground = new SolidColorBrush(Color.Parse("#F2F2F5"))
+            Foreground = TB("Text1")
         };
 
         var comboText = new TextBlock
         {
             Text = FormatHotkey(hk),
             FontSize = 10,
-            Foreground = new SolidColorBrush(Color.Parse("#5E5E66"))
+            Foreground = TB("Text3")
         };
 
         if (hk.FrozenByDowngrade)
@@ -149,7 +153,7 @@ public partial class HotkeyEditorView : UserControl
         border.PointerEntered += (s, e) =>
         {
             if (border != _selectedListItem)
-                border.Background = new SolidColorBrush(Color.Parse("#18181C"));
+                border.Background = TB("BackgroundHover");
         };
         border.PointerExited += (s, e) =>
         {
@@ -169,7 +173,7 @@ public partial class HotkeyEditorView : UserControl
 
         _selectedHotkey = hk;
         _selectedListItem = listItem;
-        listItem.Background = new SolidColorBrush(Color.Parse("#18181C"));
+        listItem.Background = TB("BackgroundHover");
 
         // Show editor
         EmptyEditorState.IsVisible = false;

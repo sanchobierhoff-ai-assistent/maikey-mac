@@ -20,6 +20,10 @@ public partial class DashboardView : UserControl
         Loaded += DashboardView_Loaded;
     }
 
+    /// <summary>Haalt een thema-kleur op (past zich aan donker/licht aan).</summary>
+    private IBrush TB(string key) =>
+        this.TryFindResource(key, out var v) && v is IBrush b ? b : Brushes.Transparent;
+
     private async void DashboardView_Loaded(object? sender, RoutedEventArgs e)
     {
         RefreshLocalStats();
@@ -93,7 +97,7 @@ public partial class DashboardView : UserControl
                 MinHeight = 48
             };
 
-            row.PointerEntered += (s, e) => row.Background = new SolidColorBrush(Color.Parse("#1F1F24"));
+            row.PointerEntered += (s, e) => row.Background = TB("Bg3");
             row.PointerExited += (s, e) => row.Background = Brushes.Transparent;
 
             var content = new Grid();
@@ -120,7 +124,7 @@ public partial class DashboardView : UserControl
                 Text = hk.Name,
                 FontSize = 13,
                 FontWeight = Avalonia.Media.FontWeight.Medium,
-                Foreground = new SolidColorBrush(Color.Parse("#F2F2F5")),
+                Foreground = TB("Text1"),
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
             };
             Grid.SetColumn(name, 1);
@@ -130,8 +134,8 @@ public partial class DashboardView : UserControl
             var hotkeyText = FormatHotkey(hk);
             var chip = new Border
             {
-                Background = new SolidColorBrush(Color.Parse("#1F1F24")),
-                BorderBrush = new SolidColorBrush(Color.Parse("#26262C")),
+                Background = TB("Bg3"),
+                BorderBrush = TB("Border1"),
                 BorderThickness = new Avalonia.Thickness(1),
                 CornerRadius = new Avalonia.CornerRadius(6),
                 Padding = new Avalonia.Thickness(8, 3),
@@ -143,7 +147,7 @@ public partial class DashboardView : UserControl
                 Text = hotkeyText,
                 FontSize = 11,
                 FontWeight = Avalonia.Media.FontWeight.SemiBold,
-                Foreground = new SolidColorBrush(Color.Parse("#9A9AA3"))
+                Foreground = TB("Text2")
             };
             chip.Child = chipText;
             Grid.SetColumn(chip, 2);
@@ -154,7 +158,7 @@ public partial class DashboardView : UserControl
             {
                 Text = "›",
                 FontSize = 16,
-                Foreground = new SolidColorBrush(Color.Parse("#5E5E66")),
+                Foreground = TB("Text3"),
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
                 Margin = new Avalonia.Thickness(4, 0, 0, 0)
             };

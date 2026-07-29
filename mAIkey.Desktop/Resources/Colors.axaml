@@ -206,4 +206,14 @@
   <Thickness x:Key="PaddingCard">16</Thickness>
   <Thickness x:Key="PaddingLarge">24</Thickness>
 
+  <!-- Overschrijf de FluentTheme systeem-accentkleur (standaard blauw op macOS)
+       naar mAIkey-amber, zodat accent-knoppen/controls amber zijn i.p.v. blauw. -->
+  <Color x:Key="SystemAccentColor">#F5A524</Color>
+  <Color x:Key="SystemAccentColorLight1">#F7B347</Color>
+  <Color x:Key="SystemAccentColorLight2">#F9C168</Color>
+  <Color x:Key="SystemAccentColorLight3">#FBD08A</Color>
+  <Color x:Key="SystemAccentColorDark1">#E0951F</Color>
+  <Color x:Key="SystemAccentColorDark2">#C27F0E</Color>
+  <Color x:Key="SystemAccentColorDark3">#A66B0A</Color>
+
 </ResourceDictionary>
