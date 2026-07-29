@@ -224,7 +224,7 @@ public partial class HotkeyEditorView : UserControl
         var newHk = new HotkeyConfig
         {
             Id = Guid.NewGuid().ToString(),
-            Name = "Nieuwe hotkey",
+            Name = "Nieuwe mAIkey",
             CustomPrompt = "Verbeter de volgende tekst.",
             Model = "gpt-4o-mini",
             OutputMode = "replace",

@@ -10,12 +10,12 @@
             BorderThickness="0,0,1,0">
       <DockPanel>
         <StackPanel DockPanel.Dock="Top" Margin="16,16,16,0" Spacing="12">
-          <TextBlock Text="Hotkeys" FontSize="16" FontWeight="SemiBold"
+          <TextBlock Text="mAIkeys" FontSize="16" FontWeight="SemiBold"
                      Foreground="{DynamicResource Text1}"/>
           <Separator Background="{DynamicResource Border1}" Height="1"/>
         </StackPanel>
 
-        <Button DockPanel.Dock="Bottom" Classes="accent" Content="+ Nieuwe hotkey"
+        <Button DockPanel.Dock="Bottom" Classes="accent" Content="+ Nieuwe mAIkey"
                 Margin="16,8,16,16" HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Center" FontSize="12"
                 Name="AddHotkeyBtn" Click="AddHotkey_Click"/>
@@ -33,7 +33,7 @@
         <Border DockPanel.Dock="Top" Height="52" Padding="16,0"
                 BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
           <Grid>
-            <TextBlock Text="← Hotkeys" FontSize="13" Foreground="{DynamicResource Text2}"
+            <TextBlock Text="← mAIkeys" FontSize="13" Foreground="{DynamicResource Text2}"
                        VerticalAlignment="Center" HorizontalAlignment="Left"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
                         VerticalAlignment="Center" Spacing="8">

@@ -7,14 +7,13 @@
     <StackPanel Margin="28,8,28,28" Spacing="24">
 
       <!-- ═══ HEADER ═══ -->
-      <StackPanel Spacing="4">
-        <TextBlock Classes="eyebrow" Text="DASHBOARD"/>
-        <StackPanel Orientation="Horizontal" Spacing="16">
-          <TextBlock Classes="title" Text="Welkom terug."/>
-          <Button Classes="accent" Content="+ Nieuwe hotkey" Name="NewHotkeyBtn"
-                  VerticalAlignment="Center" Padding="14,8" FontSize="12"/>
-        </StackPanel>
-      </StackPanel>
+      <Grid Margin="0,0,0,4">
+        <TextBlock Text="Dashboard" FontSize="15" FontWeight="Medium"
+                   Foreground="{DynamicResource Text2}"
+                   VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <Button Classes="accent" Content="+ Nieuwe mAIkey" Name="NewHotkeyBtn"
+                HorizontalAlignment="Right" Padding="18,9" FontSize="12"/>
+      </Grid>
 
       <!-- ═══ STAT CARDS ═══ -->
       <Grid ColumnDefinitions="*,*,*,*" Margin="0,4,0,0">
@@ -34,7 +33,7 @@
               <Border Background="#1E3A5F" CornerRadius="6" Padding="5">
                 <i:Icon Value="mdi-lightning-bolt" FontSize="12" Foreground="#60A5FA"/>
               </Border>
-              <TextBlock Text="Hotkeys" FontSize="11" Foreground="{DynamicResource Text2}"
+              <TextBlock Text="mAIkeys" FontSize="11" Foreground="{DynamicResource Text2}"
                          VerticalAlignment="Center"/>
             </StackPanel>
             <TextBlock Name="HotkeyCountText" Text="0" FontSize="28" FontWeight="Bold"
@@ -97,81 +96,6 @@
         </Border>
       </Grid>
 
-      <!-- ═══ AAN DE SLAG ═══ -->
-      <Border Classes="card">
-        <StackPanel Spacing="14">
-          <TextBlock Text="Aan de slag" FontSize="13" FontWeight="SemiBold"
-                     Foreground="{DynamicResource Text1}"/>
-          <Grid ColumnDefinitions="*,10,*" RowDefinitions="Auto,8,Auto">
-
-            <Border Grid.Column="0" Grid.Row="0" Classes="step">
-              <Grid ColumnDefinitions="26,10,*">
-                <Border Grid.Column="0" Width="26" Height="26" CornerRadius="7"
-                        Background="{DynamicResource Bg4}" VerticalAlignment="Center">
-                  <i:Icon Value="mdi-lightning-bolt" FontSize="13" Foreground="#60A5FA"
-                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </Border>
-                <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                  <TextBlock Text="Maak je eerste hotkey" FontSize="12" FontWeight="SemiBold"
-                             Foreground="{DynamicResource Text1}"/>
-                  <TextBlock Text="Kies een toetscombo en wat de AI moet doen."
-                             FontSize="11" Foreground="{DynamicResource Text3}" TextWrapping="Wrap" Margin="0,2,0,0"/>
-                </StackPanel>
-              </Grid>
-            </Border>
-
-            <Border Grid.Column="2" Grid.Row="0" Classes="step">
-              <Grid ColumnDefinitions="26,10,*">
-                <Border Grid.Column="0" Width="26" Height="26" CornerRadius="7"
-                        Background="{DynamicResource Bg4}" VerticalAlignment="Center">
-                  <i:Icon Value="mdi-feather" FontSize="13" Foreground="#A78BFA"
-                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </Border>
-                <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                  <TextBlock Text="Train je schrijfstijl" FontSize="12" FontWeight="SemiBold"
-                             Foreground="{DynamicResource Text1}"/>
-                  <TextBlock Text="Voeg voorbeeldteksten toe zodat AI als jij klinkt."
-                             FontSize="11" Foreground="{DynamicResource Text3}" TextWrapping="Wrap" Margin="0,2,0,0"/>
-                </StackPanel>
-              </Grid>
-            </Border>
-
-            <Border Grid.Column="0" Grid.Row="2" Classes="step">
-              <Grid ColumnDefinitions="26,10,*">
-                <Border Grid.Column="0" Width="26" Height="26" CornerRadius="7"
-                        Background="{DynamicResource Bg4}" VerticalAlignment="Center">
-                  <i:Icon Value="mdi-connection" FontSize="13" Foreground="#10B981"
-                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </Border>
-                <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                  <TextBlock Text="Koppel een tool" FontSize="12" FontWeight="SemiBold"
-                             Foreground="{DynamicResource Text1}"/>
-                  <TextBlock Text="Stuur resultaten naar Jira, Slack, Gmail en meer."
-                             FontSize="11" Foreground="{DynamicResource Text3}" TextWrapping="Wrap" Margin="0,2,0,0"/>
-                </StackPanel>
-              </Grid>
-            </Border>
-
-            <Border Grid.Column="2" Grid.Row="2" Classes="step">
-              <Grid ColumnDefinitions="26,10,*">
-                <Border Grid.Column="0" Width="26" Height="26" CornerRadius="7"
-                        Background="{DynamicResource Bg4}" VerticalAlignment="Center">
-                  <i:Icon Value="mdi-cloud-sync-outline" FontSize="13" Foreground="#F5A524"
-                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </Border>
-                <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                  <TextBlock Text="Sync naar de cloud" FontSize="12" FontWeight="SemiBold"
-                             Foreground="{DynamicResource Text1}"/>
-                  <TextBlock Text="Bewaar je hotkeys en stijlen op al je apparaten."
-                             FontSize="11" Foreground="{DynamicResource Text3}" TextWrapping="Wrap" Margin="0,2,0,0"/>
-                </StackPanel>
-              </Grid>
-            </Border>
-
-          </Grid>
-        </StackPanel>
-      </Border>
-
       <!-- ═══ MAIN CONTENT (2 columns) ═══ -->
       <Grid ColumnDefinitions="*,280">
 
@@ -179,7 +103,7 @@
         <Border Grid.Column="0" Classes="card" Margin="0,0,16,0">
           <DockPanel>
             <StackPanel DockPanel.Dock="Top" Spacing="12" Margin="0,0,0,12">
-              <TextBlock Text="Jouw hotkeys" FontSize="13" FontWeight="SemiBold"
+              <TextBlock Text="Jouw mAIkeys" FontSize="13" FontWeight="SemiBold"
                          Foreground="{DynamicResource Text1}"/>
               <Separator Background="{DynamicResource Border1}" Height="1" Margin="0"/>
             </StackPanel>

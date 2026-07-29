@@ -233,7 +233,7 @@ public class ConfigService
 
     public string Theme
     {
-        get => _config.Theme ?? "Dark";
+        get => _config.Theme ?? "Light";
         set { _config.Theme = value; SaveConfig(); }
     }
 

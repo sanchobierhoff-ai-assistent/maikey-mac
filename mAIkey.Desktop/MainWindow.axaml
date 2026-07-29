@@ -80,14 +80,14 @@
             <Button Name="NavHotkeys" Classes="NavButton" Height="36" Click="NavHotkeys_Click">
               <StackPanel Orientation="Horizontal" Spacing="10">
                 <i:Icon Value="mdi-lightning-bolt" FontSize="16" VerticalAlignment="Center" />
-                <TextBlock Text="Hotkeys" VerticalAlignment="Center" FontSize="13" FontWeight="Medium" />
+                <TextBlock Text="mAIkeys" VerticalAlignment="Center" FontSize="13" FontWeight="Medium" />
               </StackPanel>
             </Button>
 
             <Button Name="NavStyles" Classes="NavButton" Height="36" Click="NavStyles_Click">
               <StackPanel Orientation="Horizontal" Spacing="10">
                 <i:Icon Value="mdi-book-open-variant" FontSize="16" VerticalAlignment="Center" />
-                <TextBlock Text="Stijl Library" VerticalAlignment="Center" FontSize="13" FontWeight="Medium" />
+                <TextBlock Text="Stijlprofielen" VerticalAlignment="Center" FontSize="13" FontWeight="Medium" />
               </StackPanel>
             </Button>
 
