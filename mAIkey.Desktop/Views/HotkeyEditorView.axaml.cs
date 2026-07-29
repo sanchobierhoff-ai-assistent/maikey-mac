@@ -85,6 +85,46 @@ public partial class HotkeyEditorView : UserControl
             if (oi.Tag?.ToString() == t.OutputMode) { OutputModeComboBox.SelectedItem = oi; break; }
     }
 
+    // ═══ AI-HULP ═══
+
+    private async void Optimize_Click(object? sender, RoutedEventArgs e)
+    {
+        var prompt = PromptBox.Text?.Trim();
+        if (string.IsNullOrEmpty(prompt)) return;
+
+        OptimizeBtn.IsEnabled = false;
+        try
+        {
+            var r = await _api.AnalyzeAsync(prompt, outputMode: "window",
+                customPrompt: "Je bent een prompt-expert. Herschrijf de volgende AI-instructie zodat hij duidelijker, concreter en effectiever is. Geef ALLEEN de verbeterde instructie terug, zonder uitleg of aanhalingstekens.");
+            if (r.Success && !string.IsNullOrEmpty(r.Output))
+                PromptBox.Text = r.Output.Trim();
+        }
+        catch { /* stil */ }
+        finally { OptimizeBtn.IsEnabled = true; }
+    }
+
+    private async void AiBuilder_Click(object? sender, RoutedEventArgs e)
+    {
+        var desc = await Windows.InputPromptWindow.PromptAsync("Wat moet deze mAIkey doen?");
+        if (string.IsNullOrWhiteSpace(desc)) return;
+
+        AiBuilderBtn.IsEnabled = false;
+        try
+        {
+            var r = await _api.AnalyzeAsync(desc, outputMode: "window",
+                customPrompt: "Je schrijft AI-instructies voor een tekst-tool. De gebruiker beschrijft wat een sneltoets moet doen met geselecteerde tekst. Schrijf een heldere, bruikbare AI-instructie die dat bereikt. Geef ALLEEN de instructie terug.");
+            if (r.Success && !string.IsNullOrEmpty(r.Output))
+            {
+                PromptBox.Text = r.Output.Trim();
+                if (string.IsNullOrWhiteSpace(HotkeyNameBox.Text) || HotkeyNameBox.Text == "Nieuwe mAIkey")
+                    HotkeyNameBox.Text = desc.Length > 40 ? desc.Substring(0, 40) : desc;
+            }
+        }
+        catch { /* stil */ }
+        finally { AiBuilderBtn.IsEnabled = true; }
+    }
+
     // ═══ HOTKEY LIST ═══
 
     private void PopulateHotkeyList()

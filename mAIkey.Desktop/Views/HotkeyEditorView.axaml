@@ -101,12 +101,14 @@
                 </StackPanel>
 
                 <StackPanel Spacing="6">
-                  <TextBlock Text="Instructie voor de AI" FontSize="11"
-                             Foreground="{DynamicResource Text2}"/>
+                  <TextBlock Text="Wat wil je met de geselecteerde tekst doen?" FontSize="12"
+                             FontWeight="Medium" Foreground="{DynamicResource Text1}"/>
+                  <TextBlock FontSize="11" Foreground="{DynamicResource Text3}" TextWrapping="Wrap"
+                             Text="Beschrijf eerst wat voor tekst je selecteert (bijv. een e-mail, stukje code of alinea), en daarna wat de AI ermee moet doen."/>
                   <TextBox Name="PromptBox" AcceptsReturn="True"
                            TextWrapping="Wrap" MinHeight="80" MaxHeight="200"
                            Watermark="Bijv: Verbeter de tekst en maak deze professioneler..."
-                           FontSize="13"/>
+                           FontSize="13" Margin="0,4,0,0"/>
                 </StackPanel>
 
                 <!-- Model -->
@@ -118,9 +120,25 @@
 
                 <!-- Writing style -->
                 <StackPanel Spacing="6">
-                  <TextBlock Text="Schrijfstijl" FontSize="11" Foreground="{DynamicResource Text2}"/>
+                  <TextBlock Text="Schrijfstijl (optioneel)" FontSize="11" Foreground="{DynamicResource Text2}"/>
                   <ComboBox Name="StyleComboBox" HorizontalAlignment="Stretch"
                             FontSize="13"/>
+                </StackPanel>
+
+                <!-- AI-hulp -->
+                <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,4,0,0">
+                  <Button Name="AiBuilderBtn" Classes="ghost" FontSize="12" Click="AiBuilder_Click">
+                    <StackPanel Orientation="Horizontal" Spacing="7">
+                      <i:Icon Value="mdi-creation" FontSize="14" VerticalAlignment="Center"/>
+                      <TextBlock Text="Nieuwe mAIkey met AI aanmaken" VerticalAlignment="Center"/>
+                    </StackPanel>
+                  </Button>
+                  <Button Name="OptimizeBtn" Classes="ghost" FontSize="12" Click="Optimize_Click">
+                    <StackPanel Orientation="Horizontal" Spacing="7">
+                      <i:Icon Value="mdi-wrench-outline" FontSize="14" VerticalAlignment="Center"/>
+                      <TextBlock Text="Prompt optimaliseren" VerticalAlignment="Center"/>
+                    </StackPanel>
+                  </Button>
                 </StackPanel>
               </StackPanel>
             </Border>
