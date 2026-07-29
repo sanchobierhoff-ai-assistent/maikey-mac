@@ -151,39 +151,59 @@
             </StackPanel>
           </Border>
 
-          <!-- Tips card -->
+          <!-- Nieuws & tips -->
           <Border Classes="card">
-            <StackPanel Spacing="12">
-              <TextBlock Text="Tips" FontSize="13" FontWeight="SemiBold"
-                         Foreground="{DynamicResource Text1}"/>
+            <StackPanel Spacing="14">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <i:Icon Value="mdi-bullhorn" FontSize="14" Foreground="{DynamicResource Accent}" VerticalAlignment="Center"/>
+                <TextBlock Text="Nieuws &amp; tips" FontSize="13" FontWeight="SemiBold"
+                           Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
+              </StackPanel>
+
+              <StackPanel Spacing="4">
+                <Grid>
+                  <Border Background="#F5A52422" CornerRadius="4" Padding="5,2" HorizontalAlignment="Left">
+                    <TextBlock Text="NIEUW" FontSize="9" FontWeight="Bold" Foreground="#F5A524"/>
+                  </Border>
+                  <TextBlock Text="2 maanden geleden" FontSize="10" Foreground="{DynamicResource Text3}"
+                             HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                </Grid>
+                <TextBlock Text="Multimodal: stuur afbeeldingen mee" FontSize="12.5" FontWeight="SemiBold"
+                           Foreground="{DynamicResource Text1}" Margin="0,2,0,0"/>
+                <TextBlock Text="Selecteer tekst + screenshot, mAIkey leest beide."
+                           FontSize="11" Foreground="{DynamicResource Text2}" TextWrapping="Wrap"/>
+              </StackPanel>
+
               <Separator Background="{DynamicResource Border1}" Height="1" Margin="0"/>
 
-              <StackPanel Spacing="12">
-                <StackPanel Spacing="4">
-                  <Border Background="#F5A52418" CornerRadius="4" Padding="4,2"
-                          HorizontalAlignment="Left">
-                    <TextBlock Text="TIP" FontSize="9" FontWeight="Bold"
-                               Foreground="#F5A524"/>
+              <StackPanel Spacing="4">
+                <Grid>
+                  <Border Background="#F5A52422" CornerRadius="4" Padding="5,2" HorizontalAlignment="Left">
+                    <TextBlock Text="TIP" FontSize="9" FontWeight="Bold" Foreground="#F5A524"/>
                   </Border>
-                  <TextBlock Text="Sneltoets instellen" FontSize="12"
-                             FontWeight="Medium" Foreground="{DynamicResource Text1}"/>
-                  <TextBlock FontSize="11" Foreground="{DynamicResource Text2}" TextWrapping="Wrap"
-                             Text="Ga naar Hotkeys en maak je eerste AI-sneltoets. Selecteer tekst, druk de toets, en mAIkey doet de rest."/>
-                </StackPanel>
+                  <TextBlock Text="3 maanden geleden" FontSize="10" Foreground="{DynamicResource Text3}"
+                             HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                </Grid>
+                <TextBlock Text="Sneller wisselen tussen mAIkeys" FontSize="12.5" FontWeight="SemiBold"
+                           Foreground="{DynamicResource Text1}" Margin="0,2,0,0"/>
+                <TextBlock Text="Gebruik Ctrl+Shift+Space om te zoeken zonder muis."
+                           FontSize="11" Foreground="{DynamicResource Text2}" TextWrapping="Wrap"/>
+              </StackPanel>
 
-                <Separator Background="{DynamicResource Border1}" Height="1" Margin="0"/>
+              <Separator Background="{DynamicResource Border1}" Height="1" Margin="0"/>
 
-                <StackPanel Spacing="4">
-                  <Border Background="#60A5FA18" CornerRadius="4" Padding="4,2"
-                          HorizontalAlignment="Left">
-                    <TextBlock Text="FEATURE" FontSize="9" FontWeight="Bold"
-                               Foreground="#60A5FA"/>
+              <StackPanel Spacing="4">
+                <Grid>
+                  <Border Background="#10B98122" CornerRadius="4" Padding="5,2" HorizontalAlignment="Left">
+                    <TextBlock Text="UPDATE" FontSize="9" FontWeight="Bold" Foreground="#10B981"/>
                   </Border>
-                  <TextBlock Text="Schrijfstijl" FontSize="12"
-                             FontWeight="Medium" Foreground="{DynamicResource Text1}"/>
-                  <TextBlock FontSize="11" Foreground="{DynamicResource Text2}" TextWrapping="Wrap"
-                             Text="Voeg voorbeeldteksten toe en mAIkey leert automatisch je stijl. AI-antwoorden klinken dan als jij."/>
-                </StackPanel>
+                  <TextBlock Text="3 maanden geleden" FontSize="10" Foreground="{DynamicResource Text3}"
+                             HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                </Grid>
+                <TextBlock Text="GPT-4o nu sneller in alle plannen" FontSize="12.5" FontWeight="SemiBold"
+                           Foreground="{DynamicResource Text1}" Margin="0,2,0,0"/>
+                <TextBlock Text="Responstijden gehalveerd voor korte teksten."
+                           FontSize="11" Foreground="{DynamicResource Text2}" TextWrapping="Wrap"/>
               </StackPanel>
             </StackPanel>
           </Border>

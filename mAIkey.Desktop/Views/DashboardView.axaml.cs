@@ -106,17 +106,24 @@ public partial class DashboardView : UserControl
             content.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             content.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
 
-            // Color dot
-            var dot = new Border
+            // Donker icoon-vierkant met gekleurd bliksem-icoon (zoals Windows)
+            var iconBox = new Border
             {
-                Width = 8, Height = 8,
-                CornerRadius = new Avalonia.CornerRadius(4),
-                Background = new SolidColorBrush(Color.Parse(color)),
+                Width = 36, Height = 36,
+                CornerRadius = new Avalonia.CornerRadius(9),
+                Background = new SolidColorBrush(Color.Parse("#1A1A1F")),
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
-                Margin = new Avalonia.Thickness(0, 0, 10, 0)
+                Margin = new Avalonia.Thickness(0, 0, 12, 0),
+                Child = new Projektanker.Icons.Avalonia.Icon
+                {
+                    Value = "mdi-lightning-bolt", FontSize = 16,
+                    Foreground = new SolidColorBrush(Color.Parse(color)),
+                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                    VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
+                }
             };
-            Grid.SetColumn(dot, 0);
-            content.Children.Add(dot);
+            Grid.SetColumn(iconBox, 0);
+            content.Children.Add(iconBox);
 
             // Name
             var name = new TextBlock
