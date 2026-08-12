@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using mAIkey.Core.Models;
+using mAIkey.Core.Services;
+using Projektanker.Icons.Avalonia;
 
 namespace mAIkey.Desktop.Views;
 
@@ -17,6 +20,13 @@ public partial class PromptTemplatesView : UserControl
     {
         InitializeComponent();
         Loaded += (_, _) => _ = LoadAsync();
+        L.Changed += OnLanguageChanged;
+        DetachedFromVisualTree += (_, _) => L.Changed -= OnLanguageChanged;
+    }
+
+    private void OnLanguageChanged()
+    {
+        if (_all.Count > 0) Render(SearchBox.Text?.Trim());
     }
 
     private async System.Threading.Tasks.Task LoadAsync()
@@ -45,6 +55,14 @@ public partial class PromptTemplatesView : UserControl
     private void Search_Changed(object? sender, TextChangedEventArgs e) =>
         Render(SearchBox.Text?.Trim());
 
+    /// <summary>Thema-kleur ophalen (past zich aan donker/taupe aan).</summary>
+    private IBrush TB(string key)
+    {
+        if (this.TryFindResource(key, ActualThemeVariant, out var v) && v is IBrush b) return b;
+        if (Application.Current is { } app && app.TryFindResource(key, ActualThemeVariant, out var v2) && v2 is IBrush b2) return b2;
+        return Brushes.Gray;
+    }
+
     private void Render(string? query)
     {
         CategoriesPanel.Children.Clear();
@@ -54,41 +72,111 @@ public partial class PromptTemplatesView : UserControl
         if (searching)
         {
             var q = query!.ToLowerInvariant();
-            items = items.Where(t =>
-                (t.Name + " " + t.Description + " " + t.Category).ToLowerInvariant().Contains(q));
+            var results = items.Where(t =>
+                (t.Name + " " + t.Description + " " + t.Category).ToLowerInvariant().Contains(q)).ToList();
+
+            StatusText.IsVisible = results.Count == 0;
+            StatusText.Text = "Geen templates gevonden voor je zoekopdracht.";
 
             // Bij zoeken: platte lijst met tegels.
-            foreach (var t in items)
-                CategoriesPanel.Children.Add(BuildCard(t));
+            var list = new StackPanel { Spacing = 10 };
+            foreach (var t in results)
+                list.Children.Add(BuildCard(t));
+            CategoriesPanel.Children.Add(list);
             return;
         }
 
-        // Anders: per categorie een uitklap-sectie.
-        foreach (var group in items.GroupBy(t => string.IsNullOrWhiteSpace(t.Category) ? "Overig" : t.Category))
-        {
-            var inner = new StackPanel { Margin = new Avalonia.Thickness(12, 4, 0, 12) };
-            foreach (var t in group)
-                inner.Children.Add(BuildCard(t));
+        StatusText.IsVisible = false;
 
-            CategoriesPanel.Children.Add(new Expander
-            {
-                Header = $"{IconFor(group.Key)}  {group.Key}",
-                IsExpanded = false,
-                Margin = new Avalonia.Thickness(0, 0, 0, 10),
-                Content = inner
-            });
-        }
+        // Anders: per categorie een uitklapbare sectiekaart (volledige breedte).
+        foreach (var group in items.GroupBy(t => string.IsNullOrWhiteSpace(t.Category) ? "Overig" : t.Category))
+            CategoriesPanel.Children.Add(BuildCategory(group.Key, group.ToList()));
     }
 
-    private static string IconFor(string category) => category.ToUpperInvariant() switch
+    private Control BuildCategory(string category, List<RemotePromptTemplate> templates)
     {
-        "PRODUCTIVITEIT" or "PRODUCTIVITY" => "⚡",
-        "COMMUNICATIE" or "COMMUNICATION" => "💬",
-        "ONTWIKKELING" or "DEVELOPMENT" => "💻",
-        "CREATIEF" or "CREATIVE" => "🎨",
-        "ANALYSE" or "ANALYSIS" => "🔍",
-        "INTEGRATIES" or "INTEGRATIONS" => "🔗",
-        _ => "📁"
+        var chevron = new Icon
+        {
+            Value = "mdi-chevron-down", FontSize = 18, Foreground = TB("Text3"),
+            VerticalAlignment = VerticalAlignment.Center
+        };
+
+        var header = new Grid
+        {
+            ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto,Auto"),
+            Height = 52
+        };
+        header.Children.Add(new Icon
+        {
+            Value = MdiFor(category), FontSize = 17, Foreground = TB("Accent"),
+            VerticalAlignment = VerticalAlignment.Center, Margin = new Avalonia.Thickness(2, 0, 12, 0)
+        });
+        var title = new TextBlock
+        {
+            Text = category.ToUpperInvariant(), FontSize = 13, FontWeight = FontWeight.SemiBold,
+            Foreground = TB("Text1"), VerticalAlignment = VerticalAlignment.Center
+        };
+        Grid.SetColumn(title, 1);
+        header.Children.Add(title);
+        var count = new TextBlock
+        {
+            Text = $"{templates.Count}", FontSize = 12, Foreground = TB("Text3"),
+            VerticalAlignment = VerticalAlignment.Center, Margin = new Avalonia.Thickness(0, 0, 12, 0)
+        };
+        Grid.SetColumn(count, 2);
+        header.Children.Add(count);
+        Grid.SetColumn(chevron, 3);
+        header.Children.Add(chevron);
+
+        var inner = new StackPanel
+        {
+            Spacing = 10,
+            Margin = new Avalonia.Thickness(0, 4, 0, 4),
+            IsVisible = false
+        };
+        foreach (var t in templates)
+            inner.Children.Add(BuildCard(t));
+
+        var headerButton = new Button
+        {
+            Content = header,
+            Background = Brushes.Transparent,
+            BorderThickness = new Avalonia.Thickness(0),
+            Padding = new Avalonia.Thickness(16, 0),
+            HorizontalContentAlignment = HorizontalAlignment.Stretch,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            Cursor = new Avalonia.Input.Cursor(Avalonia.Input.StandardCursorType.Hand)
+        };
+        headerButton.Click += (_, _) =>
+        {
+            inner.IsVisible = !inner.IsVisible;
+            chevron.Value = inner.IsVisible ? "mdi-chevron-up" : "mdi-chevron-down";
+        };
+
+        var body = new StackPanel();
+        body.Children.Add(headerButton);
+        var innerHost = new Border { Child = inner, Padding = new Avalonia.Thickness(16, 0, 16, 0) };
+        body.Children.Add(innerHost);
+
+        var card = new Border
+        {
+            Child = body,
+            Margin = new Avalonia.Thickness(0, 0, 0, 10),
+            Padding = new Avalonia.Thickness(0)
+        };
+        card.Classes.Add("section");
+        return card;
+    }
+
+    private static string MdiFor(string category) => category.ToUpperInvariant() switch
+    {
+        "PRODUCTIVITEIT" or "PRODUCTIVITY" => "mdi-lightning-bolt",
+        "COMMUNICATIE" or "COMMUNICATION" => "mdi-message-text-outline",
+        "ONTWIKKELING" or "DEVELOPMENT" => "mdi-code-tags",
+        "CREATIEF" or "CREATIVE" => "mdi-palette-outline",
+        "ANALYSE" or "ANALYSIS" => "mdi-magnify",
+        "INTEGRATIES" or "INTEGRATIONS" => "mdi-link-variant",
+        _ => "mdi-folder-outline"
     };
 
     private static string OutputLabel(string mode) => mode switch
@@ -125,7 +213,7 @@ public partial class PromptTemplatesView : UserControl
         meta.Children.Add(new TextBlock { Text = "  •  Model: ", FontSize = 11, Classes = { "dimmed" } });
         meta.Children.Add(new TextBlock { Text = t.Model, FontSize = 11, FontWeight = FontWeight.SemiBold, Foreground = accent });
 
-        var btn = new Button { Content = "Toevoegen", Height = 30, HorizontalAlignment = HorizontalAlignment.Left, FontSize = 12 };
+        var btn = new Button { Content = L.T("Templates_AddBtn"), HorizontalAlignment = HorizontalAlignment.Left, FontSize = 12, Padding = new Avalonia.Thickness(16, 8) };
         btn.Classes.Add("ghost");
         btn.Click += (_, _) => UseTemplate(t);
 
@@ -156,10 +244,10 @@ public partial class PromptTemplatesView : UserControl
         };
 
         App.Config.Hotkeys = App.Config.Hotkeys.Append(hk).ToArray();
-        App.Hotkeys?.RegisterAll();
+        try { App.Hotkeys?.RegisterAll(); } catch { /* registratie mag toevoegen niet blokkeren */ }
 
         StatusText.IsVisible = true;
-        StatusText.Foreground = new SolidColorBrush(Color.Parse("#F5A524"));
+        StatusText.Foreground = TB("Accent");
         StatusText.Text = $"'{t.Name}' toegevoegd. Ga naar Hotkeys om een toets te kiezen.";
     }
 }

@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="using:mAIkey.Desktop"
              x:Class="mAIkey.Desktop.Views.PromptTemplatesView"
              Background="{DynamicResource Bg1}">
 
@@ -9,14 +10,14 @@
       <!-- Header -->
       <TextBlock Text="PROMPTS" FontSize="11" FontWeight="SemiBold"
                  Foreground="{DynamicResource Text3}" Margin="0,0,0,6"/>
-      <TextBlock Text="Custom Prompts" FontSize="28" FontWeight="SemiBold"
+      <TextBlock loc:Tr.Key="Templates_Title" FontSize="28" FontWeight="SemiBold"
                  Foreground="{DynamicResource Text1}" Margin="0,0,0,4"/>
-      <TextBlock Text="Kies een template en voeg toe aan je hotkeys"
+      <TextBlock loc:Tr.Key="Templates_Subtitle"
                  FontSize="13" Foreground="{DynamicResource Text3}" Margin="0,0,0,24"/>
 
       <!-- Zoeken -->
       <TextBox Name="SearchBox" Height="40" FontSize="13" Margin="0,0,0,20"
-               Watermark="Zoek je favoriete template…"
+               loc:Tr.WatermarkKey="Templates_SearchPlaceholder"
                VerticalContentAlignment="Center" TextChanged="Search_Changed"/>
 
       <TextBlock Name="StatusText" Classes="muted" Text="Templates laden..."/>

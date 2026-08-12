@@ -1,5 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="using:mAIkey.Desktop"
         x:Class="mAIkey.Desktop.Windows.InputPromptWindow"
         Title="mAIkey"
         Width="480" Height="300"
@@ -15,12 +16,12 @@
     </StackPanel>
 
     <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="10" Margin="0,14,0,0">
-      <Button Name="OkBtn" Classes="accent" Content="Uitvoeren" Click="Ok_Click"/>
-      <Button Classes="ghost" Content="Annuleren" Click="Cancel_Click"/>
+      <Button Name="OkBtn" Classes="accent" loc:Tr.Key="Dlg_Execute" Click="Ok_Click"/>
+      <Button Classes="ghost" loc:Tr.Key="Common_Cancel" Click="Cancel_Click"/>
     </StackPanel>
 
     <TextBox Name="InputBox" AcceptsReturn="True" TextWrapping="Wrap"
              VerticalContentAlignment="Top"
-             Watermark="Typ hier je tekst of instructie…"/>
+             loc:Tr.WatermarkKey="InputPrompt_Placeholder"/>
   </DockPanel>
 </Window>

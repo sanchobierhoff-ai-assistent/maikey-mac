@@ -1,36 +1,181 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="mAIkey.Desktop.Views.StyleLibraryView">
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
+             xmlns:loc="using:mAIkey.Desktop"
+             x:Class="mAIkey.Desktop.Views.StyleLibraryView"
+             Background="{DynamicResource Bg1}">
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto">
-    <StackPanel Margin="28,8,28,28" Spacing="20" MaxWidth="860">
+  <UserControl.Styles>
+    <Style Selector="Border.card2">
+      <Setter Property="Background" Value="{DynamicResource Bg2}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Border1}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="14"/>
+      <Setter Property="Margin" Value="0,0,0,16"/>
+    </Style>
+    <Style Selector="Border.card2-head">
+      <Setter Property="Padding" Value="20,14"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Border1}"/>
+      <Setter Property="BorderThickness" Value="0,0,0,1"/>
+    </Style>
+    <Style Selector="TextBlock.card2-title">
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Foreground" Value="{DynamicResource Text1}"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="TextBlock.field-label">
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="FontWeight" Value="Medium"/>
+      <Setter Property="Foreground" Value="{DynamicResource Text3}"/>
+      <Setter Property="Margin" Value="0,0,0,6"/>
+    </Style>
+  </UserControl.Styles>
 
-      <!-- Header -->
-      <StackPanel Spacing="4">
-        <TextBlock Classes="eyebrow" Text="STIJL LIBRARY"/>
-        <TextBlock Classes="title" Text="Schrijfstijlen"/>
-        <TextBlock Classes="subtitle"
-                   Text="Leer mAIkey jouw schrijfstijl. Koppel een stijl aan een hotkey."/>
+  <Grid ColumnDefinitions="280,*">
+
+    <!-- ═══ LINKS: stijl-lijst ═══ -->
+    <Border Grid.Column="0" Background="{DynamicResource Bg0}"
+            BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,1,0">
+      <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Header -->
+        <Border Grid.Row="0" Padding="20,18"
+                BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
+          <StackPanel Spacing="5">
+            <TextBlock Classes="eyebrow" loc:Tr.Key="StyleLib_Eyebrow"/>
+            <TextBlock loc:Tr.Key="StyleLib_Title" FontSize="13" FontWeight="SemiBold"
+                       Foreground="{DynamicResource Text1}"/>
+          </StackPanel>
+        </Border>
+
+        <!-- Lijst -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+          <StackPanel Name="StylesListPanel" Margin="0,6"/>
+        </ScrollViewer>
+
+        <!-- Footer -->
+        <Border Grid.Row="2" Padding="16,12"
+                BorderBrush="{DynamicResource Border1}" BorderThickness="0,1,0,0">
+          <Button Name="NewStyleBtn" Classes="accent" loc:Tr.Key="StyleLib_NewStyle"
+                  Height="36" HorizontalAlignment="Stretch"
+                  HorizontalContentAlignment="Center" Click="NewStyle_Click"/>
+        </Border>
+      </Grid>
+    </Border>
+
+    <!-- ═══ RECHTS: placeholder + editor ═══ -->
+    <Grid Grid.Column="1">
+
+      <!-- Placeholder -->
+      <StackPanel Name="RightPlaceholder" VerticalAlignment="Center"
+                  HorizontalAlignment="Center" Spacing="14" MaxWidth="360">
+        <Border Width="72" Height="72" CornerRadius="20"
+                Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource Border1}"
+                BorderThickness="1" HorizontalAlignment="Center">
+          <i:Icon Value="mdi-book-open-variant" FontSize="34" Foreground="{DynamicResource Accent}"
+                  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+        <TextBlock loc:Tr.Key="StyleLib_SelectPrompt" FontSize="15"
+                   Foreground="{DynamicResource Text3}" HorizontalAlignment="Center"/>
+        <TextBlock Text="…of maak links een nieuwe stijl aan." FontSize="12"
+                   Foreground="{DynamicResource Text3}" HorizontalAlignment="Center"/>
       </StackPanel>
 
-      <!-- Nieuwe stijl -->
-      <Border Classes="card">
-        <StackPanel Spacing="12">
-          <TextBlock Classes="CardTitle" Text="Nieuwe stijl trainen"/>
-          <TextBox Name="NameBox" Watermark="Naam (bijv. Zakelijke e-mails)"/>
-          <TextBox Name="ExamplesBox" Watermark="Plak hier één of meer voorbeeldteksten (scheid ze met een lege regel)…"
-                   AcceptsReturn="True" TextWrapping="Wrap" Height="120"
-                   VerticalContentAlignment="Top"/>
-          <Button Name="GenerateBtn" Classes="accent" Content="Genereer stijlprofiel"
-                  HorizontalAlignment="Left" Click="Generate_Click"/>
-          <TextBlock Name="StatusText" Classes="muted" IsVisible="False"/>
-        </StackPanel>
-      </Border>
+      <!-- Editor -->
+      <Grid Name="EditorPanel" IsVisible="False" RowDefinitions="Auto,*">
 
-      <!-- Bestaande stijlen -->
-      <TextBlock Classes="eyebrow" Text="MIJN STIJLEN" Margin="4,8,0,0"/>
-      <StackPanel Name="StylesPanel" Spacing="12"/>
+        <!-- Kruimelbalk -->
+        <Border Grid.Row="0" Height="52" Padding="28,0"
+                BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Name="EditorTitle" Text="Nieuwe stijl" FontSize="13"
+                       Foreground="{DynamicResource Text2}" VerticalAlignment="Center"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+              <TextBlock Name="StatusText" IsVisible="False" VerticalAlignment="Center"
+                         FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Accent}"/>
+              <Button Name="DeleteStyleBtn" Classes="danger" loc:Tr.Key="HotkeyEditor_Delete"
+                      FontSize="12" IsVisible="False" Click="Delete_Click"/>
+              <Button Classes="ghost" loc:Tr.Key="StyleEditor_Cancel" FontSize="12" Click="Cancel_Click"/>
+              <Button Name="StyleSaveBtn" Classes="accent" loc:Tr.Key="StyleEditor_Save" FontSize="12" Padding="16,8" Click="Save_Click"/>
+            </StackPanel>
+          </Grid>
+        </Border>
 
-    </StackPanel>
-  </ScrollViewer>
+        <!-- Inhoud -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+          <StackPanel Margin="28,24,28,40" MaxWidth="720">
+
+            <!-- Basisinformatie -->
+            <Border Classes="card2">
+              <StackPanel>
+                <Border Classes="card2-head">
+                  <TextBlock Classes="card2-title" loc:Tr.Key="StyleEditor_BasicInfo"/>
+                </Border>
+                <StackPanel Margin="20,16,20,20">
+                  <TextBlock Classes="field-label" loc:Tr.Key="StyleEditor_NameLabel"/>
+                  <TextBox Name="NameBox" Height="40" FontSize="14"
+                           VerticalContentAlignment="Center" Watermark="Bijv. Zakelijke e-mails"
+                           Margin="0,0,0,16"/>
+                  <TextBlock Classes="field-label" loc:Tr.Key="StyleEditor_UsageLabel"/>
+                  <TextBox Name="UsageBox" MinHeight="80" FontSize="13"
+                           AcceptsReturn="True" TextWrapping="Wrap"
+                           VerticalContentAlignment="Top"
+                           Watermark="Bijv. Reageren op klantmails in formele stijl"/>
+                </StackPanel>
+              </StackPanel>
+            </Border>
+
+            <!-- Voorbeeldteksten -->
+            <Border Classes="card2">
+              <StackPanel>
+                <Border Classes="card2-head">
+                  <Grid ColumnDefinitions="*,Auto">
+                    <TextBlock Classes="card2-title" loc:Tr.Key="StyleEditor_Examples"/>
+                    <Button Grid.Column="1" Name="AddExampleBtn" Classes="ghost"
+                            loc:Tr.Key="StyleEditor_AddExample" FontSize="12" Click="AddExample_Click"/>
+                  </Grid>
+                </Border>
+                <StackPanel Margin="20,14,20,16">
+                  <TextBlock loc:Tr.Key="StyleEditor_ExamplesHint"
+                             FontSize="11.5" Foreground="{DynamicResource Text3}"
+                             TextWrapping="Wrap" Margin="0,0,0,12"/>
+                  <StackPanel Name="ExamplesPanel" Spacing="8"/>
+                  <Border Name="ExamplesEmpty" Background="{DynamicResource Bg3}"
+                          CornerRadius="8" Padding="20">
+                    <TextBlock loc:Tr.Key="StyleEditor_NoExamples" FontSize="13"
+                               Foreground="{DynamicResource Text3}"
+                               HorizontalAlignment="Center" TextAlignment="Center"/>
+                  </Border>
+                </StackPanel>
+              </StackPanel>
+            </Border>
+
+            <!-- Jouw schrijfstijl -->
+            <Border Classes="card2">
+              <StackPanel>
+                <Border Classes="card2-head">
+                  <Grid ColumnDefinitions="*,Auto">
+                    <TextBlock Classes="card2-title" Text="Jouw schrijfstijl"/>
+                    <Button Grid.Column="1" Name="GenerateBtn" Classes="accent"
+                            loc:Tr.Key="StyleEditor_GenerateBtn" FontSize="12" Click="Generate_Click"/>
+                  </Grid>
+                </Border>
+                <StackPanel Margin="20,14,20,16">
+                  <TextBlock Text="Beschrijf hoe je schrijft (toon, zinlengte, woordkeuze, etc.) — of laat het door AI genereren."
+                             FontSize="11.5" Foreground="{DynamicResource Text3}"
+                             TextWrapping="Wrap" Margin="0,0,0,10"/>
+                  <TextBox Name="ProfileBox" Height="240" FontSize="13"
+                           AcceptsReturn="True" TextWrapping="Wrap"
+                           VerticalContentAlignment="Top"
+                           Watermark="Het gegenereerde of handmatige stijlprofiel verschijnt hier…"/>
+                </StackPanel>
+              </StackPanel>
+            </Border>
+
+          </StackPanel>
+        </ScrollViewer>
+      </Grid>
+    </Grid>
+  </Grid>
 </UserControl>

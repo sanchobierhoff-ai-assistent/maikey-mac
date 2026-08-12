@@ -237,6 +237,37 @@ public class ConfigService
         set { _config.Theme = value; SaveConfig(); }
     }
 
+    // mAI Assistent
+    public bool AssistantEnabled
+    {
+        get => _config.AssistantEnabled;
+        set { _config.AssistantEnabled = value; SaveConfig(); }
+    }
+
+    public string AssistantHotkey
+    {
+        get => _config.AssistantHotkey ?? "Ctrl + Alt + Space";
+        set { _config.AssistantHotkey = value; SaveConfig(); }
+    }
+
+    public bool ScreenshotEnabled
+    {
+        get => _config.ScreenshotEnabled;
+        set { _config.ScreenshotEnabled = value; SaveConfig(); }
+    }
+
+    public string ScreenshotHotkey
+    {
+        get => _config.ScreenshotHotkey ?? "Ctrl + Shift + Space";
+        set { _config.ScreenshotHotkey = value; SaveConfig(); }
+    }
+
+    public bool HasSeenTour
+    {
+        get => _config.HasSeenTour;
+        set { _config.HasSeenTour = value; SaveConfig(); }
+    }
+
     public int MaxImages
     {
         get => _config.MaxImages;

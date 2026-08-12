@@ -1,0 +1,54 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="using:mAIkey.Desktop"
+        x:Class="mAIkey.Desktop.Windows.AiChatWindow"
+        Title="mAIkey — AI-hulp"
+        Width="720" Height="640"
+        MinWidth="560" MinHeight="460"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource Bg1}">
+
+  <Grid Margin="24" RowDefinitions="Auto,*,Auto,Auto">
+
+    <!-- Header -->
+    <StackPanel Grid.Row="0" Spacing="6" Margin="0,0,0,16">
+      <TextBlock Name="EyebrowText" Classes="eyebrow" Text="AI MAIKEY BUILDER"/>
+      <TextBlock Name="TitleText" FontSize="22" FontWeight="SemiBold"
+                 Foreground="{DynamicResource Text1}" Text="Hotkey maken met AI"/>
+      <TextBlock Name="SubtitleText" FontSize="13" Foreground="{DynamicResource Text3}"
+                 TextWrapping="Wrap"
+                 Text="Beschrijf wat je hotkey moet doen — de AI helpt je met de beste instructie."/>
+    </StackPanel>
+
+    <!-- Chatberichten -->
+    <Border Grid.Row="1" Background="{DynamicResource Bg2}" CornerRadius="10"
+            BorderBrush="{DynamicResource Border1}" BorderThickness="1" Margin="0,0,0,14">
+      <ScrollViewer Name="ChatScroll" VerticalScrollBarVisibility="Auto" Padding="16">
+        <StackPanel Name="MessagesPanel" Spacing="10"/>
+      </ScrollViewer>
+    </Border>
+
+    <!-- Invoer -->
+    <Border Grid.Row="2" Background="{DynamicResource Bg2}" CornerRadius="10"
+            BorderBrush="{DynamicResource Border1}" BorderThickness="1" Padding="12" Margin="0,0,0,14">
+      <Grid ColumnDefinitions="*,Auto">
+        <TextBox Name="MessageBox" Grid.Column="0" TextWrapping="Wrap" AcceptsReturn="False"
+                 Background="Transparent" BorderThickness="0" FontSize="13"
+                 VerticalAlignment="Center" loc:Tr.WatermarkKey="AiChat_InputPlaceholder"
+                 KeyDown="MessageBox_KeyDown"/>
+        <Button Name="SendButton" Grid.Column="1" Classes="accent" loc:Tr.Key="AiChat_Send"
+                Height="36" Padding="14,0" Margin="10,0,0,0" FontSize="13" Click="Send_Click"/>
+      </Grid>
+    </Border>
+
+    <!-- Acties -->
+    <Grid Grid.Row="3" ColumnDefinitions="*,Auto,Auto">
+      <TextBlock Grid.Column="0" loc:Tr.Key="AiChat_RefineHint"
+                 FontSize="12" Foreground="{DynamicResource Text3}" VerticalAlignment="Center"/>
+      <Button Grid.Column="1" Classes="ghost" loc:Tr.Key="AiChat_Cancel" Height="40" Padding="20,0"
+              Margin="0,0,10,0" Click="Cancel_Click"/>
+      <Button Name="ApplyButton" Grid.Column="2" Classes="accent" loc:Tr.Key="AiChat_Apply"
+              Height="40" Padding="22,0" IsEnabled="False" Click="Apply_Click"/>
+    </Grid>
+  </Grid>
+</Window>

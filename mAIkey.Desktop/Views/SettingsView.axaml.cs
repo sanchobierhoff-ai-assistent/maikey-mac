@@ -76,6 +76,18 @@ public partial class SettingsView : UserControl
         App.ApplyTheme(theme);
     }
 
+    private void TourHotkey_Click(object? sender, RoutedEventArgs e)
+        => (TopLevel.GetTopLevel(this) as MainWindow)?.StartHotkeyTour();
+
+    private void TourStyle_Click(object? sender, RoutedEventArgs e)
+        => (TopLevel.GetTopLevel(this) as MainWindow)?.StartStyleTour();
+
+    private void TourTemplate_Click(object? sender, RoutedEventArgs e)
+        => (TopLevel.GetTopLevel(this) as MainWindow)?.StartTemplateTour();
+
+    private void TourPin_Click(object? sender, RoutedEventArgs e)
+        => (TopLevel.GetTopLevel(this) as MainWindow)?.StartPinTour();
+
     private void ImgMinus_Click(object? sender, RoutedEventArgs e)
     {
         if (_config.MaxImages > 0)

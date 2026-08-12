@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
+             xmlns:loc="using:mAIkey.Desktop"
              x:Class="mAIkey.Desktop.Views.CloudSyncView"
              Background="{DynamicResource Bg1}">
 
@@ -23,9 +24,8 @@
     <StackPanel MaxWidth="760">
 
       <StackPanel Spacing="4" Margin="0,0,0,24">
-        <TextBlock Classes="title" Text="Cloud Sync"/>
-        <TextBlock Classes="subtitle"
-                   Text="Exporteer je hotkeys en stijlen naar de cloud. Importeer ze op een ander apparaat of smartphone."/>
+        <TextBlock Classes="title" loc:Tr.Key="CloudSync_Title"/>
+        <TextBlock Classes="subtitle" loc:Tr.Key="CloudSync_Subtitle"/>
       </StackPanel>
 
       <!-- Exporteren -->
@@ -35,7 +35,7 @@
             <StackPanel Orientation="Horizontal">
               <i:Icon Value="mdi-cloud-upload-outline" FontSize="17" Foreground="{DynamicResource Accent}"
                       Margin="0,0,10,0" VerticalAlignment="Center"/>
-              <TextBlock Text="Exporteren naar cloud" FontSize="14" FontWeight="SemiBold"
+              <TextBlock loc:Tr.Key="CloudSync_ExportHeader" FontSize="14" FontWeight="SemiBold"
                          Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
             </StackPanel>
           </Border>
@@ -51,18 +51,18 @@
             </Border>
 
             <StackPanel Spacing="6">
-              <TextBlock Text="mAIkeys" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Text2}"/>
+              <TextBlock loc:Tr.Key="CloudSync_HotkeysLabel" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Text2}"/>
               <StackPanel Name="HotkeysPanel" Spacing="4"/>
             </StackPanel>
 
             <StackPanel Spacing="6">
-              <TextBlock Text="Schrijfstijlen" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Text2}"/>
+              <TextBlock loc:Tr.Key="CloudSync_StylesLabel" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Text2}"/>
               <StackPanel Name="StylesPanel" Spacing="4"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
-              <Button Name="SelectAllBtn" Classes="ghost" Content="Alles selecteren" Click="SelectAll_Click"/>
-              <Button Name="SyncBtn" Classes="accent" Content="Exporteer naar cloud" Click="Sync_Click"/>
+              <Button Name="SelectAllBtn" Classes="ghost" loc:Tr.Key="CloudSync_SelectAll" Click="SelectAll_Click"/>
+              <Button Name="SyncBtn" Classes="accent" loc:Tr.Key="CloudSync_ExportBtn" Click="Sync_Click"/>
             </StackPanel>
 
             <TextBlock Name="StatusText" Classes="muted" IsVisible="False" HorizontalAlignment="Right"/>
@@ -77,13 +77,13 @@
             <StackPanel Orientation="Horizontal">
               <i:Icon Value="mdi-cloud-download-outline" FontSize="17" Foreground="{DynamicResource Accent}"
                       Margin="0,0,10,0" VerticalAlignment="Center"/>
-              <TextBlock Text="Importeren vanuit cloud" FontSize="14" FontWeight="SemiBold"
+              <TextBlock loc:Tr.Key="CloudSync_ImportHeader" FontSize="14" FontWeight="SemiBold"
                          Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
             </StackPanel>
           </Border>
           <StackPanel Margin="20,16,20,20" Spacing="12">
-            <TextBlock Classes="muted" Text="Controleer of er een cloudexport beschikbaar is voor dit account."/>
-            <Button Name="ImportCheckBtn" Classes="ghost" Content="Controleer beschikbare export"
+            <TextBlock Classes="muted" loc:Tr.Key="CloudSync_ImportCheckHint"/>
+            <Button Name="ImportCheckBtn" Classes="ghost" loc:Tr.Key="CloudSync_CheckBtn"
                     HorizontalAlignment="Left" Click="ImportCheck_Click"/>
             <TextBlock Name="ImportStatusText" Classes="muted" IsVisible="False"/>
           </StackPanel>

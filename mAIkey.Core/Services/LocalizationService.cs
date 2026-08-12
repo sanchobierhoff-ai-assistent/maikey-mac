@@ -9,6 +9,9 @@ public static class L
 
     public static string CurrentLanguage { get; private set; } = "nl";
 
+    /// <summary>Wordt aangeroepen zodra de taal is gewisseld (voor live UI-updates).</summary>
+    public static event System.Action? Changed;
+
     public static void Apply(string languageCode, Assembly? assembly = null)
     {
         var lang = languageCode switch
@@ -35,6 +38,7 @@ public static class L
             if (stream != null)
             {
                 _strings = ParseStream(stream);
+                Changed?.Invoke();
                 return;
             }
         }
@@ -48,6 +52,7 @@ public static class L
             if (stream != null)
             {
                 _strings = ParseStream(stream);
+                Changed?.Invoke();
                 return;
             }
         }
@@ -56,16 +61,18 @@ public static class L
     private static Dictionary<string, string> ParseStream(Stream stream)
     {
         using var reader = new StreamReader(stream, Encoding.UTF8);
-        return reader.ReadToEnd()
-            .Split('\n')
-            .Select(line => line.TrimEnd('\r'))
-            .Where(line => !line.TrimStart().StartsWith('#') && line.Contains('='))
-            .Select(line => line.Split('=', 2))
-            .Where(parts => parts.Length == 2 && parts[0].Trim().Length > 0)
-            .ToDictionary(
-                parts => parts[0].Trim(),
-                parts => parts[1].Trim().Replace("\\n", "\n"),
-                StringComparer.Ordinal);
+        // Tolerant voor dubbele keys (laatste wint) i.p.v. crashen.
+        var dict = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var parts in reader.ReadToEnd()
+                     .Split('\n')
+                     .Select(line => line.TrimEnd('\r'))
+                     .Where(line => !line.TrimStart().StartsWith('#') && line.Contains('='))
+                     .Select(line => line.Split('=', 2))
+                     .Where(parts => parts.Length == 2 && parts[0].Trim().Length > 0))
+        {
+            dict[parts[0].Trim()] = parts[1].Trim().Replace("\\n", "\n");
+        }
+        return dict;
     }
 
     public static string T(string key) =>

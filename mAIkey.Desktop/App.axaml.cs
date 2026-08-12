@@ -12,14 +12,14 @@ public partial class App : Application
     public static ApiClient Api { get; private set; } = null!;
     public static Services.HotkeyRuntime? Hotkeys { get; private set; }
 
-    /// <summary>Zet het app-thema op donker (standaard) of taupe/licht.</summary>
+    /// <summary>Zet het app-thema op taupe/licht (standaard) of donker.</summary>
     public static void ApplyTheme(string? theme)
     {
         if (Current != null)
             Current.RequestedThemeVariant =
-                string.Equals(theme, "Light", StringComparison.OrdinalIgnoreCase)
-                    ? ThemeVariant.Light
-                    : ThemeVariant.Dark;
+                string.Equals(theme, "Dark", StringComparison.OrdinalIgnoreCase)
+                    ? ThemeVariant.Dark
+                    : ThemeVariant.Light;
     }
 
     private static void StartHotkeys()
@@ -46,7 +46,7 @@ public partial class App : Application
         // Apply localization
         L.Apply(Config.InterfaceLanguage);
 
-        // Pas het opgeslagen thema toe (donker is de standaard).
+        // Pas het opgeslagen thema toe (taupe/licht is de standaard).
         ApplyTheme(Config.Theme);
 
         // Restore auth token if available

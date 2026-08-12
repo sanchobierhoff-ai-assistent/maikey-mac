@@ -224,10 +224,63 @@ public class AvailableModel
     public string Id { get; set; } = "";
     public string Name { get; set; } = "";
     public string Provider { get; set; } = "";
+    // De backend levert deze als speedLevel/qualityLevel/usageLevel (1–5).
+    [System.Text.Json.Serialization.JsonPropertyName("speedLevel")]
     public int Speed { get; set; }
+    [System.Text.Json.Serialization.JsonPropertyName("qualityLevel")]
     public int Intelligence { get; set; }
+    [System.Text.Json.Serialization.JsonPropertyName("usageLevel")]
     public int Usage { get; set; }
     public string? MinTier { get; set; }
+}
+
+public class AiChatMessage
+{
+    [System.Text.Json.Serialization.JsonPropertyName("role")] public string Role { get; set; } = "";
+    [System.Text.Json.Serialization.JsonPropertyName("content")] public string Content { get; set; } = "";
+}
+
+public class AiHotkeyConfig
+{
+    [System.Text.Json.Serialization.JsonPropertyName("name")] public string? Name { get; set; }
+    [System.Text.Json.Serialization.JsonPropertyName("customPrompt")] public string? CustomPrompt { get; set; }
+    [System.Text.Json.Serialization.JsonPropertyName("model")] public string? Model { get; set; }
+    [System.Text.Json.Serialization.JsonPropertyName("outputMode")] public string? OutputMode { get; set; }
+}
+
+public class OptimizePromptResponse : ApiResponse
+{
+    [System.Text.Json.Serialization.JsonPropertyName("message")] public string? Message { get; set; }
+    [System.Text.Json.Serialization.JsonPropertyName("isReady")] public bool IsReady { get; set; }
+    [System.Text.Json.Serialization.JsonPropertyName("config")] public AiHotkeyConfig? Config { get; set; }
+    [System.Text.Json.Serialization.JsonPropertyName("conversationHistory")] public List<AiChatMessage>? ConversationHistory { get; set; }
+}
+
+public class MemoryItem
+{
+    public string Id { get; set; } = "";
+    public string? Category { get; set; }
+    public string Content { get; set; } = "";
+    public string? Source { get; set; }
+    [System.Text.Json.Serialization.JsonPropertyName("updated_at")]
+    public string? UpdatedAt { get; set; }
+}
+
+public class MemoryListResponse : ApiResponse
+{
+    public List<MemoryItem> Memory { get; set; } = new();
+}
+
+public class AssistantProfile
+{
+    public string? Company { get; set; }
+    public string? Role { get; set; }
+    public string? Background { get; set; }
+}
+
+public class AssistantProfileResponse : ApiResponse
+{
+    public AssistantProfile? Profile { get; set; }
 }
 
 public class AvailableModelsResponse : ApiResponse

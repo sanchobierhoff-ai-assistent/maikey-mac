@@ -326,6 +326,42 @@
     <Setter Property="FontSize" Value="11" />
   </Style>
 
+  <!-- ═══════════════════ SECTIE-KAART ═══════════════════ -->
+  <!-- WPF: Bg2-kaart met Border1, CornerRadius 14 (Instellingen/Integraties) -->
+  <Style Selector="Border.section">
+    <Setter Property="Background" Value="{DynamicResource Bg2}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Border1}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="14" />
+    <Setter Property="Padding" Value="20" />
+  </Style>
+  <Style Selector="TextBlock.section-title">
+    <Setter Property="FontSize" Value="15" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="{DynamicResource Text1}" />
+  </Style>
+  <Style Selector="TextBlock.section-sub">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Foreground" Value="{DynamicResource Text2}" />
+  </Style>
+
+  <!-- ═══════════════════ BADGE / PILL ═══════════════════ -->
+  <Style Selector="Border.pill">
+    <Setter Property="CornerRadius" Value="25" />
+    <Setter Property="Padding" Value="10,4" />
+    <Setter Property="Background" Value="{DynamicResource Bg3}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Border1}" />
+    <Setter Property="BorderThickness" Value="1" />
+  </Style>
+
+  <!-- ═══════════════════ PROGRESSBAR ═══════════════════ -->
+  <Style Selector="ProgressBar">
+    <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+    <Setter Property="Background" Value="{DynamicResource Bg3}" />
+    <Setter Property="MinHeight" Value="6" />
+    <Setter Property="CornerRadius" Value="3" />
+  </Style>
+
   <!-- ═══════════════════ SCROLLBAR ═══════════════════ -->
   <Style Selector="ScrollBar">
     <Setter Property="Background" Value="Transparent" />

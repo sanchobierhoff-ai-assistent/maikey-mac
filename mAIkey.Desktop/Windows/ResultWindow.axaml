@@ -1,54 +1,41 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="https://github.com/projektanker/icons.avalonia"
+        xmlns:loc="using:mAIkey.Desktop"
         x:Class="mAIkey.Desktop.Windows.ResultWindow"
         Title="mAIkey — Resultaat"
         Width="600" Height="500"
         WindowStartupLocation="CenterScreen"
-        ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="NoChrome"
-        ExtendClientAreaTitleBarHeightHint="40"
         Background="{DynamicResource Bg0}">
 
-  <DockPanel>
-    <!-- Title bar -->
-    <Border DockPanel.Dock="Top" Height="40" Name="ResultTitleBar"
-            Background="Transparent">
-      <Grid>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
-                    VerticalAlignment="Center" Margin="16,0" Spacing="8">
-          <Border Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource BorderStrong}" BorderThickness="1"
-                  CornerRadius="5" Width="28" Height="20" Padding="2">
-            <TextBlock Text="AI" FontSize="10" FontWeight="ExtraBold"
-                       Foreground="#F5A524" HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
-          </Border>
-          <TextBlock Text="Resultaat" FontSize="12" Foreground="{DynamicResource Text2}"
-                     VerticalAlignment="Center"/>
-        </StackPanel>
-        <Button HorizontalAlignment="Right" VerticalAlignment="Top"
-                Width="46" Height="40" Content="✕"
-                Background="Transparent" BorderThickness="0" CornerRadius="0"
-                Foreground="{DynamicResource Text2}" FontSize="10"
-                Click="CloseBtn_Click" Name="ResultCloseBtn"/>
-      </Grid>
-    </Border>
+  <DockPanel Margin="20">
 
-    <!-- Content -->
-    <DockPanel Margin="20,0,20,20">
-      <!-- Bottom buttons -->
-      <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
-                  HorizontalAlignment="Right" Spacing="8" Margin="0,12,0,0">
-        <Button Classes="ghost" Content="Kopieer" Name="CopyBtn"
-                Padding="16,8" FontSize="12" Click="CopyBtn_Click"/>
-        <Button Classes="accent" Content="Gebruiken" Name="UseBtn"
-                Padding="16,8" FontSize="12" Click="UseBtn_Click"/>
-      </StackPanel>
+    <!-- Kop -->
+    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="8"
+                Margin="0,0,0,14" VerticalAlignment="Center">
+      <Border Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource BorderStrong}"
+              BorderThickness="1" CornerRadius="5" Width="28" Height="20" Padding="2">
+        <TextBlock Text="AI" FontSize="10" FontWeight="ExtraBold"
+                   Foreground="{DynamicResource Accent}" HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+      </Border>
+      <TextBlock loc:Tr.Key="Result_Title" FontSize="14" FontWeight="SemiBold"
+                 Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
+    </StackPanel>
 
-      <!-- Result text -->
-      <TextBox Name="ResultTextBox" AcceptsReturn="True" TextWrapping="Wrap"
-               IsReadOnly="True" Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource Border1}"
-               BorderThickness="1" CornerRadius="10" Padding="16"
-               FontSize="13" Foreground="{DynamicResource Text1}"/>
-    </DockPanel>
+    <!-- Onderaan knoppen -->
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
+                HorizontalAlignment="Right" Spacing="8" Margin="0,12,0,0">
+      <Button Classes="ghost" loc:Tr.Key="Result_Copy" Name="CopyBtn"
+              Padding="16,8" FontSize="12" Click="CopyBtn_Click"/>
+      <Button Classes="accent" loc:Tr.Key="Result_Use" Name="UseBtn"
+              Padding="16,8" FontSize="12" Click="UseBtn_Click"/>
+    </StackPanel>
+
+    <!-- Resultaattekst -->
+    <TextBox Name="ResultTextBox" AcceptsReturn="True" TextWrapping="Wrap"
+             IsReadOnly="True" Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource Border1}"
+             BorderThickness="1" CornerRadius="10" Padding="16"
+             FontSize="13" Foreground="{DynamicResource Text1}"/>
   </DockPanel>
 </Window>

@@ -13,12 +13,6 @@ public partial class LoginWindow : Window
     {
         InitializeComponent();
 
-        LoginTitleBar.PointerPressed += (s, e) =>
-        {
-            if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
-                BeginMoveDrag(e);
-        };
-
         // Enter key triggers login
         PasswordBox.KeyDown += (s, e) =>
         {
@@ -30,12 +24,6 @@ public partial class LoginWindow : Window
             if (e.Key == Key.Return)
                 PasswordBox.Focus();
         };
-
-        // Close button hover
-        LoginCloseBtn.PointerEntered += (s, e) => LoginCloseBtn.Background =
-            new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#E81123"));
-        LoginCloseBtn.PointerExited += (s, e) => LoginCloseBtn.Background =
-            Avalonia.Media.Brushes.Transparent;
 
         RegisterBtn.Click += async (s, e) =>
         {

@@ -1,111 +1,93 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="using:mAIkey.Desktop"
         x:Class="mAIkey.Desktop.Windows.LoginWindow"
         Title="mAIkey — Inloggen"
         Width="460" Height="580"
         CanResize="False"
         WindowStartupLocation="CenterScreen"
-        ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="NoChrome"
-        ExtendClientAreaTitleBarHeightHint="40"
         Background="{DynamicResource Bg0}">
 
-  <DockPanel>
-    <!-- Title bar -->
-    <Border DockPanel.Dock="Top" Height="40" Name="LoginTitleBar"
-            Background="Transparent">
-      <Grid>
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
-                   FontSize="12" Foreground="{DynamicResource Text3}">mAIkey</TextBlock>
-        <Button HorizontalAlignment="Right" VerticalAlignment="Top"
-                Width="46" Height="40" Content="✕"
-                Background="Transparent" BorderThickness="0" CornerRadius="0"
-                Foreground="{DynamicResource Text2}" FontSize="10"
-                Click="CloseBtn_Click" Name="LoginCloseBtn"/>
-      </Grid>
-    </Border>
+  <ScrollViewer>
+    <StackPanel Margin="48,32,48,32" Spacing="20" MaxWidth="360"
+                HorizontalAlignment="Center">
 
-    <ScrollViewer>
-      <StackPanel Margin="48,16,48,32" Spacing="20" MaxWidth="360"
-                  HorizontalAlignment="Center">
-
-        <!-- Logo -->
-        <StackPanel HorizontalAlignment="Center" Spacing="12">
-          <Border Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource BorderStrong}" BorderThickness="1"
-                  CornerRadius="12" Width="80" Height="60"
-                  HorizontalAlignment="Center">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
-                        VerticalAlignment="Center" Spacing="1">
-              <TextBlock Text="m" FontSize="14" FontWeight="ExtraBold"
-                         Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
-              <TextBlock Text="AI" FontSize="20" FontWeight="ExtraBold"
-                         Foreground="#F5A524" VerticalAlignment="Center"/>
-              <TextBlock Text="key" FontSize="14" FontWeight="ExtraBold"
-                         Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
-            </StackPanel>
-          </Border>
-
-          <TextBlock Text="Welkom terug" FontSize="22" FontWeight="SemiBold"
-                     Foreground="{DynamicResource Text1}" HorizontalAlignment="Center"/>
-          <TextBlock Text="Log in om mAIkey te gebruiken"
-                     FontSize="13" Foreground="{DynamicResource Text2}" HorizontalAlignment="Center"/>
-        </StackPanel>
-
-        <!-- Error message -->
-        <Border Name="ErrorBorder" IsVisible="False"
-                Background="#2A1215" BorderBrush="#5C2D33" BorderThickness="1"
-                CornerRadius="10" Padding="12,10">
-          <TextBlock Name="ErrorText" Foreground="#EF4444" FontSize="12"
-                     TextWrapping="Wrap"/>
+      <!-- Logo -->
+      <StackPanel HorizontalAlignment="Center" Spacing="12">
+        <Border Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource BorderStrong}" BorderThickness="1"
+                CornerRadius="12" Width="80" Height="60"
+                HorizontalAlignment="Center">
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                      VerticalAlignment="Center" Spacing="1">
+            <TextBlock Text="m" FontSize="14" FontWeight="ExtraBold"
+                       Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
+            <TextBlock Text="AI" FontSize="20" FontWeight="ExtraBold"
+                       Foreground="{DynamicResource Accent}" VerticalAlignment="Center"/>
+            <TextBlock Text="key" FontSize="14" FontWeight="ExtraBold"
+                       Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
+          </StackPanel>
         </Border>
 
-        <!-- Email -->
-        <StackPanel Spacing="6">
-          <TextBlock Text="E-mailadres" FontSize="12" FontWeight="Medium"
-                     Foreground="{DynamicResource Text2}"/>
-          <TextBox Name="EmailBox" Watermark="naam@voorbeeld.nl"
-                   FontSize="13"/>
-        </StackPanel>
-
-        <!-- Password -->
-        <StackPanel Spacing="6">
-          <TextBlock Text="Wachtwoord" FontSize="12" FontWeight="Medium"
-                     Foreground="{DynamicResource Text2}"/>
-          <TextBox Name="PasswordBox" PasswordChar="●"
-                   Watermark="••••••••" FontSize="13"/>
-        </StackPanel>
-
-        <!-- Login button -->
-        <Button Name="LoginBtn" Classes="accent" Content="Inloggen"
-                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-                Height="44" FontSize="14" Click="LoginBtn_Click"/>
-
-        <!-- Loading -->
-        <StackPanel Name="LoadingPanel" IsVisible="False"
-                    HorizontalAlignment="Center" Spacing="8">
-          <TextBlock Text="Inloggen..." FontSize="12" Foreground="{DynamicResource Text2}"
-                     HorizontalAlignment="Center"/>
-        </StackPanel>
-
-        <!-- Forgot password link -->
-        <Button Name="ForgotBtn" Classes="ghost" Content="Wachtwoord vergeten?"
-                HorizontalAlignment="Center" FontSize="12"
-                Padding="12,6" BorderThickness="0" Foreground="{DynamicResource Text2}"/>
-
-        <!-- Register link -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="4">
-          <TextBlock Text="Nog geen account?" FontSize="12" Foreground="{DynamicResource Text3}"
-                     VerticalAlignment="Center"/>
-          <Button Name="RegisterBtn" Content="Registreer"
-                  Background="Transparent" BorderThickness="0"
-                  Foreground="#F5A524" FontSize="12" Padding="4,2"
-                  Cursor="Hand"/>
-        </StackPanel>
-
-        <!-- Version -->
-        <TextBlock Text="Beta-v1.4-mac" FontSize="10" Foreground="{DynamicResource Text3}"
-                   HorizontalAlignment="Center" Margin="0,8,0,0"/>
+        <TextBlock Text="Welkom terug" FontSize="22" FontWeight="SemiBold"
+                   Foreground="{DynamicResource Text1}" HorizontalAlignment="Center"/>
+        <TextBlock loc:Tr.Key="Login_Subtitle"
+                   FontSize="13" Foreground="{DynamicResource Text2}" HorizontalAlignment="Center"/>
       </StackPanel>
-    </ScrollViewer>
-  </DockPanel>
+
+      <!-- Error message -->
+      <Border Name="ErrorBorder" IsVisible="False"
+              Background="#1FEF4444" BorderBrush="#55EF4444" BorderThickness="1"
+              CornerRadius="10" Padding="12,10">
+        <TextBlock Name="ErrorText" Foreground="{DynamicResource Error}" FontSize="12"
+                   TextWrapping="Wrap"/>
+      </Border>
+
+      <!-- Email -->
+      <StackPanel Spacing="6">
+        <TextBlock loc:Tr.Key="Login_Email" FontSize="12" FontWeight="Medium"
+                   Foreground="{DynamicResource Text2}"/>
+        <TextBox Name="EmailBox" Watermark="naam@voorbeeld.nl"
+                 FontSize="13"/>
+      </StackPanel>
+
+      <!-- Password -->
+      <StackPanel Spacing="6">
+        <TextBlock loc:Tr.Key="Login_Password" FontSize="12" FontWeight="Medium"
+                   Foreground="{DynamicResource Text2}"/>
+        <TextBox Name="PasswordBox" PasswordChar="●"
+                 Watermark="••••••••" FontSize="13"/>
+      </StackPanel>
+
+      <!-- Login button -->
+      <Button Name="LoginBtn" Classes="accent" loc:Tr.Key="Login_Button"
+              HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+              Height="44" FontSize="14" Click="LoginBtn_Click"/>
+
+      <!-- Loading -->
+      <StackPanel Name="LoadingPanel" IsVisible="False"
+                  HorizontalAlignment="Center" Spacing="8">
+        <TextBlock Text="Inloggen..." FontSize="12" Foreground="{DynamicResource Text2}"
+                   HorizontalAlignment="Center"/>
+      </StackPanel>
+
+      <!-- Forgot password link -->
+      <Button Name="ForgotBtn" Classes="ghost" loc:Tr.Key="Login_ForgotPassword"
+              HorizontalAlignment="Center" FontSize="12"
+              Padding="12,6" BorderThickness="0" Foreground="{DynamicResource Text2}"/>
+
+      <!-- Register link -->
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="4">
+        <TextBlock loc:Tr.Key="Login_NoAccount" FontSize="12" Foreground="{DynamicResource Text3}"
+                   VerticalAlignment="Center"/>
+        <Button Name="RegisterBtn" loc:Tr.Key="Login_Register"
+                Background="Transparent" BorderThickness="0"
+                Foreground="{DynamicResource Accent}" FontSize="12" Padding="4,2"
+                Cursor="Hand"/>
+      </StackPanel>
+
+      <!-- Version -->
+      <TextBlock Text="Beta-v1.4-mac" FontSize="10" Foreground="{DynamicResource Text3}"
+                 HorizontalAlignment="Center" Margin="0,8,0,0"/>
+    </StackPanel>
+  </ScrollViewer>
 </Window>

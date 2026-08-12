@@ -12,17 +12,6 @@ public partial class ResultWindow : Window
     public ResultWindow()
     {
         InitializeComponent();
-
-        ResultTitleBar.PointerPressed += (s, e) =>
-        {
-            if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
-                BeginMoveDrag(e);
-        };
-
-        ResultCloseBtn.PointerEntered += (s, e) => ResultCloseBtn.Background =
-            new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#E81123"));
-        ResultCloseBtn.PointerExited += (s, e) => ResultCloseBtn.Background =
-            Avalonia.Media.Brushes.Transparent;
     }
 
     public ResultWindow(string resultText) : this()

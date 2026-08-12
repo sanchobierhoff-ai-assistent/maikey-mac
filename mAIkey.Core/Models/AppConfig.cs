@@ -23,8 +23,14 @@ public class AppConfig
     public bool HasShownDemoHotkey { get; set; } = false;
     public bool ShowAiIndicator { get; set; } = true;
     public bool SoundOnComplete { get; set; } = false;
-    public string InterfaceLanguage { get; set; } = "en";
-    public string Theme { get; set; } = "Dark";
+    public string InterfaceLanguage { get; set; } = "nl";
+    public string Theme { get; set; } = "Light";
+    // mAI Assistent
+    public bool AssistantEnabled { get; set; } = false;
+    public string? AssistantHotkey { get; set; } = "Ctrl + Alt + Space";
+    public bool ScreenshotEnabled { get; set; } = false;
+    public string? ScreenshotHotkey { get; set; } = "Ctrl + Shift + Space";
+    public bool HasSeenTour { get; set; } = false;
 }
 
 public class HotkeyConfig

@@ -1,36 +1,50 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Layout;
 using Avalonia.Media;
+using mAIkey.Core.Services;
 using Projektanker.Icons.Avalonia;
 
 namespace mAIkey.Desktop.Views;
 
 public partial class IntegrationsView : UserControl
 {
-    // type, naam, omschrijving, MDI-icoon, merkkleur
-    private static readonly (string Type, string Name, string Desc, string Icon, string Color)[] Supported =
+    // type, naam, omschrijving-KEY (via L.T), MDI-icoon, merkkleur
+    private static readonly (string Type, string Name, string DescKey, string Icon, string Color)[] Supported =
     {
-        ("jira",      "Jira",             "Maak tickets vanuit geselecteerde tekst.", "mdi-jira",                        "#2684FF"),
-        ("github",    "GitHub",           "Maak issues vanuit geselecteerde tekst.",  "mdi-github",                      "#8B949E"),
-        ("slack",     "Slack",            "Stuur berichten naar je kanalen.",         "mdi-slack",                       "#E01E5A"),
-        ("teams",     "Microsoft Teams",  "Stuur berichten naar Teams.",              "mdi-microsoft-teams",             "#6264A7"),
-        ("trello",    "Trello",           "Maak kaarten op je borden.",               "mdi-trello",                      "#0079BF"),
-        ("asana",     "Asana",            "Maak taken in Asana.",                     "mdi-checkbox-marked-circle",      "#F06A6A"),
-        ("todoist",   "Todoist",          "Maak taken in Todoist.",                   "mdi-checkbox-marked-circle-outline","#E44332"),
-        ("gmail",     "Gmail",            "Stel e-mails op en verstuur ze.",          "mdi-gmail",                       "#EA4335"),
-        ("gcalendar", "Google Agenda",    "Maak afspraken in je agenda.",             "mdi-calendar-month",              "#4285F4"),
-        ("gtasks",    "Google Taken",     "Maak taken in Google Tasks.",              "mdi-format-list-checks",          "#4285F4"),
-        ("zapier",    "Zapier / Make",    "Stuur data naar je automatiseringen.",     "mdi-lightning-bolt",              "#FF4A00"),
+        ("jira",      "Jira",             "Integrations_JiraDesc",     "mdi-jira",                          "#2684FF"),
+        ("github",    "GitHub",           "Integrations_GitHubDesc",   "mdi-github",                        "#8B949E"),
+        ("slack",     "Slack",            "Integrations_SlackDesc",    "mdi-slack",                         "#E01E5A"),
+        ("teams",     "Microsoft Teams",  "Integrations_TeamsDesc",    "mdi-microsoft-teams",               "#6264A7"),
+        ("trello",    "Trello",           "Integrations_TrelloDesc",   "mdi-trello",                        "#0079BF"),
+        ("asana",     "Asana",            "Integrations_AsanaDesc",    "mdi-checkbox-marked-circle",        "#F06A6A"),
+        ("todoist",   "Todoist",          "Integrations_TodoistDesc",  "mdi-checkbox-marked-circle-outline","#E44332"),
+        ("gmail",     "Gmail",            "Integrations_GmailDesc",    "mdi-gmail",                         "#EA4335"),
+        ("gcalendar", "Google Agenda",    "Integrations_CalendarDesc", "mdi-calendar-month",                "#4285F4"),
+        ("gtasks",    "Google Taken",     "Integrations_GTasksDesc",   "mdi-format-list-checks",            "#4285F4"),
+        ("zapier",    "Zapier / Make",    "Integrations_ZapierDesc",   "mdi-lightning-bolt",                "#FF4A00"),
     };
 
     public IntegrationsView()
     {
         InitializeComponent();
         Loaded += (_, _) => _ = LoadAsync();
+        L.Changed += OnLanguageChanged;
+        DetachedFromVisualTree += (_, _) => L.Changed -= OnLanguageChanged;
+    }
+
+    private void OnLanguageChanged() => _ = LoadAsync();
+
+    /// <summary>Thema-kleur ophalen (past zich aan donker/taupe aan).</summary>
+    private IBrush TB(string key)
+    {
+        if (this.TryFindResource(key, ActualThemeVariant, out var v) && v is IBrush b) return b;
+        if (Application.Current is { } app && app.TryFindResource(key, ActualThemeVariant, out var v2) && v2 is IBrush b2) return b2;
+        return Brushes.Gray;
     }
 
     private async Task LoadAsync()
@@ -69,7 +83,7 @@ public partial class IntegrationsView : UserControl
         };
     }
 
-    private Control BuildCard((string Type, string Name, string Desc, string Icon, string Color) m, mAIkey.Core.Models.Integration? integration)
+    private Control BuildCard((string Type, string Name, string DescKey, string Icon, string Color) m, mAIkey.Core.Models.Integration? integration)
     {
         bool isConnected = integration != null;
         var brand = new SolidColorBrush(Color.Parse(m.Color));
@@ -90,14 +104,14 @@ public partial class IntegrationsView : UserControl
             Width = 7, Height = 7, Margin = new Avalonia.Thickness(0, 0, 6, 0),
             VerticalAlignment = VerticalAlignment.Center
         };
-        if (isConnected) dot.Fill = new SolidColorBrush(Color.Parse("#10B981"));
-        else { dot.Stroke = new SolidColorBrush(Color.Parse("#5E5E66")); dot.StrokeThickness = 1.5; dot.Fill = Brushes.Transparent; }
+        if (isConnected) dot.Fill = TB("Success");
+        else { dot.Stroke = TB("Text3"); dot.StrokeThickness = 1.5; dot.Fill = Brushes.Transparent; }
 
         var statusText = new TextBlock
         {
-            Text = isConnected ? "Verbonden" : "Beschikbaar",
+            Text = L.T(isConnected ? "Integrations_Connected" : "Integrations_Available"),
             FontSize = 12, FontWeight = FontWeight.Medium, VerticalAlignment = VerticalAlignment.Center,
-            Foreground = new SolidColorBrush(Color.Parse(isConnected ? "#9A9AA3" : "#5E5E66"))
+            Foreground = isConnected ? TB("Text2") : TB("Text3")
         };
         var badge = new StackPanel { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Top };
         badge.Children.Add(dot);
@@ -110,7 +124,7 @@ public partial class IntegrationsView : UserControl
         header.Children.Add(badge);
 
         var name = new TextBlock { Text = m.Name, FontSize = 16, FontWeight = FontWeight.SemiBold, Margin = new Avalonia.Thickness(0, 0, 0, 4) };
-        var desc = new TextBlock { Text = m.Desc, FontSize = 13, TextWrapping = TextWrapping.Wrap, Height = 38 };
+        var desc = new TextBlock { Text = L.T(m.DescKey), FontSize = 13, TextWrapping = TextWrapping.Wrap, Height = 38 };
         desc.Classes.Add("muted");
 
         var stack = new StackPanel();
@@ -126,14 +140,14 @@ public partial class IntegrationsView : UserControl
             {
                 Text = detail, FontSize = 11.5, TextTrimming = TextTrimming.CharacterEllipsis,
                 Margin = new Avalonia.Thickness(0, 8, 0, 0),
-                Foreground = new SolidColorBrush(Color.Parse("#9A9AA3"))
+                Foreground = TB("Text2")
             };
             stack.Children.Add(d);
         }
 
         var btn = new Button
         {
-            Content = isConnected ? "Wijzigen" : "Verbinden",
+            Content = isConnected ? "Wijzigen" : L.T("Integrations_Connect"),
             Height = 32, FontSize = 12, VerticalAlignment = VerticalAlignment.Center
         };
         btn.Classes.Add(isConnected ? "ghost" : "accent");
@@ -147,7 +161,7 @@ public partial class IntegrationsView : UserControl
         actions.Children.Add(btn);
         if (isConnected)
         {
-            var disc = new Button { Content = "Ontkoppelen", Height = 32, FontSize = 12, VerticalAlignment = VerticalAlignment.Center };
+            var disc = new Button { Content = L.T("Integrations_Disconnect"), Height = 32, FontSize = 12, VerticalAlignment = VerticalAlignment.Center };
             disc.Classes.Add("danger");
             disc.Click += async (_, _) =>
             {

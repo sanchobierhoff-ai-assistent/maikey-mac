@@ -1,214 +1,359 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
-             x:Class="mAIkey.Desktop.Views.DashboardView">
+             xmlns:loc="using:mAIkey.Desktop"
+             x:Class="mAIkey.Desktop.Views.DashboardView"
+             Background="{DynamicResource Bg1}">
 
   <ScrollViewer VerticalScrollBarVisibility="Auto">
-    <StackPanel Margin="28,8,28,28" Spacing="24">
+    <StackPanel Margin="32,28,32,48">
 
-      <!-- ═══ HEADER ═══ -->
-      <Grid Margin="0,0,0,4">
-        <TextBlock Text="Dashboard" FontSize="15" FontWeight="Medium"
-                   Foreground="{DynamicResource Text2}"
-                   VerticalAlignment="Center" HorizontalAlignment="Left"/>
-        <Button Classes="accent" Content="+ Nieuwe mAIkey" Name="NewHotkeyBtn"
-                HorizontalAlignment="Right" Padding="18,9" FontSize="12"/>
-      </Grid>
-
-      <!-- ═══ STAT CARDS ═══ -->
-      <Grid ColumnDefinitions="*,*,*,*" Margin="0,4,0,0">
-        <Grid.Styles>
-          <Style Selector="Border.stat-card">
-            <Setter Property="CornerRadius" Value="14"/>
-            <Setter Property="Padding" Value="16"/>
-            <Setter Property="Margin" Value="0,0,12,0"/>
-          </Style>
-        </Grid.Styles>
-
-        <!-- Hotkeys -->
-        <Border Grid.Column="0" Classes="stat-card"
-                Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource Border1}" BorderThickness="1">
-          <StackPanel Spacing="6">
-            <StackPanel Orientation="Horizontal" Spacing="6">
-              <Border Background="#1E3A5F" CornerRadius="6" Padding="5">
-                <i:Icon Value="mdi-lightning-bolt" FontSize="12" Foreground="#60A5FA"/>
-              </Border>
-              <TextBlock Text="mAIkeys" FontSize="11" Foreground="{DynamicResource Text2}"
-                         VerticalAlignment="Center"/>
-            </StackPanel>
-            <TextBlock Name="HotkeyCountText" Text="0" FontSize="28" FontWeight="Bold"
-                       Foreground="#60A5FA"/>
-            <TextBlock Text="actief" FontSize="11" Foreground="{DynamicResource Text3}"/>
+      <!-- ═══════════════ PAGINA-KOP ═══════════════ -->
+      <DockPanel LastChildFill="False" Margin="0,0,0,20">
+        <StackPanel DockPanel.Dock="Left">
+          <TextBlock loc:Tr.Key="Dashboard_Eyebrow" Classes="eyebrow" Margin="0,0,0,6"/>
+          <TextBlock loc:Tr.Key="Dashboard_Title" FontSize="28" FontWeight="SemiBold"
+                     Foreground="{DynamicResource Text1}"/>
+        </StackPanel>
+        <Button Name="NewHotkeyBtn" DockPanel.Dock="Right" Classes="accent"
+                VerticalAlignment="Bottom" Padding="14,8" FontSize="13"
+                Click="AddHotkey_Click">
+          <StackPanel Orientation="Horizontal" Spacing="6">
+            <i:Icon Value="mdi-plus" FontSize="14" VerticalAlignment="Center"/>
+            <TextBlock loc:Tr.Key="Dashboard_NewHotkey" VerticalAlignment="Center"/>
           </StackPanel>
-        </Border>
+        </Button>
+      </DockPanel>
 
-        <!-- Vandaag -->
-        <Border Grid.Column="1" Classes="stat-card"
-                Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource Border1}" BorderThickness="1">
-          <StackPanel Spacing="6">
-            <StackPanel Orientation="Horizontal" Spacing="6">
-              <Border Background="#1E3F3A" CornerRadius="6" Padding="5">
-                <i:Icon Value="mdi-chart-line" FontSize="12" Foreground="#10B981"/>
-              </Border>
-              <TextBlock Text="Vandaag" FontSize="11" Foreground="{DynamicResource Text2}"
-                         VerticalAlignment="Center"/>
-            </StackPanel>
-            <TextBlock Name="TodayCountText" Text="0" FontSize="28" FontWeight="Bold"
-                       Foreground="#10B981"/>
-            <TextBlock Text="verzoeken" FontSize="11" Foreground="{DynamicResource Text3}"/>
+      <!-- ═══════════════ RONDLEIDINGEN ═══════════════ -->
+      <Border Name="OnboardingHero" IsVisible="True"
+              CornerRadius="14" BorderThickness="1"
+              BorderBrush="{DynamicResource Border1}"
+              Background="{DynamicResource Bg2}"
+              Margin="0,0,0,16">
+        <StackPanel Margin="20,18,20,20">
+          <StackPanel Margin="0,0,0,16">
+            <TextBlock loc:Tr.Key="Dashboard_ToursHeader" FontSize="11" FontWeight="SemiBold"
+                       Foreground="{DynamicResource Accent}" Margin="0,0,0,5"/>
+            <TextBlock loc:Tr.Key="Dashboard_ToursTitle" FontSize="16" FontWeight="SemiBold"
+                       Foreground="{DynamicResource Text1}"/>
+            <TextBlock loc:Tr.Key="Dashboard_ToursSub"
+                       FontSize="12" Foreground="{DynamicResource Text3}" Margin="0,3,0,0"/>
           </StackPanel>
-        </Border>
 
-        <!-- Stijlen -->
-        <Border Grid.Column="2" Classes="stat-card"
-                Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource Border1}" BorderThickness="1">
-          <StackPanel Spacing="6">
-            <StackPanel Orientation="Horizontal" Spacing="6">
-              <Border Background="#2D1E5F" CornerRadius="6" Padding="5">
-                <i:Icon Value="mdi-feather" FontSize="12" Foreground="#A78BFA"/>
-              </Border>
-              <TextBlock Text="Stijlen" FontSize="11" Foreground="{DynamicResource Text2}"
-                         VerticalAlignment="Center"/>
-            </StackPanel>
-            <TextBlock Name="StyleCountText" Text="0" FontSize="28" FontWeight="Bold"
-                       Foreground="#A78BFA"/>
-            <TextBlock Text="opgeslagen" FontSize="11" Foreground="{DynamicResource Text3}"/>
-          </StackPanel>
-        </Border>
-
-        <!-- Abonnement -->
-        <Border Grid.Column="3" Classes="stat-card"
-                Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource Border1}" BorderThickness="1"
-                Margin="0">
-          <StackPanel Spacing="6">
-            <StackPanel Orientation="Horizontal" Spacing="6">
-              <Border Background="#3F3A1E" CornerRadius="6" Padding="5">
-                <i:Icon Value="mdi-crown-outline" FontSize="12" Foreground="#F5A524"/>
-              </Border>
-              <TextBlock Text="Abonnement" FontSize="11" Foreground="{DynamicResource Text2}"
-                         VerticalAlignment="Center"/>
-            </StackPanel>
-            <TextBlock Name="TierText" Text="Free" FontSize="28" FontWeight="Bold"
-                       Foreground="#F5A524"/>
-            <TextBlock Name="UsageText" Text="0 / 0 verzoeken" FontSize="11"
-                       Foreground="{DynamicResource Text3}"/>
-          </StackPanel>
-        </Border>
-      </Grid>
-
-      <!-- ═══ MAIN CONTENT (2 columns) ═══ -->
-      <Grid ColumnDefinitions="*,280">
-
-        <!-- Left: Hotkeys list -->
-        <Border Grid.Column="0" Classes="card" Margin="0,0,16,0">
-          <DockPanel>
-            <StackPanel DockPanel.Dock="Top" Spacing="12" Margin="0,0,0,12">
-              <TextBlock Text="Jouw mAIkeys" FontSize="13" FontWeight="SemiBold"
-                         Foreground="{DynamicResource Text1}"/>
-              <Separator Background="{DynamicResource Border1}" Height="1" Margin="0"/>
-            </StackPanel>
-
-            <!-- Hotkey items -->
-            <StackPanel Name="HotkeyListPanel" Spacing="2">
-              <!-- Empty state -->
-              <Border Name="EmptyHotkeyState" Padding="24"
-                      HorizontalAlignment="Center">
-                <StackPanel Spacing="12" HorizontalAlignment="Center">
-                  <i:Icon Value="mdi-lightning-bolt" FontSize="32" HorizontalAlignment="Center"
-                          Foreground="{DynamicResource Text3}"/>
-                  <TextBlock Text="Nog geen hotkeys" FontSize="14"
-                             Foreground="{DynamicResource Text2}" HorizontalAlignment="Center"/>
-                  <TextBlock Text="Maak je eerste AI-sneltoets aan"
-                             FontSize="12" Foreground="{DynamicResource Text3}"
-                             HorizontalAlignment="Center"/>
-                  <Button Classes="accent" Content="+ Eerste hotkey maken"
-                          HorizontalAlignment="Center" Padding="16,8"
-                          FontSize="12" Name="FirstHotkeyBtn"/>
+          <Grid ColumnDefinitions="*,10,*" RowDefinitions="Auto,8,Auto">
+            <Border Grid.Column="0" Grid.Row="0" Classes="step" Tag="hotkey"
+                    Cursor="Hand" PointerReleased="StepTile_Click">
+              <Grid ColumnDefinitions="26,10,*">
+                <Border Grid.Column="0" Width="26" Height="26" CornerRadius="7"
+                        Background="{DynamicResource Bg4}" VerticalAlignment="Center">
+                  <i:Icon Value="mdi-lightning-bolt" FontSize="13" Foreground="{DynamicResource Text3}"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                  <TextBlock loc:Tr.Key="Dashboard_Step1_Title" FontSize="12" FontWeight="SemiBold"
+                             Foreground="{DynamicResource Text1}" TextWrapping="Wrap"/>
+                  <TextBlock loc:Tr.Key="Dashboard_Step1_Sub" FontSize="11"
+                             Foreground="{DynamicResource Text3}" TextWrapping="Wrap" Margin="0,2,0,0"/>
                 </StackPanel>
-              </Border>
+              </Grid>
+            </Border>
+            <Border Grid.Column="2" Grid.Row="0" Classes="step" Tag="style"
+                    Cursor="Hand" PointerReleased="StepTile_Click">
+              <Grid ColumnDefinitions="26,10,*">
+                <Border Grid.Column="0" Width="26" Height="26" CornerRadius="7"
+                        Background="{DynamicResource Bg4}" VerticalAlignment="Center">
+                  <i:Icon Value="mdi-feather" FontSize="13" Foreground="{DynamicResource Text3}"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                  <TextBlock loc:Tr.Key="Dashboard_Step2_Title" FontSize="12" FontWeight="SemiBold"
+                             Foreground="{DynamicResource Text1}" TextWrapping="Wrap"/>
+                  <TextBlock loc:Tr.Key="Dashboard_Step2_Sub" FontSize="11"
+                             Foreground="{DynamicResource Text3}" TextWrapping="Wrap" Margin="0,2,0,0"/>
+                </StackPanel>
+              </Grid>
+            </Border>
+            <Border Grid.Column="0" Grid.Row="2" Classes="step" Tag="template"
+                    Cursor="Hand" PointerReleased="StepTile_Click">
+              <Grid ColumnDefinitions="26,10,*">
+                <Border Grid.Column="0" Width="26" Height="26" CornerRadius="7"
+                        Background="{DynamicResource Bg4}" VerticalAlignment="Center">
+                  <i:Icon Value="mdi-file-document-edit" FontSize="13" Foreground="{DynamicResource Text3}"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                  <TextBlock loc:Tr.Key="Dashboard_Step3_Title" FontSize="12" FontWeight="SemiBold"
+                             Foreground="{DynamicResource Text1}" TextWrapping="Wrap"/>
+                  <TextBlock loc:Tr.Key="Dashboard_Step3_Sub" FontSize="11"
+                             Foreground="{DynamicResource Text3}" TextWrapping="Wrap" Margin="0,2,0,0"/>
+                </StackPanel>
+              </Grid>
+            </Border>
+            <Border Grid.Column="2" Grid.Row="2" Classes="step" Tag="pin"
+                    Cursor="Hand" PointerReleased="StepTile_Click">
+              <Grid ColumnDefinitions="26,10,*">
+                <Border Grid.Column="0" Width="26" Height="26" CornerRadius="7"
+                        Background="{DynamicResource Bg4}" VerticalAlignment="Center">
+                  <i:Icon Value="mdi-pin" FontSize="13" Foreground="{DynamicResource Text3}"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                  <TextBlock loc:Tr.Key="Dashboard_Step4_Title" FontSize="12" FontWeight="SemiBold"
+                             Foreground="{DynamicResource Text1}" TextWrapping="Wrap"/>
+                  <TextBlock loc:Tr.Key="Dashboard_Step4_Sub" FontSize="11"
+                             Foreground="{DynamicResource Text3}" TextWrapping="Wrap" Margin="0,2,0,0"/>
+                </StackPanel>
+              </Grid>
+            </Border>
+          </Grid>
+        </StackPanel>
+      </Border>
+
+      <!-- ═══════════════ STAT-BLOKKEN ═══════════════ -->
+      <Grid ColumnDefinitions="*,12,*,12,*,12,*" Margin="0,0,0,16">
+
+        <Border Grid.Column="0" CornerRadius="14" BorderThickness="1"
+                BorderBrush="{DynamicResource Border1}" Background="{DynamicResource Bg2}">
+          <Panel>
+            <Border CornerRadius="14" IsHitTestVisible="False">
+              <Border.Background>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                  <GradientStop Color="#1260A5FA" Offset="0"/>
+                  <GradientStop Color="#0A60A5FA" Offset="1"/>
+                </LinearGradientBrush>
+              </Border.Background>
+            </Border>
+            <StackPanel Margin="18,16">
+              <DockPanel LastChildFill="False" Margin="0,0,0,10">
+                <TextBlock DockPanel.Dock="Left" loc:Tr.Key="Dashboard_Hotkeys" FontSize="11" FontWeight="SemiBold"
+                           Foreground="{DynamicResource Text3}" VerticalAlignment="Center"/>
+                <Border DockPanel.Dock="Right" Width="22" Height="22"
+                        Background="#2660A5FA" BorderBrush="#5560A5FA" BorderThickness="1" CornerRadius="6">
+                  <i:Icon Value="mdi-lightning-bolt" FontSize="11" Foreground="#60A5FA"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+              </DockPanel>
+              <TextBlock Name="HotkeyCountText" Text="—" FontSize="24" FontWeight="SemiBold"
+                         Foreground="{DynamicResource Text1}" Margin="0,0,0,4"/>
+              <TextBlock loc:Tr.Key="Dashboard_Active" FontSize="11" Foreground="{DynamicResource Text3}"/>
             </StackPanel>
-          </DockPanel>
+          </Panel>
         </Border>
 
-        <!-- Right: Plan + Tips -->
-        <StackPanel Grid.Column="1" Spacing="12">
+        <Border Grid.Column="2" CornerRadius="14" BorderThickness="1"
+                BorderBrush="{DynamicResource Border1}" Background="{DynamicResource Bg2}">
+          <Panel>
+            <Border CornerRadius="14" IsHitTestVisible="False">
+              <Border.Background>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                  <GradientStop Color="#1210B981" Offset="0"/>
+                  <GradientStop Color="#0A10B981" Offset="1"/>
+                </LinearGradientBrush>
+              </Border.Background>
+            </Border>
+            <StackPanel Margin="18,16">
+              <DockPanel LastChildFill="False" Margin="0,0,0,10">
+                <TextBlock DockPanel.Dock="Left" loc:Tr.Key="Dashboard_Today" FontSize="11" FontWeight="SemiBold"
+                           Foreground="{DynamicResource Text3}" VerticalAlignment="Center"/>
+                <Border DockPanel.Dock="Right" Width="22" Height="22"
+                        Background="#2610B981" BorderBrush="#5510B981" BorderThickness="1" CornerRadius="6">
+                  <i:Icon Value="mdi-chart-line" FontSize="11" Foreground="#10B981"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+              </DockPanel>
+              <TextBlock Name="TodayCountText" Text="—" FontSize="24" FontWeight="SemiBold"
+                         Foreground="{DynamicResource Text1}" Margin="0,0,0,4"/>
+              <TextBlock loc:Tr.Key="Dashboard_Requests" FontSize="11" Foreground="{DynamicResource Text3}"/>
+            </StackPanel>
+          </Panel>
+        </Border>
 
-          <!-- Usage warning (hidden by default) -->
-          <Border Name="UsageWarningCard" IsVisible="False"
-                  Background="#1F1A10" BorderBrush="#F5A52459"
-                  BorderThickness="1" CornerRadius="14" Padding="16">
-            <StackPanel Spacing="8">
-              <StackPanel Orientation="Horizontal" Spacing="6">
-                <i:Icon Value="mdi-alert" FontSize="12" Foreground="#F5A524" VerticalAlignment="Center"/>
-                <TextBlock Text="Limiet bijna bereikt" FontSize="12"
-                           FontWeight="SemiBold" Foreground="#F5A524" VerticalAlignment="Center"/>
+        <Border Grid.Column="4" CornerRadius="14" BorderThickness="1"
+                BorderBrush="{DynamicResource Border1}" Background="{DynamicResource Bg2}">
+          <Panel>
+            <Border CornerRadius="14" IsHitTestVisible="False">
+              <Border.Background>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                  <GradientStop Color="#12A78BFA" Offset="0"/>
+                  <GradientStop Color="#0AA78BFA" Offset="1"/>
+                </LinearGradientBrush>
+              </Border.Background>
+            </Border>
+            <StackPanel Margin="18,16">
+              <DockPanel LastChildFill="False" Margin="0,0,0,10">
+                <TextBlock DockPanel.Dock="Left" loc:Tr.Key="Dashboard_Styles" FontSize="11" FontWeight="SemiBold"
+                           Foreground="{DynamicResource Text3}" VerticalAlignment="Center"/>
+                <Border DockPanel.Dock="Right" Width="22" Height="22"
+                        Background="#26A78BFA" BorderBrush="#55A78BFA" BorderThickness="1" CornerRadius="6">
+                  <i:Icon Value="mdi-feather" FontSize="11" Foreground="#A78BFA"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+              </DockPanel>
+              <TextBlock Name="StyleCountText" Text="—" FontSize="24" FontWeight="SemiBold"
+                         Foreground="{DynamicResource Text1}" Margin="0,0,0,4"/>
+              <TextBlock loc:Tr.Key="Dashboard_StylesLabel" FontSize="11" Foreground="{DynamicResource Text3}"/>
+            </StackPanel>
+          </Panel>
+        </Border>
+
+        <Border Grid.Column="6" CornerRadius="14" BorderThickness="1"
+                BorderBrush="{DynamicResource Border1}" Background="{DynamicResource Bg2}">
+          <Panel>
+            <Border CornerRadius="14" IsHitTestVisible="False">
+              <Border.Background>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                  <GradientStop Color="#12F5A524" Offset="0"/>
+                  <GradientStop Color="#0AF5A524" Offset="1"/>
+                </LinearGradientBrush>
+              </Border.Background>
+            </Border>
+            <StackPanel Margin="18,16">
+              <DockPanel LastChildFill="False" Margin="0,0,0,10">
+                <TextBlock DockPanel.Dock="Left" loc:Tr.Key="Dashboard_Sub" FontSize="11" FontWeight="SemiBold"
+                           Foreground="{DynamicResource Text3}" VerticalAlignment="Center"/>
+                <Border DockPanel.Dock="Right" Width="22" Height="22"
+                        Background="#2BF5A524" BorderBrush="#55F5A524" BorderThickness="1" CornerRadius="6">
+                  <i:Icon Value="mdi-crown-outline" FontSize="11" Foreground="{DynamicResource Accent}"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+              </DockPanel>
+              <TextBlock Name="TierText" Text="—" FontSize="24" FontWeight="SemiBold"
+                         Foreground="{DynamicResource Text1}" Margin="0,0,0,4"/>
+            </StackPanel>
+          </Panel>
+        </Border>
+      </Grid>
+
+      <!-- ═══════════════ HOOFDGRID ═══════════════ -->
+      <Grid ColumnDefinitions="*,16,280">
+
+        <!-- LINKS: Hotkeys-kaart -->
+        <Border Grid.Column="0" CornerRadius="14" BorderThickness="1"
+                BorderBrush="{DynamicResource Border1}" Background="{DynamicResource Bg2}">
+          <StackPanel>
+            <Border Padding="18,14">
+              <DockPanel LastChildFill="False">
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Spacing="8">
+                  <i:Icon Value="mdi-lightning-bolt" FontSize="14" Foreground="{DynamicResource Accent}"
+                          VerticalAlignment="Center"/>
+                  <TextBlock loc:Tr.Key="Dashboard_YourHotkeys" FontSize="13" FontWeight="SemiBold"
+                             Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
+                </StackPanel>
+              </DockPanel>
+            </Border>
+            <Border Height="1" Background="{DynamicResource Border1}"/>
+
+            <StackPanel Name="HotkeyListPanel" Spacing="0" Margin="0,4">
+              <StackPanel Name="EmptyHotkeyState" HorizontalAlignment="Center" Margin="0,44,0,44">
+                <i:Icon Value="mdi-lightning-bolt" FontSize="36" Foreground="{DynamicResource Text3}"
+                        HorizontalAlignment="Center"/>
+                <TextBlock loc:Tr.Key="Dashboard_NoHotkeys" FontSize="14" FontWeight="SemiBold"
+                           Foreground="{DynamicResource Text2}" HorizontalAlignment="Center"
+                           Margin="0,10,0,4"/>
+                <TextBlock loc:Tr.Key="Dashboard_NoHotkeysSub" FontSize="12"
+                           Foreground="{DynamicResource Text3}" HorizontalAlignment="Center"
+                           Margin="0,0,0,16"/>
+                <Button Name="FirstHotkeyBtn" Classes="ghost" loc:Tr.Key="Dashboard_EmptyStateBtn"
+                        Padding="16,8" FontSize="13" HorizontalAlignment="Center"
+                        Click="AddHotkey_Click"/>
               </StackPanel>
-              <TextBlock Name="UsageWarningText"
-                         Text="Je hebt 80% van je maandlimiet gebruikt."
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+        <!-- RECHTS: Plan-waarschuwing + Nieuws & tips -->
+        <StackPanel Grid.Column="2" Spacing="12">
+
+          <Border Name="UsageWarningCard" IsVisible="False"
+                  CornerRadius="14" BorderThickness="1" Padding="16,14"
+                  BorderBrush="#59F5A524" Background="#12F5A524">
+            <StackPanel Spacing="8">
+              <DockPanel LastChildFill="False">
+                <TextBlock DockPanel.Dock="Left" loc:Tr.Key="Dashboard_WarnAlmost" FontSize="12" FontWeight="SemiBold"
+                           Foreground="{DynamicResource Accent}"/>
+                <TextBlock DockPanel.Dock="Right" Text="≥80%" FontSize="12" FontWeight="SemiBold"
+                           FontFamily="{DynamicResource FontMono}" Foreground="{DynamicResource Accent}"/>
+              </DockPanel>
+              <ProgressBar Name="UsagePlanBar" Minimum="0" Maximum="100" Value="80" Height="4"/>
+              <TextBlock Name="UsageWarningText" Text="Je hebt 80% van je maandlimiet gebruikt."
                          FontSize="11" Foreground="{DynamicResource Text2}" TextWrapping="Wrap"/>
-              <Button Classes="accent" Content="Upgrade plan"
-                      FontSize="11" Padding="12,6" HorizontalAlignment="Left"/>
+              <Button Classes="accent" loc:Tr.Key="Dashboard_UpgradePlanBtn" FontSize="12" Padding="10,6"
+                      HorizontalAlignment="Stretch"/>
             </StackPanel>
           </Border>
 
-          <!-- Nieuws & tips -->
-          <Border Classes="card">
-            <StackPanel Spacing="14">
-              <StackPanel Orientation="Horizontal" Spacing="8">
-                <i:Icon Value="mdi-bullhorn" FontSize="14" Foreground="{DynamicResource Accent}" VerticalAlignment="Center"/>
-                <TextBlock Text="Nieuws &amp; tips" FontSize="13" FontWeight="SemiBold"
-                           Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
+          <Border CornerRadius="14" BorderThickness="1"
+                  BorderBrush="{DynamicResource Border1}" Background="{DynamicResource Bg2}">
+            <StackPanel>
+              <Border Padding="18,14">
+                <StackPanel Orientation="Horizontal" Spacing="7">
+                  <i:Icon Value="mdi-bullhorn" FontSize="13" Foreground="{DynamicResource Accent}"
+                          VerticalAlignment="Center"/>
+                  <TextBlock loc:Tr.Key="Dashboard_News" FontSize="13" FontWeight="SemiBold"
+                             Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
+                </StackPanel>
+              </Border>
+              <Border Height="1" Background="{DynamicResource Border1}"/>
+
+              <StackPanel>
+                <StackPanel Margin="18,12" Spacing="3">
+                  <DockPanel LastChildFill="False" Margin="0,0,0,2">
+                    <Border DockPanel.Dock="Left" Background="#26F5A524" BorderBrush="#55F5A524"
+                            BorderThickness="1" CornerRadius="4" Padding="6,1">
+                      <TextBlock loc:Tr.Key="News_Badge1" FontSize="10" FontWeight="SemiBold" Foreground="#F5A524"/>
+                    </Border>
+                    <TextBlock DockPanel.Dock="Right" loc:Tr.Key="News_Date1" FontSize="10"
+                               FontFamily="{DynamicResource FontMono}" Foreground="{DynamicResource Text3}"
+                               VerticalAlignment="Center"/>
+                  </DockPanel>
+                  <TextBlock loc:Tr.Key="News_Title1" FontSize="12" FontWeight="SemiBold"
+                             Foreground="{DynamicResource Text1}"/>
+                  <TextBlock loc:Tr.Key="News_Body1" FontSize="11"
+                             Foreground="{DynamicResource Text3}" TextWrapping="Wrap" LineHeight="16"/>
+                </StackPanel>
+                <Border Height="1" Background="{DynamicResource Border1}"/>
               </StackPanel>
 
-              <StackPanel Spacing="4">
-                <Grid>
-                  <Border Background="#F5A52422" CornerRadius="4" Padding="5,2" HorizontalAlignment="Left">
-                    <TextBlock Text="NIEUW" FontSize="9" FontWeight="Bold" Foreground="#F5A524"/>
-                  </Border>
-                  <TextBlock Text="2 maanden geleden" FontSize="10" Foreground="{DynamicResource Text3}"
-                             HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                </Grid>
-                <TextBlock Text="Multimodal: stuur afbeeldingen mee" FontSize="12.5" FontWeight="SemiBold"
-                           Foreground="{DynamicResource Text1}" Margin="0,2,0,0"/>
-                <TextBlock Text="Selecteer tekst + screenshot, mAIkey leest beide."
-                           FontSize="11" Foreground="{DynamicResource Text2}" TextWrapping="Wrap"/>
+              <StackPanel>
+                <StackPanel Margin="18,12" Spacing="3">
+                  <DockPanel LastChildFill="False" Margin="0,0,0,2">
+                    <Border DockPanel.Dock="Left" Background="#26F5A524" BorderBrush="#55F5A524"
+                            BorderThickness="1" CornerRadius="4" Padding="6,1">
+                      <TextBlock loc:Tr.Key="News_Badge2" FontSize="10" FontWeight="SemiBold" Foreground="#F5A524"/>
+                    </Border>
+                    <TextBlock DockPanel.Dock="Right" loc:Tr.Key="News_Date2" FontSize="10"
+                               FontFamily="{DynamicResource FontMono}" Foreground="{DynamicResource Text3}"
+                               VerticalAlignment="Center"/>
+                  </DockPanel>
+                  <TextBlock loc:Tr.Key="News_Title2" FontSize="12" FontWeight="SemiBold"
+                             Foreground="{DynamicResource Text1}"/>
+                  <TextBlock loc:Tr.Key="News_Body2" FontSize="11"
+                             Foreground="{DynamicResource Text3}" TextWrapping="Wrap" LineHeight="16"/>
+                </StackPanel>
+                <Border Height="1" Background="{DynamicResource Border1}"/>
               </StackPanel>
 
-              <Separator Background="{DynamicResource Border1}" Height="1" Margin="0"/>
-
-              <StackPanel Spacing="4">
-                <Grid>
-                  <Border Background="#F5A52422" CornerRadius="4" Padding="5,2" HorizontalAlignment="Left">
-                    <TextBlock Text="TIP" FontSize="9" FontWeight="Bold" Foreground="#F5A524"/>
+              <StackPanel Margin="18,12" Spacing="3">
+                <DockPanel LastChildFill="False" Margin="0,0,0,2">
+                  <Border DockPanel.Dock="Left" Background="#2610B981" BorderBrush="#5510B981"
+                          BorderThickness="1" CornerRadius="4" Padding="6,1">
+                    <TextBlock loc:Tr.Key="News_Badge3" FontSize="10" FontWeight="SemiBold" Foreground="#10B981"/>
                   </Border>
-                  <TextBlock Text="3 maanden geleden" FontSize="10" Foreground="{DynamicResource Text3}"
-                             HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                </Grid>
-                <TextBlock Text="Sneller wisselen tussen mAIkeys" FontSize="12.5" FontWeight="SemiBold"
-                           Foreground="{DynamicResource Text1}" Margin="0,2,0,0"/>
-                <TextBlock Text="Gebruik Ctrl+Shift+Space om te zoeken zonder muis."
-                           FontSize="11" Foreground="{DynamicResource Text2}" TextWrapping="Wrap"/>
-              </StackPanel>
-
-              <Separator Background="{DynamicResource Border1}" Height="1" Margin="0"/>
-
-              <StackPanel Spacing="4">
-                <Grid>
-                  <Border Background="#10B98122" CornerRadius="4" Padding="5,2" HorizontalAlignment="Left">
-                    <TextBlock Text="UPDATE" FontSize="9" FontWeight="Bold" Foreground="#10B981"/>
-                  </Border>
-                  <TextBlock Text="3 maanden geleden" FontSize="10" Foreground="{DynamicResource Text3}"
-                             HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                </Grid>
-                <TextBlock Text="GPT-4o nu sneller in alle plannen" FontSize="12.5" FontWeight="SemiBold"
-                           Foreground="{DynamicResource Text1}" Margin="0,2,0,0"/>
-                <TextBlock Text="Responstijden gehalveerd voor korte teksten."
-                           FontSize="11" Foreground="{DynamicResource Text2}" TextWrapping="Wrap"/>
+                  <TextBlock DockPanel.Dock="Right" loc:Tr.Key="News_Date3" FontSize="10"
+                             FontFamily="{DynamicResource FontMono}" Foreground="{DynamicResource Text3}"
+                             VerticalAlignment="Center"/>
+                </DockPanel>
+                <TextBlock loc:Tr.Key="News_Title3" FontSize="12" FontWeight="SemiBold"
+                           Foreground="{DynamicResource Text1}"/>
+                <TextBlock loc:Tr.Key="News_Body3" FontSize="11"
+                           Foreground="{DynamicResource Text3}" TextWrapping="Wrap" LineHeight="16"/>
               </StackPanel>
             </StackPanel>
           </Border>
         </StackPanel>
       </Grid>
+
     </StackPanel>
   </ScrollViewer>
 </UserControl>

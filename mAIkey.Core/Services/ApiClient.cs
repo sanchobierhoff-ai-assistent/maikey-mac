@@ -488,6 +488,51 @@ public class ApiClient
         return await PostAsync<GenerateStyleProfileResponse>("/ai/generate-style-profile",
             new { examples, usageContext });
     }
+
+    // ============================================
+    // mAI ASSISTENT — geheugen + achtergrondprofiel
+    // ============================================
+
+    public async Task<MemoryListResponse> GetMemoryAsync()
+        => await GetAsync<MemoryListResponse>("/memory");
+
+    public async Task<ApiResponse> AddMemoryAsync(string content, string category = "general")
+        => await PostAsync<ApiResponse>("/memory", new { content, category });
+
+    public async Task<ApiResponse> DeleteMemoryAsync(string id)
+    {
+        try
+        {
+            var resp = await _httpClient.DeleteAsync($"/memory/{id}");
+            return new ApiResponse { Success = resp.IsSuccessStatusCode };
+        }
+        catch
+        {
+            return new ApiResponse { Success = false };
+        }
+    }
+
+    public async Task<AssistantProfileResponse> GetAssistantProfileAsync()
+        => await GetAsync<AssistantProfileResponse>("/assistant/profile");
+
+    public async Task<ApiResponse> SaveAssistantProfileAsync(string? company, string? role, string? background)
+        => await PutAsync<ApiResponse>("/assistant/profile", new { company, role, background });
+
+    // ============================================
+    // AI-hulp — conversationele hotkey-builder / prompt-optimizer
+    // ============================================
+
+    public async Task<OptimizePromptResponse> OptimizePromptAsync(
+        System.Collections.Generic.List<AiChatMessage> conversationHistory,
+        string userMessage, object currentConfig, string lang)
+        => await PostAsync<OptimizePromptResponse>("/ai/optimize-prompt",
+            new { conversationHistory, userMessage, currentConfig, lang });
+
+    public async Task<OptimizePromptResponse> BuildHotkeyAsync(
+        System.Collections.Generic.List<AiChatMessage> conversationHistory,
+        string userMessage, string lang)
+        => await PostAsync<OptimizePromptResponse>("/ai/build-hotkey",
+            new { conversationHistory, userMessage, lang });
 }
 
 public class GenerateStyleProfileResponse : ApiResponse

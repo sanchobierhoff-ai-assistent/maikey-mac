@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -21,8 +22,12 @@ public partial class DashboardView : UserControl
     }
 
     /// <summary>Haalt een thema-kleur op (past zich aan donker/licht aan).</summary>
-    private IBrush TB(string key) =>
-        this.TryFindResource(key, out var v) && v is IBrush b ? b : Brushes.Transparent;
+    private IBrush TB(string key)
+    {
+        if (this.TryFindResource(key, ActualThemeVariant, out var v) && v is IBrush b) return b;
+        if (Application.Current is { } app && app.TryFindResource(key, ActualThemeVariant, out var v2) && v2 is IBrush b2) return b2;
+        return Brushes.Gray;
+    }
 
     private async void DashboardView_Loaded(object? sender, RoutedEventArgs e)
     {
@@ -51,7 +56,6 @@ public partial class DashboardView : UserControl
             {
                 TierText.Text = CapitalizeFirst(status.Tier ?? "free");
                 TodayCountText.Text = status.DailyUsed.ToString();
-                UsageText.Text = $"{status.RequestsUsed} / {status.MaxMonthlyRequests} verzoeken";
 
                 // Show warning at 80%
                 if (status.MaxMonthlyRequests > 0)
@@ -59,7 +63,10 @@ public partial class DashboardView : UserControl
                     var pct = (double)status.RequestsUsed / status.MaxMonthlyRequests;
                     UsageWarningCard.IsVisible = pct >= 0.8;
                     if (pct >= 0.8)
+                    {
                         UsageWarningText.Text = $"Je hebt {(int)(pct * 100)}% van je maandlimiet gebruikt.";
+                        UsagePlanBar.Value = Math.Min(100, pct * 100);
+                    }
                 }
             }
         }
@@ -204,4 +211,24 @@ public partial class DashboardView : UserControl
 
     private static string CapitalizeFirst(string s) =>
         string.IsNullOrEmpty(s) ? s : char.ToUpper(s[0]) + s[1..];
+
+    /// <summary>Navigeer naar de hotkey-editor (zoals de Windows-versie).</summary>
+    private void AddHotkey_Click(object? sender, RoutedEventArgs e)
+    {
+        (TopLevel.GetTopLevel(this) as MainWindow)?.ShowHotkeyEditor();
+    }
+
+    /// <summary>Start de bijbehorende rondleiding vanuit een tegel op het dashboard.</summary>
+    private void StepTile_Click(object? sender, Avalonia.Input.PointerReleasedEventArgs e)
+    {
+        var tag = (sender as Control)?.Tag as string;
+        if (TopLevel.GetTopLevel(this) is not MainWindow mw || tag == null) return;
+        switch (tag)
+        {
+            case "hotkey": mw.StartHotkeyTour(); break;
+            case "style": mw.StartStyleTour(); break;
+            case "template": mw.StartTemplateTour(); break;
+            case "pin": mw.StartPinTour(); break;
+        }
+    }
 }

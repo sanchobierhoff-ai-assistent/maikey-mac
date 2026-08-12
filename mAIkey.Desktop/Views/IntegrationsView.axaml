@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="using:mAIkey.Desktop"
              x:Class="mAIkey.Desktop.Views.IntegrationsView"
              Background="{DynamicResource Bg1}">
 
@@ -8,16 +9,15 @@
 
       <Grid Margin="0,0,0,24">
         <StackPanel Spacing="4" HorizontalAlignment="Left">
-          <TextBlock Classes="eyebrow" Text="INTEGRATIES"/>
-          <TextBlock Classes="title" Text="Verbind externe services"/>
-          <TextBlock Classes="subtitle"
-                     Text="Koppel tools die je dagelijks gebruikt aan je AI-hotkeys."/>
+          <TextBlock Classes="eyebrow" loc:Tr.Key="Integrations_Eyebrow"/>
+          <TextBlock Classes="title" loc:Tr.Key="Integrations_Title"/>
+          <TextBlock Classes="subtitle" loc:Tr.Key="Integrations_Subtitle"/>
         </StackPanel>
-        <Button Classes="ghost" Content="+ Integratie aanvragen"
+        <Button Classes="ghost" loc:Tr.Key="Integrations_RequestBtn"
                 HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="12" Padding="14,8"/>
       </Grid>
 
-      <TextBlock Name="StatusText" Classes="muted" Text="Status laden..." Margin="0,0,0,12"/>
+      <TextBlock Name="StatusText" Classes="muted" loc:Tr.Key="Integrations_Loading" Margin="0,0,0,12"/>
 
       <!-- Raster met integratie-kaarten -->
       <WrapPanel Name="IntegrationsPanel"/>

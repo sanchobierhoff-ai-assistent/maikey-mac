@@ -1,5 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="using:mAIkey.Desktop"
         x:Class="mAIkey.Desktop.Windows.GmailReviewWindow"
         Title="E-mail nakijken"
         Width="560" Height="620"
@@ -9,33 +10,33 @@
 
   <DockPanel Margin="24">
     <StackPanel DockPanel.Dock="Top" Spacing="4" Margin="0,0,0,16">
-      <TextBlock Classes="eyebrow" Text="GMAIL"/>
-      <TextBlock Classes="title" Text="E-mail nakijken" FontSize="22"/>
-      <TextBlock Classes="subtitle" FontSize="13" Text="Controleer en vul de ontvanger in."/>
+      <TextBlock Classes="eyebrow" loc:Tr.Key="GmailReview_Eyebrow"/>
+      <TextBlock Classes="title" loc:Tr.Key="GmailReview_Title" FontSize="22"/>
+      <TextBlock Classes="subtitle" FontSize="13" loc:Tr.Key="GmailReview_Subtitle"/>
     </StackPanel>
 
     <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="10" Margin="0,16,0,0">
-      <Button Name="SendBtn" Classes="accent" Content="Versturen" Click="Send_Click"/>
-      <Button Classes="ghost" Content="Annuleren" Click="Cancel_Click"/>
+      <Button Name="SendBtn" Classes="accent" loc:Tr.Key="GmailReview_SendBtn" Click="Send_Click"/>
+      <Button Classes="ghost" loc:Tr.Key="Common_Cancel" Click="Cancel_Click"/>
       <TextBlock Name="StatusText" Classes="muted" IsVisible="False"
                  VerticalAlignment="Center" TextWrapping="Wrap"/>
     </StackPanel>
 
     <StackPanel Spacing="12">
       <StackPanel Spacing="6">
-        <TextBlock Text="Aan" Classes="muted"/>
+        <TextBlock loc:Tr.Key="GmailReview_To" Classes="muted"/>
         <TextBox Name="ToBox" Watermark="ontvanger@voorbeeld.nl"/>
       </StackPanel>
       <StackPanel Spacing="6">
-        <TextBlock Text="CC (optioneel)" Classes="muted"/>
+        <TextBlock loc:Tr.Key="GmailReview_Cc" Classes="muted"/>
         <TextBox Name="CcBox"/>
       </StackPanel>
       <StackPanel Spacing="6">
-        <TextBlock Text="Onderwerp" Classes="muted"/>
+        <TextBlock loc:Tr.Key="GmailReview_Subject" Classes="muted"/>
         <TextBox Name="SubjectBox"/>
       </StackPanel>
       <StackPanel Spacing="6">
-        <TextBlock Text="Bericht" Classes="muted"/>
+        <TextBlock loc:Tr.Key="GmailReview_Body" Classes="muted"/>
         <TextBox Name="BodyBox" AcceptsReturn="True" TextWrapping="Wrap"
                  Height="220" VerticalContentAlignment="Top"/>
       </StackPanel>

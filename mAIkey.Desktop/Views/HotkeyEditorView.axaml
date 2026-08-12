@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
+             xmlns:loc="using:mAIkey.Desktop"
              x:Class="mAIkey.Desktop.Views.HotkeyEditorView">
 
   <Grid ColumnDefinitions="260,*">
@@ -10,18 +11,34 @@
             BorderThickness="0,0,1,0">
       <DockPanel>
         <StackPanel DockPanel.Dock="Top" Margin="16,16,16,0" Spacing="12">
-          <TextBlock Text="mAIkeys" FontSize="16" FontWeight="SemiBold"
+          <TextBlock loc:Tr.Key="HotkeyEditor_Title" FontSize="16" FontWeight="SemiBold"
                      Foreground="{DynamicResource Text1}"/>
           <Separator Background="{DynamicResource Border1}" Height="1"/>
         </StackPanel>
 
-        <Button DockPanel.Dock="Bottom" Classes="accent" Content="+ Nieuwe mAIkey"
+        <Button DockPanel.Dock="Bottom" Classes="accent" loc:Tr.Key="HotkeyEditor_NewHotkey"
                 Margin="16,8,16,16" HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Center" FontSize="12"
                 Name="AddHotkeyBtn" Click="AddHotkey_Click"/>
 
         <ScrollViewer Margin="8,8,8,0">
-          <StackPanel Name="HotkeyListPanel" Spacing="2"/>
+          <StackPanel Spacing="2">
+            <StackPanel Name="HotkeyListPanel" Spacing="2"/>
+            <!-- Lege staat -->
+            <StackPanel Name="ListEmptyHint" Margin="8,32,8,8" Spacing="8"
+                        HorizontalAlignment="Center">
+              <i:Icon Value="mdi-lightning-bolt-outline" FontSize="28"
+                      Foreground="{DynamicResource Text3}" HorizontalAlignment="Center"/>
+              <TextBlock loc:Tr.Key="HotkeyEditor_EmptyTitle" FontSize="12" FontWeight="SemiBold"
+                         Foreground="{DynamicResource Text2}" HorizontalAlignment="Center"/>
+              <TextBlock loc:Tr.Key="HotkeyEditor_EmptySub"
+                         FontSize="11" Foreground="{DynamicResource Text3}"
+                         TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+            </StackPanel>
+            <TextBlock Name="ListError" IsVisible="False" Margin="8,8"
+                       FontSize="11" TextWrapping="Wrap"
+                       Foreground="{DynamicResource Error}"/>
+          </StackPanel>
         </ScrollViewer>
       </DockPanel>
     </Border>
@@ -33,27 +50,43 @@
         <Border DockPanel.Dock="Top" Height="52" Padding="16,0"
                 BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
           <Grid>
-            <TextBlock Text="← mAIkeys" FontSize="13" Foreground="{DynamicResource Text2}"
+            <TextBlock loc:Tr.Key="HotkeyEditor_Back" FontSize="13" Foreground="{DynamicResource Text2}"
                        VerticalAlignment="Center" HorizontalAlignment="Left"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
-                        VerticalAlignment="Center" Spacing="8">
-              <Button Name="DeleteBtn" Classes="danger" Content="Verwijderen"
+                        VerticalAlignment="Center" Spacing="10">
+              <TextBlock Name="SaveStatus" loc:Tr.Key="HotkeyEditor_SavedOk" IsVisible="False"
+                         FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Success}"
+                         VerticalAlignment="Center"/>
+              <Button Classes="ghost" loc:Tr.Key="HotkeyEditor_TourLabel"
+                      FontSize="12" Click="Instructions_Click"/>
+              <Button Name="DeleteBtn" Classes="danger" loc:Tr.Key="HotkeyEditor_Delete"
                       FontSize="12" Click="DeleteHotkey_Click"/>
-              <Button Name="SaveBtn" Classes="accent" Content="Opslaan"
+              <Button Name="SaveBtn" Classes="accent" loc:Tr.Key="HotkeyEditor_Save"
                       FontSize="12" Padding="16,8" Click="SaveHotkey_Click"/>
             </StackPanel>
           </Grid>
         </Border>
 
+        <!-- Vult de rest van het venster; lege staat gecentreerd, editor eroverheen -->
+        <Grid>
+
         <!-- Empty state -->
         <StackPanel Name="EmptyEditorState" VerticalAlignment="Center"
-                    HorizontalAlignment="Center" Spacing="12"
-                    Margin="0,0,0,60">
-          <i:Icon Value="mdi-lightning-bolt" FontSize="48" HorizontalAlignment="Center"
-                  Foreground="{DynamicResource Text3}"/>
-          <TextBlock Text="Selecteer een hotkey of maak een nieuwe aan"
-                     FontSize="14" Foreground="{DynamicResource Text2}"
-                     HorizontalAlignment="Center"/>
+                    HorizontalAlignment="Center" Spacing="14" MaxWidth="360"
+                    Margin="0,0,0,40">
+          <Border Width="72" Height="72" CornerRadius="20"
+                  Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource Border1}"
+                  BorderThickness="1" HorizontalAlignment="Center">
+            <i:Icon Value="mdi-lightning-bolt" FontSize="34" Foreground="{DynamicResource Accent}"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          </Border>
+          <TextBlock loc:Tr.Key="HotkeyEditor_EditorEmptyTitle" FontSize="16" FontWeight="SemiBold"
+                     Foreground="{DynamicResource Text1}" HorizontalAlignment="Center"/>
+          <TextBlock loc:Tr.Key="HotkeyEditor_EditorEmptySub"
+                     FontSize="12.5" Foreground="{DynamicResource Text3}"
+                     TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
+          <Button Classes="accent" loc:Tr.Key="HotkeyEditor_NewHotkey" HorizontalAlignment="Center"
+                  Padding="16,9" FontSize="13" Click="AddHotkey_Click"/>
         </StackPanel>
 
         <!-- Editor content -->
@@ -63,23 +96,23 @@
 
             <!-- Hero: Name -->
             <TextBox Name="HotkeyNameBox" FontSize="22" FontWeight="SemiBold"
-                     Watermark="Naam van je hotkey"
+                     loc:Tr.WatermarkKey="HotkeyEditor_NameWatermark"
                      Background="Transparent" BorderThickness="0" Padding="0,8"/>
 
             <!-- Section: Trigger -->
             <Border Classes="card">
               <StackPanel Spacing="12">
-                <TextBlock Text="Trigger" FontSize="13" FontWeight="SemiBold"
+                <TextBlock loc:Tr.Key="HotkeyEditor_TriggerSection" FontSize="13" FontWeight="SemiBold"
                            Foreground="{DynamicResource Text1}"/>
 
                 <StackPanel Spacing="6">
-                  <TextBlock Text="Toetscombo" FontSize="11" Foreground="{DynamicResource Text2}"/>
+                  <TextBlock loc:Tr.Key="HotkeyEditor_KeyCombo" FontSize="11" Foreground="{DynamicResource Text2}"/>
                   <TextBox Name="HotkeyComboBox" IsReadOnly="True"
-                           Watermark="Klik hier en druk een combinatie"
+                           loc:Tr.WatermarkKey="HotkeyEditor_ComboWatermark"
                            Height="40" FontSize="13"
                            Background="{DynamicResource Bg3}" Cursor="Hand"
                            KeyDown="HotkeyCombo_KeyDown"/>
-                  <TextBlock Text="Klik op het veld en druk een combinatie in (bijv. Ctrl+Alt+1)"
+                  <TextBlock loc:Tr.Key="HotkeyEditor_KeyComboHint"
                              FontSize="10" Foreground="{DynamicResource Text3}"/>
                 </StackPanel>
               </StackPanel>
@@ -88,57 +121,50 @@
             <!-- Section: AI Prompt -->
             <Border Classes="card">
               <StackPanel Spacing="12">
-                <TextBlock Text="AI Prompt" FontSize="13" FontWeight="SemiBold"
+                <TextBlock loc:Tr.Key="HotkeyEditor_PromptSection" FontSize="13" FontWeight="SemiBold"
                            Foreground="{DynamicResource Text1}"/>
 
                 <!-- Sneller instellen met een template -->
                 <StackPanel Spacing="6">
-                  <TextBlock Text="Sneller instellen met een template" FontSize="11"
+                  <TextBlock loc:Tr.Key="HotkeyEditor_TemplatePickerLabel" FontSize="11"
                              Foreground="{DynamicResource Text2}"/>
                   <ComboBox Name="TemplatePickerCombo" HorizontalAlignment="Stretch" FontSize="13"
-                            PlaceholderText="Kies een template…"
+                            loc:Tr.WatermarkKey="HotkeyEditor_TemplatePickerPlaceholder"
                             SelectionChanged="TemplatePicker_Changed"/>
                 </StackPanel>
 
                 <StackPanel Spacing="6">
-                  <TextBlock Text="Wat wil je met de geselecteerde tekst doen?" FontSize="12"
+                  <TextBlock loc:Tr.Key="HotkeyEditor_PromptLabel" FontSize="12"
                              FontWeight="Medium" Foreground="{DynamicResource Text1}"/>
-                  <TextBlock FontSize="11" Foreground="{DynamicResource Text3}" TextWrapping="Wrap"
-                             Text="Beschrijf eerst wat voor tekst je selecteert (bijv. een e-mail, stukje code of alinea), en daarna wat de AI ermee moet doen."/>
+                  <TextBlock loc:Tr.Key="HotkeyEditor_PromptHint" FontSize="11"
+                             Foreground="{DynamicResource Text3}" TextWrapping="Wrap"/>
                   <TextBox Name="PromptBox" AcceptsReturn="True"
                            TextWrapping="Wrap" MinHeight="80" MaxHeight="200"
-                           Watermark="Bijv: Verbeter de tekst en maak deze professioneler..."
+                           loc:Tr.WatermarkKey="HotkeyEditor_PromptWatermark"
                            FontSize="13" Margin="0,4,0,0"/>
                 </StackPanel>
 
                 <!-- Model -->
                 <StackPanel Spacing="6">
-                  <TextBlock Text="AI Model" FontSize="11" Foreground="{DynamicResource Text2}"/>
+                  <TextBlock loc:Tr.Key="HotkeyEditor_AIModel" FontSize="11" Foreground="{DynamicResource Text2}"/>
                   <ComboBox Name="ModelComboBox" HorizontalAlignment="Stretch"
-                            FontSize="13"/>
+                            HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center"
+                            MinHeight="48" FontSize="13"/>
                 </StackPanel>
 
                 <!-- Writing style -->
                 <StackPanel Spacing="6">
-                  <TextBlock Text="Schrijfstijl (optioneel)" FontSize="11" Foreground="{DynamicResource Text2}"/>
+                  <TextBlock loc:Tr.Key="HotkeyEditor_WriteStyle" FontSize="11" Foreground="{DynamicResource Text2}"/>
                   <ComboBox Name="StyleComboBox" HorizontalAlignment="Stretch"
                             FontSize="13"/>
                 </StackPanel>
 
                 <!-- AI-hulp -->
                 <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,4,0,0">
-                  <Button Name="AiBuilderBtn" Classes="ghost" FontSize="12" Click="AiBuilder_Click">
-                    <StackPanel Orientation="Horizontal" Spacing="7">
-                      <i:Icon Value="mdi-creation" FontSize="14" VerticalAlignment="Center"/>
-                      <TextBlock Text="Nieuwe mAIkey met AI aanmaken" VerticalAlignment="Center"/>
-                    </StackPanel>
-                  </Button>
-                  <Button Name="OptimizeBtn" Classes="ghost" FontSize="12" Click="Optimize_Click">
-                    <StackPanel Orientation="Horizontal" Spacing="7">
-                      <i:Icon Value="mdi-wrench-outline" FontSize="14" VerticalAlignment="Center"/>
-                      <TextBlock Text="Prompt optimaliseren" VerticalAlignment="Center"/>
-                    </StackPanel>
-                  </Button>
+                  <Button Name="AiBuilderBtn" Classes="ghost" FontSize="12" Click="AiBuilder_Click"
+                          loc:Tr.Key="HotkeyEditor_AIBuilder"/>
+                  <Button Name="OptimizeBtn" Classes="ghost" FontSize="12" Click="Optimize_Click"
+                          loc:Tr.Key="HotkeyEditor_AIOptimizer"/>
                 </StackPanel>
               </StackPanel>
             </Border>
@@ -146,38 +172,45 @@
             <!-- Section: Gedrag -->
             <Border Classes="card">
               <StackPanel Spacing="12">
-                <TextBlock Text="Gedrag" FontSize="13" FontWeight="SemiBold"
+                <TextBlock loc:Tr.Key="HotkeyEditor_BehaviorSection" FontSize="13" FontWeight="SemiBold"
                            Foreground="{DynamicResource Text1}"/>
 
                 <StackPanel Spacing="6">
-                  <TextBlock Text="Output modus" FontSize="11" Foreground="{DynamicResource Text2}"/>
+                  <TextBlock loc:Tr.Key="HotkeyEditor_OutputMode" FontSize="11" Foreground="{DynamicResource Text2}"/>
                   <ComboBox Name="OutputModeComboBox" HorizontalAlignment="Stretch"
                             FontSize="13">
-                    <ComboBoxItem Content="Vervangen (replace)" Tag="replace"/>
-                    <ComboBoxItem Content="Klembord (clipboard)" Tag="clipboard"/>
-                    <ComboBoxItem Content="Venster (window)" Tag="window"/>
-                    <ComboBoxItem Content="Jira – Met review venster" Tag="jira_review"/>
-                    <ComboBoxItem Content="Jira – Direct aanmaken" Tag="jira_direct"/>
-                    <ComboBoxItem Content="GitHub – Met review venster" Tag="github_review"/>
-                    <ComboBoxItem Content="GitHub – Direct aanmaken" Tag="github_direct"/>
-                    <ComboBoxItem Content="Slack – Met preview" Tag="slack_review"/>
-                    <ComboBoxItem Content="Slack – Direct versturen" Tag="slack_direct"/>
-                    <ComboBoxItem Content="Gmail – Met review venster" Tag="gmail_review"/>
-                    <ComboBoxItem Content="Google Agenda – Met review" Tag="calendar_review"/>
+                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutReplace" Tag="replace"/>
+                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutCopy" Tag="clipboard"/>
+                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutWindow" Tag="window"/>
+                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutJiraReview" Tag="jira_review"/>
+                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutJira" Tag="jira_direct"/>
+                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutGitHubReview" Tag="github_review"/>
+                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutGitHub" Tag="github_direct"/>
+                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutSlackReview" Tag="slack_review"/>
+                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutSlack" Tag="slack_direct"/>
+                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutEmailReview" Tag="gmail_review"/>
+                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutCalendarReview" Tag="calendar_review"/>
                   </ComboBox>
                 </StackPanel>
 
-                <CheckBox Name="AskContextCheck" Content="Vraag om extra context"
+                <CheckBox Name="AskContextCheck" loc:Tr.Key="HotkeyEditor_AskContext"
                           FontSize="12"/>
-                <CheckBox Name="UseInputCheck"
-                          Content="Gebruik invoerveld in plaats van selectie"
+                <CheckBox Name="IncludeImagesCheck" loc:Tr.Key="HotkeyEditor_SendImages"
+                          FontSize="12"/>
+                <CheckBox Name="ScreenCaptureCheck" loc:Tr.Key="HotkeyEditor_ScreenCapture"
+                          FontSize="12"/>
+                <CheckBox Name="UseInputCheck" loc:Tr.Key="HotkeyEditor_UseInput"
                           FontSize="12"/>
               </StackPanel>
             </Border>
 
             <!-- Section: Geavanceerd -->
-            <Expander Header="Geavanceerde AI-parameters" FontSize="12"
+            <Expander FontSize="12"
                       Foreground="{DynamicResource Text2}" Margin="0,0,0,20">
+              <Expander.Header>
+                <TextBlock loc:Tr.Key="HotkeyEditor_AdvancedParams" FontSize="12"
+                           Foreground="{DynamicResource Text2}"/>
+              </Expander.Header>
               <Border Classes="card" Margin="0,8,0,0">
                 <StackPanel Spacing="16">
                   <!-- Temperature -->
@@ -209,6 +242,7 @@
 
           </StackPanel>
         </ScrollViewer>
+        </Grid>
       </DockPanel>
     </Border>
   </Grid>
