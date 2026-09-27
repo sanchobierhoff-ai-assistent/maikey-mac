@@ -1,0 +1,257 @@
+<Window x:Class="mAIkey.Desktop.Windows.BridgeHubWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Koppelingen — Zendesk ⇄ Jira"
+        Height="900" Width="1000"
+        MinHeight="700" MinWidth="820"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource Bg1}"
+        FontFamily="{DynamicResource FontUi}">
+
+
+    <Grid>
+        <!-- Hoofdlayout -->
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>  <!-- 0 header -->
+                <RowDefinition Height="Auto"/>  <!-- 1 bronpanelen -->
+                <RowDefinition Height="Auto"/>  <!-- 2 opties -->
+                <RowDefinition Height="*"/>     <!-- 3 chat -->
+                <RowDefinition Height="Auto"/>  <!-- 4 status + invoer -->
+            </Grid.RowDefinitions>
+
+            <!-- ── Header ── -->
+            <DockPanel Grid.Row="0" LastChildFill="False" Margin="0,0,0,14">
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="Koppelingen: de schakel tussen klant en development"
+                               FontSize="18" FontWeight="Bold" Foreground="{DynamicResource Text1}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                        <TextBlock x:Name="ConnZendesk" Text="Zendesk …" FontSize="12" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource Text3}"/>
+                        <TextBlock Text="  ·  " FontSize="12" Foreground="{DynamicResource Text3}"/>
+                        <TextBlock x:Name="ConnJira" Text="Jira …" FontSize="12" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource Text3}"/>
+                        <Button x:Name="ConnFixButton" Content="Koppelen →" IsVisible="False"
+                                Classes="GhostButton" Padding="10,3" Height="24" Margin="12,0,0,0"
+                                FontSize="11" Click="GoToIntegrationsButton_Click"/>
+                    </StackPanel>
+                    <!-- Tabs: Werklijst (Zendesk-first) | Gekoppeld (bestaande koppelingen) -->
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <Button x:Name="TabWerklijst" Content="Werklijst" Classes="AccentButton"
+                                Padding="16,6" Height="30" Margin="0,0,8,0" Click="TabWerklijst_Click"/>
+                        <Button x:Name="TabGekoppeld" Content="Gekoppeld" Classes="GhostButton"
+                                Padding="16,6" Height="30" Click="TabGekoppeld_Click"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Top">
+                    <Button x:Name="NewChatButton" Content="+ Nieuw" Classes="GhostButton"
+                            Padding="14,6" Height="32" Margin="0,0,8,0" Click="NewChat_Click"/>
+                    <Button x:Name="HistoryButton" Content="Geschiedenis" Classes="GhostButton"
+                            Padding="14,6" Height="32" Click="History_Click"/>
+                </StackPanel>
+            </DockPanel>
+
+            <!-- ── Rij 1: twee bronpanelen (Zendesk zichtbaar; Jira standaard verborgen) ── -->
+            <Grid x:Name="SourcesGrid" Grid.Row="1" Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0"/>
+                    <ColumnDefinition Width="0"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Zendesk (links) -->
+                <Border Grid.Column="0" Background="{DynamicResource Bg2}" CornerRadius="{DynamicResource RadiusLg}"
+                        Padding="14" BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                    <StackPanel>
+                        <DockPanel LastChildFill="False">
+                            <TextBlock DockPanel.Dock="Left" Text="ZENDESK" FontSize="11" FontWeight="Bold"
+                                       Foreground="{DynamicResource Accent}" VerticalAlignment="Center"/>
+                            <Button x:Name="InboxRefreshButton" DockPanel.Dock="Right" Content="⟳ Werklijst"
+                                    Classes="GhostButton" Padding="10,3" Height="24" FontSize="11"
+                                    ToolTip.Tip="Haal openstaande tickets op als werklijst"
+                                    Click="InboxRefresh_Click"/>
+                        </DockPanel>
+
+                        <!-- Werklijst (opt-in achtergrond-poll; klik = selecteer als Zendesk-bron) -->
+                        <Border x:Name="InboxContainer" IsVisible="False" Margin="0,8,0,0"
+                                Background="{DynamicResource Bg1}" CornerRadius="{DynamicResource RadiusMd}"
+                                BorderBrush="{DynamicResource Border1}" BorderThickness="1" Padding="6">
+                            <ScrollViewer MaxHeight="110" VerticalScrollBarVisibility="Auto">
+                                <StackPanel x:Name="ZenInboxPanel"/>
+                            </ScrollViewer>
+                        </Border>
+                        <TextBlock x:Name="InboxHint" IsVisible="False" FontSize="11" TextWrapping="Wrap"
+                                   Foreground="{DynamicResource Text3}" Margin="2,8,0,0"/>
+
+                        <DockPanel Margin="0,8,0,8">
+                            <Button x:Name="ZenSearchButton" DockPanel.Dock="Right" Content="Zoek"
+                                    Classes="GhostButton" Padding="14,7" Height="34"
+                                    Margin="8,0,0,0" Click="ZenSearch_Click"/>
+                            <TextBox x:Name="ZenSearchBox" Classes="ModernTextBox" Height="34"
+                                     VerticalContentAlignment="Center" Padding="10,0"
+                                     ToolTip.Tip="Zoek op nummer, link of naam (leeg = recent)"
+                                     KeyDown="ZenSearch_KeyDown"/>
+                        </DockPanel>
+                        <Border x:Name="ZenSelectedChip" IsVisible="False" Margin="0,0,0,8"
+                                Background="{DynamicResource Bg3}" CornerRadius="8" Padding="10,6"
+                                BorderBrush="{DynamicResource Accent}" BorderThickness="1">
+                            <DockPanel LastChildFill="True">
+                                <Button x:Name="ZenClearButton" DockPanel.Dock="Right" Content="✕"
+                                        Classes="GhostButton" Padding="6,0" Height="22" MinWidth="22"
+                                        FontSize="11" Click="ZenClear_Click"/>
+                                <TextBlock x:Name="ZenSelectedText" Foreground="{DynamicResource Text1}"
+                                           FontSize="12.5" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                            </DockPanel>
+                        </Border>
+                        <ListBox x:Name="ZenList" Height="110" Background="Transparent" BorderThickness="0"
+                                 Foreground="{DynamicResource Text1}"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 SelectionChanged="ZenList_SelectionChanged"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Jira (rechts) — standaard verborgen; verschijnt bij "Koppel bestaand Jira-ticket" -->
+                <Border x:Name="JiraPanel" Grid.Column="2" IsVisible="False"
+                        Background="{DynamicResource Bg2}" CornerRadius="{DynamicResource RadiusLg}"
+                        Padding="14" BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="JIRA — kies een issue om te koppelen" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource Accent}"/>
+                        <DockPanel Margin="0,8,0,8">
+                            <Button x:Name="JiraSearchButton" DockPanel.Dock="Right" Content="Zoek"
+                                    Classes="GhostButton" Padding="14,7" Height="34"
+                                    Margin="8,0,0,0" Click="JiraSearch_Click"/>
+                            <TextBox x:Name="JiraSearchBox" Classes="ModernTextBox" Height="34"
+                                     VerticalContentAlignment="Center" Padding="10,0"
+                                     ToolTip.Tip="Zoek op sleutel, link of naam"
+                                     KeyDown="JiraSearch_KeyDown"/>
+                        </DockPanel>
+                        <Border x:Name="JiraSelectedChip" IsVisible="False" Margin="0,0,0,8"
+                                Background="{DynamicResource Bg3}" CornerRadius="8" Padding="10,6"
+                                BorderBrush="{DynamicResource Accent}" BorderThickness="1">
+                            <DockPanel LastChildFill="True">
+                                <Button x:Name="JiraClearButton" DockPanel.Dock="Right" Content="✕"
+                                        Classes="GhostButton" Padding="6,0" Height="22" MinWidth="22"
+                                        FontSize="11" Click="JiraClear_Click"/>
+                                <TextBlock x:Name="JiraSelectedText" Foreground="{DynamicResource Text1}"
+                                           FontSize="12.5" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                            </DockPanel>
+                        </Border>
+                        <ListBox x:Name="JiraList" Height="150" Background="Transparent" BorderThickness="0"
+                                 Foreground="{DynamicResource Text1}"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 SelectionChanged="JiraList_SelectionChanged"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- ── Rij 1 (alternatief): tab "Gekoppeld" — bestaande Zendesk⇄Jira-koppelingen ── -->
+            <Border x:Name="CoupledPanel" Grid.Row="1" IsVisible="False" Margin="0,0,0,12"
+                    Background="{DynamicResource Bg2}" CornerRadius="{DynamicResource RadiusLg}"
+                    Padding="14" BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                <StackPanel>
+                    <DockPanel LastChildFill="False" Margin="0,0,0,8">
+                        <TextBlock DockPanel.Dock="Left" Text="GEKOPPELDE TICKETS" FontSize="11" FontWeight="Bold"
+                                   Foreground="{DynamicResource Accent}" VerticalAlignment="Center"/>
+                        <Button x:Name="CoupledRefreshButton" DockPanel.Dock="Right" Content="⟳ Vernieuwen"
+                                Classes="GhostButton" Padding="10,3" Height="24" FontSize="11"
+                                Click="CoupledRefresh_Click"/>
+                    </DockPanel>
+                    <ScrollViewer MaxHeight="230" VerticalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="CoupledList"/>
+                    </ScrollViewer>
+                    <TextBlock x:Name="CoupledEmptyHint" IsVisible="False"
+                               Text="Nog geen gekoppelde tickets. Maak of koppel er één vanuit de Werklijst."
+                               FontSize="12" Foreground="{DynamicResource Text3}" Margin="2,6,0,0" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <!-- ── Rij 2: dynamische opties ── -->
+            <StackPanel Grid.Row="2" Margin="0,0,0,10">
+                <TextBlock x:Name="OptionsHint" Text="Kies een actie, of typ hieronder direct je instructie."
+                           FontSize="11.5" Foreground="{DynamicResource Text3}" Margin="2,0,0,6"/>
+                <WrapPanel x:Name="OptionsPanel"/>
+
+                <!-- Statuswijziging-paneel (zichtbaar via de chip "Statuswijziging") -->
+                <Border x:Name="StatusPanel" IsVisible="False" Margin="0,8,0,0"
+                        Background="{DynamicResource Bg2}" CornerRadius="{DynamicResource RadiusMd}"
+                        BorderBrush="{DynamicResource Border1}" BorderThickness="1" Padding="12,10">
+                    <WrapPanel>
+                        <TextBlock Text="Zendesk-status:" VerticalAlignment="Center" FontSize="12"
+                                   Foreground="{DynamicResource Text3}" Margin="0,0,6,0"/>
+                        <ComboBox x:Name="ZenStatusCombo" Classes="ModernComboBox" Width="140" Height="30"
+                                  Margin="0,0,6,0"/>
+                        <Button x:Name="ZenStatusApply" Content="Zet Zendesk-status" Classes="GhostButton"
+                                Padding="12,5" Height="30" Margin="0,0,18,0" Click="ApplyZendeskStatus_Click"/>
+                        <TextBlock Text="Jira-status:" VerticalAlignment="Center" FontSize="12"
+                                   Foreground="{DynamicResource Text3}" Margin="0,0,6,0"/>
+                        <ComboBox x:Name="JiraStatusCombo" Classes="ModernComboBox" Width="180" Height="30"
+                                  Margin="0,0,6,0"/>
+                        <Button x:Name="JiraStatusApply" Content="Zet Jira-status" Classes="GhostButton"
+                                Padding="12,5" Height="30" Click="ApplyJiraStatus_Click"/>
+                    </WrapPanel>
+                </Border>
+            </StackPanel>
+
+            <!-- ── Rij 3: chat-transcript ── -->
+            <Border Grid.Row="3" Background="{DynamicResource Bg2}" CornerRadius="{DynamicResource RadiusLg}"
+                    BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                <ScrollViewer x:Name="ChatScroller" VerticalScrollBarVisibility="Auto" Padding="14">
+                    <StackPanel x:Name="ChatPanel">
+                        <TextBlock x:Name="ChatEmptyHint"
+                                   Text="Selecteer links een Zendesk-ticket en/of rechts een Jira-issue. Kies een actie of typ een instructie en druk op Verstuur."
+                                   FontSize="12.5" Foreground="{DynamicResource Text3}" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <!-- ── Rij 4: status + invoer ── -->
+            <StackPanel Grid.Row="4" Margin="0,10,0,0">
+                <DockPanel LastChildFill="True" Margin="0,0,0,8">
+                    <Button x:Name="GoToIntegrationsButton" DockPanel.Dock="Right" IsVisible="False"
+                            Content="Ga naar Integraties →" Classes="GhostButton"
+                            Padding="12,4" Height="26" Margin="12,0,0,0" VerticalAlignment="Center"
+                            Click="GoToIntegrationsButton_Click"/>
+                    <TextBlock x:Name="StatusText" FontSize="12"
+                               Foreground="{DynamicResource Text3}" TextWrapping="Wrap"
+                               VerticalAlignment="Center"/>
+                </DockPanel>
+                <DockPanel LastChildFill="True">
+                    <Button x:Name="SendButton" DockPanel.Dock="Right" Content="Verstuur →"
+                            Classes="AccentButton" Padding="22,10" Height="44"
+                            MinWidth="130" Margin="10,0,0,0" Click="Send_Click"/>
+                    <TextBox x:Name="InputBox" Classes="ModernTextBox" MinHeight="44" MaxHeight="120"
+                             AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Center"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="12,8"
+                            />
+                </DockPanel>
+            </StackPanel>
+        </Grid>
+
+        <!-- ── Geschiedenis-overlay ── -->
+        <Border x:Name="HistoryOverlay" IsVisible="False" Background="#B0000000">
+            <Border Width="460" MaxHeight="560" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Background="{DynamicResource Bg2}" CornerRadius="{DynamicResource RadiusLg}"
+                    BorderBrush="{DynamicResource Border1}" BorderThickness="1" Padding="18">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <DockPanel Grid.Row="0" LastChildFill="False" Margin="0,0,0,10">
+                        <TextBlock DockPanel.Dock="Left" Text="Geschiedenis" FontSize="15" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
+                        <Button DockPanel.Dock="Right" Content="✕" Classes="GhostButton"
+                                Padding="8,2" Height="28" MinWidth="28" Click="CloseHistory_Click"/>
+                    </DockPanel>
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="HistoryList"/>
+                    </ScrollViewer>
+                    <TextBlock Grid.Row="2" x:Name="HistoryEmpty" IsVisible="False"
+                               Text="Nog geen gesprekken." FontSize="12.5"
+                               Foreground="{DynamicResource Text3}" Margin="0,8,0,0"/>
+                </Grid>
+            </Border>
+        </Border>
+    </Grid>
+</Window>

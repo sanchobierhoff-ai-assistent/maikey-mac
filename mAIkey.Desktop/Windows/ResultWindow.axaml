@@ -1,41 +1,74 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="https://github.com/projektanker/icons.avalonia"
-        xmlns:loc="using:mAIkey.Desktop"
         x:Class="mAIkey.Desktop.Windows.ResultWindow"
-        Title="mAIkey — Resultaat"
-        Width="600" Height="500"
-        WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource Bg0}">
+        Title="mAIkey — AI Resultaat"
+        Width="700" Height="540" MinWidth="520" MinHeight="360"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1"
+        Background="{DynamicResource Bg1}"
+        Topmost="True"
+        WindowStartupLocation="CenterScreen">
 
-  <DockPanel Margin="20">
+  <Window.Styles>
+    <Style Selector="Ellipse.dot">
+      <Setter Property="Width" Value="6"/>
+      <Setter Property="Height" Value="6"/>
+      <Setter Property="Fill" Value="{DynamicResource Accent}"/>
+      <Setter Property="Margin" Value="0,0,4,0"/>
+      <Style.Animations>
+        <Animation Duration="0:0:1.2" IterationCount="Infinite">
+          <KeyFrame Cue="0%"><Setter Property="Opacity" Value="0.3"/></KeyFrame>
+          <KeyFrame Cue="33%"><Setter Property="Opacity" Value="1"/></KeyFrame>
+          <KeyFrame Cue="66%"><Setter Property="Opacity" Value="0.3"/></KeyFrame>
+          <KeyFrame Cue="100%"><Setter Property="Opacity" Value="0.3"/></KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+  </Window.Styles>
 
-    <!-- Kop -->
-    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="8"
-                Margin="0,0,0,14" VerticalAlignment="Center">
-      <Border Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource BorderStrong}"
-              BorderThickness="1" CornerRadius="5" Width="28" Height="20" Padding="2">
-        <TextBlock Text="AI" FontSize="10" FontWeight="ExtraBold"
-                   Foreground="{DynamicResource Accent}" HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
+  <Border BorderBrush="{DynamicResource BorderStrong}" BorderThickness="1">
+    <Grid RowDefinitions="Auto,*,Auto,Auto">
+      <!-- Titelbalk -->
+      <Border Name="TitleBar" Grid.Row="0" Padding="18,12,12,12" Background="Transparent"
+              BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
+        <DockPanel>
+          <Button DockPanel.Dock="Right" Classes="IconButton" Width="28" Height="28" Click="Close_Click">
+            <i:Icon Value="mdi-close" FontSize="13" Foreground="{DynamicResource Text3}"/>
+          </Button>
+          <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <i:Icon Value="mdi-creation" FontSize="14" Foreground="{DynamicResource Accent}"
+                    VerticalAlignment="Center" Margin="0,0,8,0"/>
+            <TextBlock Name="TitleText" FontSize="13" FontWeight="SemiBold"
+                       Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
+          </StackPanel>
+        </DockPanel>
       </Border>
-      <TextBlock loc:Tr.Key="Result_Title" FontSize="14" FontWeight="SemiBold"
-                 Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
-    </StackPanel>
 
-    <!-- Onderaan knoppen -->
-    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
-                HorizontalAlignment="Right" Spacing="8" Margin="0,12,0,0">
-      <Button Classes="ghost" loc:Tr.Key="Result_Copy" Name="CopyBtn"
-              Padding="16,8" FontSize="12" Click="CopyBtn_Click"/>
-      <Button Classes="accent" loc:Tr.Key="Result_Use" Name="UseBtn"
-              Padding="16,8" FontSize="12" Click="UseBtn_Click"/>
-    </StackPanel>
+      <ScrollViewer Name="ConversationScroll" Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                    Padding="16,12,16,0">
+        <StackPanel Name="ConversationPanel"/>
+      </ScrollViewer>
 
-    <!-- Resultaattekst -->
-    <TextBox Name="ResultTextBox" AcceptsReturn="True" TextWrapping="Wrap"
-             IsReadOnly="True" Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource Border1}"
-             BorderThickness="1" CornerRadius="10" Padding="16"
-             FontSize="13" Foreground="{DynamicResource Text1}"/>
-  </DockPanel>
+      <Border Name="LoadingRow" Grid.Row="2" IsVisible="False" Padding="18,8,18,4">
+        <StackPanel Orientation="Horizontal">
+          <Ellipse Classes="dot"/>
+          <Ellipse Classes="dot"/>
+          <Ellipse Classes="dot"/>
+          <TextBlock Name="ThinkingText" FontSize="11" Foreground="{DynamicResource Text3}"
+                     VerticalAlignment="Center" Margin="10,0,0,0"/>
+        </StackPanel>
+      </Border>
+
+      <Border Grid.Row="3" Padding="12,10,12,12" BorderBrush="{DynamicResource Border1}" BorderThickness="0,1,0,0">
+        <Grid ColumnDefinitions="*,8,Auto">
+          <TextBox Name="FollowUpBox" Grid.Column="0" Height="36" VerticalContentAlignment="Center"
+                   AcceptsReturn="False" Padding="11,0"/>
+          <Button Name="SendBtn" Grid.Column="2" Click="SendFollowUp_Click" Classes="AccentButton"
+                  Height="36" Padding="16,0" VerticalContentAlignment="Center"/>
+        </Grid>
+      </Border>
+    </Grid>
+  </Border>
 </Window>

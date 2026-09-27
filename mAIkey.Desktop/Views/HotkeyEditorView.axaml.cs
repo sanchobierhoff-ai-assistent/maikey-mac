@@ -1,647 +1,1027 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Templates;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
-using mAIkey.Core.Models;
-using mAIkey.Core.Services;
+using mAIkey.Desktop.Controls;
+using mAIkey.Desktop.Windows;
 
 namespace mAIkey.Desktop.Views;
 
+/// <summary>Sneltoets-editor (port van Views/HotkeyEditorView).</summary>
 public partial class HotkeyEditorView : UserControl
 {
     private readonly ConfigService _config;
-    private readonly ApiClient _api;
+    private readonly ApiClient _apiClient;
+    private readonly ObservableCollection<HotkeyViewModel> _hotkeyViewModels = new();
     private HotkeyConfig? _selectedHotkey;
-    private Border? _selectedListItem;
-    private int _recordedModifiers;
-    private int _recordedKey;
-    private List<AvailableModel> _models = new();
+    private bool _isLoadingHotkey;
+    private HashSet<string>? _connectedIntegrationTypes;
+    private List<RemotePromptTemplate>? _templatePickerTemplates;
+    private bool _templatePickerLoading;
+    private List<string> _highUsageModels = new();
+    private bool _isFreeTierForWarning;
 
-    public HotkeyEditorView()
+    private static readonly string[] HotkeyColors = { "#6B5BA6", "#3A6EA5", "#3A8F7A", "#A98A3F" };
+
+    public event EventHandler? NavigateBack;
+
+    public HotkeyEditorView() : this(App.Config, App.Api) { }
+
+    public HotkeyEditorView(ConfigService config, ApiClient apiClient, string? hotkeyIdToSelect = null)
     {
         InitializeComponent();
-        _config = App.Config;
-        _api = App.Api;
+        _config = config;
+        _apiClient = apiClient;
 
-        // Slider value changed events
-        TempSlider.PropertyChanged += (s, e) =>
+        for (int i = 0; i < _config.Hotkeys.Length; i++)
+            _hotkeyViewModels.Add(NewViewModel(_config.Hotkeys[i], i));
+        HotkeyListBox.ItemsSource = _hotkeyViewModels;
+
+        ApplyLocalization();
+
+        HotkeyTextBox.AddHandler(KeyDownEvent, HotkeyTextBox_KeyDown, RoutingStrategies.Tunnel);
+        MaxTokensValueBox.AddHandler(TextInputEvent, (_, e) =>
         {
-            if (e.Property.Name == "Value")
-                TempValueText.Text = TempSlider.Value.ToString("F1");
-        };
-        TokensSlider.PropertyChanged += (s, e) =>
-        {
-            if (e.Property.Name == "Value")
-                TokensValueText.Text = ((int)TokensSlider.Value).ToString();
-        };
+            if (e.Text != null && !e.Text.All(char.IsDigit)) e.Handled = true;
+        }, RoutingStrategies.Tunnel);
+        ModelComboBox.SelectionChanged += ModelComboBox_SelectionChanged;
 
-        Loaded += HotkeyEditorView_Loaded;
-    }
-
-    /// <summary>Haalt een thema-kleur op (past zich aan donker/licht aan).
-    /// Zoekt met de actieve themavariant en valt terug op app-resources, zodat
-    /// in code opgebouwde controls nooit een onzichtbare (transparante) kleur krijgen.</summary>
-    private IBrush TB(string key)
-    {
-        if (this.TryFindResource(key, ActualThemeVariant, out var v) && v is IBrush b) return b;
-        if (Application.Current is { } app && app.TryFindResource(key, ActualThemeVariant, out var v2) && v2 is IBrush b2) return b2;
-        return Brushes.Gray;
-    }
-
-    private void HotkeyEditorView_Loaded(object? sender, RoutedEventArgs e)
-    {
-        PopulateHotkeyList();
-        LoadModels();
+        _isLoadingHotkey = true;
+        ModelComboBox.SetModels(ModelPicker.FallbackModels);
         LoadStyles();
-        _ = LoadTemplatesAsync();
+        _isLoadingHotkey = false;
+
+        AttachedToVisualTree += async (_, _) =>
+        {
+            _ = LoadConnectedIntegrationsAsync();
+            await LoadAvailableModelsAsync();
+        };
+
+        if (!string.IsNullOrEmpty(hotkeyIdToSelect))
+        {
+            var idx = _hotkeyViewModels.ToList().FindIndex(vm => vm.Config.Id == hotkeyIdToSelect);
+            HotkeyListBox.SelectedIndex = idx >= 0 ? idx : (_hotkeyViewModels.Count > 0 ? 0 : -1);
+        }
+        else if (_hotkeyViewModels.Count > 0) HotkeyListBox.SelectedIndex = 0;
+
+        UpdateEmptyState();
     }
 
-    // ═══ TEMPLATE-PICKER ═══
+    private static HotkeyViewModel NewViewModel(HotkeyConfig h, int index) => new()
+    {
+        Config = h,
+        Description = h.Description,
+        Name = h.Name,
+        Enabled = h.Enabled,
+        Frozen = h.FrozenByDowngrade,
+        ColorBrush = new SolidColorBrush(Color.Parse(HotkeyColors[index % HotkeyColors.Length]))
+    };
 
-    private bool _applyingTemplate;
+    /// <summary>Selecteer een mAIkey op id (gebruikt door de tour).</summary>
+    public void SelectHotkey(string id)
+    {
+        var idx = _hotkeyViewModels.ToList().FindIndex(vm => vm.Config.Id == id);
+        if (idx >= 0) HotkeyListBox.SelectedIndex = idx;
+    }
 
-    private async System.Threading.Tasks.Task LoadTemplatesAsync()
+    public void TourAddDemo() => SelectHotkey(Services.HotkeyRuntime.DemoHotkeyId);
+
+    private void UpdateEmptyState()
+    {
+        bool isEmpty = _hotkeyViewModels.Count == 0;
+        EmptyStatePanel.IsVisible = isEmpty;
+        EditorScrollViewer.IsVisible = !isEmpty;
+        SaveHotkeyBtn.IsVisible = !isEmpty;
+        if (isEmpty)
+        {
+            DeleteButton.IsVisible = false;
+            TourBtn.IsVisible = false;
+        }
+    }
+
+    private void ApplyLocalization()
+    {
+        HotkeyListHeader.Text = L.T("HotkeyEditor_Title");
+        AddHotkeyBtn.Content = L.T("HotkeyEditor_NewHotkey");
+        TemplatePickerHeader.Text = L.T("HotkeyEditor_TemplatePickerHeader");
+        TemplatePickerSearchBox.Watermark = L.T("HotkeyEditor_TemplatePickerPlaceholder");
+        BackButton.Content = L.T("HotkeyEditor_Back");
+        DeleteButton.Content = L.T("HotkeyEditor_Delete");
+        SaveHotkeyBtn.Content = L.T("HotkeyEditor_Save");
+        ToolTip.SetTip(TourBtn, L.T("HotkeyEditor_TourTooltip"));
+        TourBtnLabel.Text = L.T("HotkeyEditor_TourLabel");
+        EmptyStateTitle.Text = L.T("HotkeyEditor_EmptyTitle");
+        EmptyStateSub.Text = L.T("HotkeyEditor_EmptySub");
+        EmptyStateTourBtn.Content = L.T("HotkeyEditor_EmptyTourLink");
+        FrozenBannerTitle.Text = L.T("HotkeyEditor_FrozenTitle");
+        FrozenBannerBody.Text = L.T("HotkeyEditor_FrozenBody");
+        TriggerSectionHeader.Text = L.T("HotkeyEditor_TriggerSection");
+        KeyComboLabel.Text = L.T("HotkeyEditor_KeyCombo");
+        KeyComboHintLabel.Text = Loc.T("HotkeyEditor_KeyComboHint_Mac", L.T("HotkeyEditor_KeyComboHint"));
+        PromptSectionHeader.Text = L.T("HotkeyEditor_PromptSection");
+        PromptLabel.Text = L.T("HotkeyEditor_PromptLabel");
+        PromptHintLabel.Text = L.T("HotkeyEditor_PromptHint");
+        AIModelLabel.Text = L.T("HotkeyEditor_AIModel");
+        WriteStyleLabel.Text = L.T("HotkeyEditor_WriteStyle");
+        StyleHintText.Text = L.T("HotkeyEditor_StyleHint");
+        AddStyleLinkText.Text = L.T("HotkeyEditor_StyleLinkText");
+        PersonalContextLabel.Text = L.T("HotkeyEditor_PersonalContext");
+        PersonalContextHint.Text = Loc.T("HotkeyEditor_PersonalContextHint", "Deze waarden worden automatisch meegestuurd bij elke uitvoering.");
+        BehaviorSectionHeader.Text = L.T("HotkeyEditor_BehaviorSection");
+        OutputModeLabel.Text = L.T("HotkeyEditor_OutputMode");
+        GHSectionHeader.Text = L.T("HotkeyEditor_GHSection");
+        GHRepoLabel.Text = Loc.T("HotkeyEditor_GHRepoLabel", "Repository (optioneel, overschrijft integratie-instelling)");
+        GHLabelsLabel.Text = Loc.T("HotkeyEditor_GHLabelsLabel", "Labels (optioneel, kommagescheiden)");
+        SlackSectionHeader.Text = L.T("HotkeyEditor_SlackSection");
+        SlackPanelHint.Text = Loc.T("HotkeyEditor_SlackPanelHint", "Berichten worden verstuurd naar het geconfigureerde Slack-kanaal uit de integratie-instellingen.");
+        GmailSectionHeader.Text = L.T("HotkeyEditor_GmailSection");
+        GmailToLabel.Text = Loc.T("HotkeyEditor_GmailTo", "Aan (optioneel — overschrijft AI-suggestie)");
+        GmailSubjectLabel.Text = Loc.T("HotkeyEditor_GmailSubject", "Onderwerp (optioneel — overschrijft AI-suggestie)");
+        GmailCcLabel.Text = Loc.T("HotkeyEditor_GmailCc", "CC (optioneel)");
+        CalSectionHeader.Text = L.T("HotkeyEditor_CalSection");
+        CalPanelHint.Text = Loc.T("HotkeyEditor_CalPanelHint", "Gebruikt de standaard agenda uit je Google Agenda-integratie.");
+        AskForContextCheckbox.Content = L.T("HotkeyEditor_AskContext");
+        IncludeImagesCheckbox.Content = L.T("HotkeyEditor_SendImages");
+        UseScreenCaptureCheckbox.Content = L.T("Editor_UseScreenCapture");
+        UseInputInsteadOfSelectionCheckbox.Content = L.T("HotkeyEditor_UseInput");
+        IncludeAssistantContextCheckbox.Content = L.T("HotkeyEditor_IncludeAssistantContext");
+        UseCustomAIParamsCheckbox.Content = L.T("HotkeyEditor_CustomParams");
+        ToolTip.SetTip(TemperatureInfoIcon, L.T("AIParam_Temperature_Tooltip"));
+        ToolTip.SetTip(MaxTokensInfoIcon, L.T("AIParam_MaxTokens_Tooltip"));
+        ToolTip.SetTip(TopPInfoIcon, L.T("AIParam_TopP_Tooltip"));
+        ToolTip.SetTip(FrequencyPenaltyInfoIcon, L.T("AIParam_FrequencyPenalty_Tooltip"));
+        ToolTip.SetTip(PresencePenaltyInfoIcon, L.T("AIParam_PresencePenalty_Tooltip"));
+        CreateWithAIButton.Content = L.T("HotkeyEditor_AIBuilder");
+        OptimizeButton.Content = L.T("HotkeyEditor_AIOptimizer");
+        RebuildOutputModeComboBox();
+    }
+
+    // ═══ Output-modus ═══
+
+    private static readonly (string tag, string key, string? integration)[] AllOutputModes =
+    {
+        ("window", "HotkeyEditor_OutWindow", null),
+        ("replace", "HotkeyEditor_OutReplace", null),
+        ("append", "HotkeyEditor_OutAppend", null),
+        ("clipboard", "HotkeyEditor_OutCopy", null),
+        ("jira_review", "HotkeyEditor_OutJiraReview", "jira"),
+        ("jira_direct", "HotkeyEditor_OutJira", "jira"),
+        ("github_review", "HotkeyEditor_OutGitHubReview", "github"),
+        ("github_direct", "HotkeyEditor_OutGitHub", "github"),
+        ("slack_review", "HotkeyEditor_OutSlackReview", "slack"),
+        ("slack_direct", "HotkeyEditor_OutSlack", "slack"),
+        ("teams_review", "HotkeyEditor_OutTeamsReview", "teams"),
+        ("teams_direct", "HotkeyEditor_OutTeams", "teams"),
+        ("zapier_review", "HotkeyEditor_OutZapierReview", "zapier"),
+        ("zapier_direct", "HotkeyEditor_OutZapier", "zapier"),
+        ("todoist_review", "HotkeyEditor_OutTodoistReview", "todoist"),
+        ("todoist_direct", "HotkeyEditor_OutTodoist", "todoist"),
+        ("trello_review", "HotkeyEditor_OutTrelloReview", "trello"),
+        ("trello_direct", "HotkeyEditor_OutTrello", "trello"),
+        ("asana_review", "HotkeyEditor_OutAsanaReview", "asana"),
+        ("asana_direct", "HotkeyEditor_OutAsana", "asana"),
+        ("gmail_review", "HotkeyEditor_OutEmailReview", "gmail"),
+        ("calendar_review", "HotkeyEditor_OutCalendarReview", "google_calendar"),
+        ("gtasks_review", "HotkeyEditor_OutGTasksReview", "google_tasks"),
+        ("gtasks_direct", "HotkeyEditor_OutGTasks", "google_tasks"),
+    };
+
+    private static readonly Dictionary<string, string> OrphanKeys = new()
+    {
+        ["gmail_send"] = "HotkeyEditor_OutEmail",
+        ["calendar_direct"] = "HotkeyEditor_OutCalendar",
+    };
+
+    private string? SelectedOutputTag => (OutputModeComboBox.SelectedItem as ComboItem)?.Value as string;
+
+    private void RebuildOutputModeComboBox(string? preserveTag = null)
+    {
+        var currentTag = preserveTag ?? SelectedOutputTag;
+        bool showAll = _connectedIntegrationTypes == null;
+
+        var items = AllOutputModes
+            .Where(m => m.integration == null || showAll || _connectedIntegrationTypes!.Contains(m.integration))
+            .Select(m => new ComboItem(L.T(m.key), m.tag))
+            .ToList();
+
+        if (!string.IsNullOrEmpty(currentTag) && items.All(i => (string?)i.Value != currentTag))
+        {
+            var key = AllOutputModes.FirstOrDefault(m => m.tag == currentTag).key
+                      ?? (OrphanKeys.TryGetValue(currentTag, out var k) ? k : null);
+            items.Add(new ComboItem(key != null ? L.T(key) : currentTag, currentTag));
+        }
+
+        OutputModeComboBox.ItemsSource = items;
+        var idx = items.FindIndex(i => (string?)i.Value == currentTag);
+        OutputModeComboBox.SelectedIndex = idx >= 0 ? idx : 0;
+    }
+
+    private async Task LoadConnectedIntegrationsAsync()
     {
         try
         {
-            var resp = await _api.GetPromptTemplatesAsync(_config.InterfaceLanguage);
-            var templates = resp?.Templates;
-            if (templates == null) return;
-
-            TemplatePickerCombo.Items.Clear();
-            foreach (var t in templates.OrderBy(t => t.SortOrder))
-                TemplatePickerCombo.Items.Add(new ComboBoxItem { Content = t.Name, Tag = t });
+            var integrations = await _apiClient.GetIntegrationsAsync();
+            if (integrations != null)
+                _connectedIntegrationTypes = new HashSet<string>(integrations.Where(i => i.IsActive).Select(i => i.IntegrationType));
         }
-        catch { /* templates zijn optioneel */ }
-    }
-
-    private void TemplatePicker_Changed(object? sender, SelectionChangedEventArgs e)
-    {
-        if (_applyingTemplate) return;
-        if (TemplatePickerCombo.SelectedItem is not ComboBoxItem item) return;
-        if (item.Tag is not RemotePromptTemplate t) return;
-
-        // Vul de prompt + kies model/output op basis van het template.
-        PromptBox.Text = t.CustomPrompt;
-
-        if (!string.IsNullOrEmpty(t.Model)) SelectModelInComboBox(t.Model);
-
-        foreach (ComboBoxItem oi in OutputModeComboBox.Items)
-            if (oi.Tag?.ToString() == t.OutputMode) { OutputModeComboBox.SelectedItem = oi; break; }
-    }
-
-    // ═══ AI-HULP ═══
-
-    private async void Optimize_Click(object? sender, RoutedEventArgs e)
-    {
-        if (TopLevel.GetTopLevel(this) is not Window owner) return;
-        var win = new Windows.AiChatWindow("optimizer", PromptBox.Text);
-        if (await win.ShowDialog<bool>(owner) && !string.IsNullOrWhiteSpace(win.Result))
-            PromptBox.Text = win.Result;
-    }
-
-    private async void AiBuilder_Click(object? sender, RoutedEventArgs e)
-    {
-        if (TopLevel.GetTopLevel(this) is not Window owner) return;
-        var win = new Windows.AiChatWindow("builder", null);
-        if (!await win.ShowDialog<bool>(owner)) return;
-
-        var cfg = win.ResultConfig;
-        if (cfg != null)
+        catch { }
+        finally
         {
-            if (!string.IsNullOrWhiteSpace(cfg.CustomPrompt)) PromptBox.Text = cfg.CustomPrompt;
-            if (!string.IsNullOrWhiteSpace(cfg.Model)) SelectModelInComboBox(cfg.Model!);
-            if (!string.IsNullOrWhiteSpace(cfg.OutputMode)) SelectOutputMode(cfg.OutputMode!);
-            if (!string.IsNullOrWhiteSpace(cfg.Name) &&
-                (string.IsNullOrWhiteSpace(HotkeyNameBox.Text) || HotkeyNameBox.Text == "Nieuwe mAIkey"))
-                HotkeyNameBox.Text = cfg.Name;
-        }
-        else if (!string.IsNullOrWhiteSpace(win.Result))
-        {
-            PromptBox.Text = win.Result;
+            var wasLoading = _isLoadingHotkey;
+            _isLoadingHotkey = true;
+            RebuildOutputModeComboBox();
+            _isLoadingHotkey = wasLoading;
         }
     }
 
-    private void SelectOutputMode(string mode)
+    private void SelectComboByTag(string tag)
     {
-        foreach (ComboBoxItem item in OutputModeComboBox.Items)
-            if (item.Tag?.ToString() == mode) { OutputModeComboBox.SelectedItem = item; return; }
-    }
-
-    // ═══ HOTKEY LIST ═══
-
-    private void PopulateHotkeyList()
-    {
-        HotkeyListPanel.Children.Clear();
-        var hotkeys = _config.Hotkeys;
-
-        foreach (var hk in hotkeys)
+        if (OutputModeComboBox.ItemsSource is not List<ComboItem> items) return;
+        var idx = items.FindIndex(i => (string?)i.Value == tag);
+        if (idx < 0)
         {
-            var item = CreateHotkeyListItem(hk);
-            HotkeyListPanel.Children.Add(item);
+            RebuildOutputModeComboBox(tag);
+            return;
         }
-
-        // Toon de lege-lijst-hint alleen als er geen mAIkeys zijn.
-        if (ListEmptyHint != null)
-            ListEmptyHint.IsVisible = hotkeys.Length == 0;
+        OutputModeComboBox.SelectedIndex = idx;
     }
 
-    private Border CreateHotkeyListItem(HotkeyConfig hk)
+    // ═══ Modellen ═══
+
+    private async Task LoadAvailableModelsAsync()
     {
-        var border = new Border
+        try
         {
-            CornerRadius = new CornerRadius(8),
-            Padding = new Thickness(12, 10),
-            Margin = new Thickness(0, 1),
-            Cursor = new Cursor(StandardCursorType.Hand),
-            MinHeight = 48,
-            Tag = hk.Id
-        };
-
-        var stack = new StackPanel { Spacing = 2 };
-
-        var nameText = new TextBlock
-        {
-            Text = hk.Name,
-            FontSize = 13,
-            FontWeight = FontWeight.Medium,
-            Foreground = TB("Text1")
-        };
-
-        var comboText = new TextBlock
-        {
-            Text = FormatHotkey(hk),
-            FontSize = 10,
-            Foreground = TB("Text3")
-        };
-
-        if (hk.FrozenByDowngrade)
-        {
-            var frozen = new Border
+            var response = await _apiClient.GetAvailableModelsAsync();
+            if (response.Success && response.Models is { Length: > 0 })
             {
-                Background = new SolidColorBrush(Color.Parse("#EF444418")),
-                CornerRadius = new CornerRadius(4),
-                Padding = new Thickness(4, 1),
-                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left
-            };
-            frozen.Child = new TextBlock
-            {
-                Text = "Bevroren",
-                FontSize = 9,
-                Foreground = new SolidColorBrush(Color.Parse("#EF4444"))
-            };
-            stack.Children.Add(frozen);
-        }
-
-        stack.Children.Add(nameText);
-        stack.Children.Add(comboText);
-        border.Child = stack;
-
-        border.PointerEntered += (s, e) =>
-        {
-            if (border != _selectedListItem)
-                border.Background = TB("BackgroundHover");
-        };
-        border.PointerExited += (s, e) =>
-        {
-            if (border != _selectedListItem)
-                border.Background = Brushes.Transparent;
-        };
-        border.PointerReleased += (s, e) => SelectHotkey(hk, border);
-
-        return border;
-    }
-
-    private void SelectHotkey(HotkeyConfig hk, Border listItem)
-    {
-        // Deselect previous
-        if (_selectedListItem != null)
-            _selectedListItem.Background = Brushes.Transparent;
-
-        _selectedHotkey = hk;
-        _selectedListItem = listItem;
-        listItem.Background = TB("BackgroundHover");
-
-        // Show editor
-        EmptyEditorState.IsVisible = false;
-        EditorPanel.IsVisible = true;
-
-        // Populate fields
-        HotkeyNameBox.Text = hk.Name;
-        _recordedModifiers = hk.ModifierKeys;
-        _recordedKey = hk.Key;
-        HotkeyComboBox.Text = FormatHotkey(hk);
-        PromptBox.Text = hk.CustomPrompt;
-        AskContextCheck.IsChecked = hk.AskForContext;
-        IncludeImagesCheck.IsChecked = hk.IncludeImages;
-        ScreenCaptureCheck.IsChecked = hk.UseScreenCapture;
-        UseInputCheck.IsChecked = hk.UseInputInsteadOfSelection;
-
-        // Model
-        SelectModelInComboBox(hk.Model ?? "gpt-4o-mini");
-
-        // Style
-        SelectStyleInComboBox(hk.StyleId);
-
-        // Output mode
-        foreach (ComboBoxItem item in OutputModeComboBox.Items)
-        {
-            if (item.Tag?.ToString() == hk.OutputMode)
-            {
-                OutputModeComboBox.SelectedItem = item;
-                break;
+                ModelCatalogCache.Update(response.Models);
+                var keep = ModelComboBox.SelectedModelId ?? _selectedHotkey?.Model;
+                ModelComboBox.SetModels(response.Models);
+                ModelComboBox.SelectedModelId = keep ?? "gpt-4o-mini";
             }
-        }
 
-        // AI parameters
-        if (hk.CustomAIParameters != null)
+            try
+            {
+                var status = await _apiClient.GetSubscriptionStatusAsync();
+                if (status?.Success == true)
+                {
+                    _highUsageModels = status.HighUsageModels ?? new List<string>();
+                    _isFreeTierForWarning = string.Equals(status.TierId, "free", StringComparison.OrdinalIgnoreCase);
+                }
+            }
+            catch { }
+            UpdateModelUsageWarning(ModelComboBox.SelectedModelId);
+        }
+        catch { /* fallback-modellen staan al */ }
+    }
+
+    private void UpdateModelUsageWarning(string? modelId)
+    {
+        bool show = _isFreeTierForWarning && !string.IsNullOrEmpty(modelId) && _highUsageModels.Contains(modelId);
+        if (show) ModelUsageWarning.Text = L.T("HotkeyEditor_HighUsageModel");
+        ModelUsageWarning.IsVisible = show;
+    }
+
+    private void ModelComboBox_SelectionChanged(object? sender, EventArgs e)
+    {
+        var id = ModelComboBox.SelectedModelId;
+        UpdateParameterVisibilityForModel(id);
+        UpdateModelUsageWarning(id);
+        if (!_isLoadingHotkey && _selectedHotkey != null) SaveEditorToHotkey();
+    }
+
+    private void UpdateParameterVisibilityForModel(string? modelId)
+    {
+        if (modelId == null) return;
+        bool isGpt5 = modelId.StartsWith("gpt-5");
+        bool isClaude = modelId.StartsWith("claude-");
+        bool isGemini = modelId.StartsWith("gemini-");
+        bool isSmart = modelId is "smart" or "smart-openai";
+
+        if (isSmart || isGemini)
         {
-            TempSlider.Value = hk.CustomAIParameters.Temperature ?? 0.7;
-            TokensSlider.Value = hk.CustomAIParameters.MaxTokens ?? 8000;
+            TemperatureRow.IsVisible = false;
+            MaxTokensRow.IsVisible = true;
+            MaxTokensLabel.Text = "Max Tokens";
+            TopPRow.IsVisible = FrequencyPenaltyRow.IsVisible = PresencePenaltyRow.IsVisible = false;
+            return;
+        }
+        TemperatureRow.IsVisible = !isGpt5;
+        MaxTokensRow.IsVisible = true;
+        MaxTokensLabel.Text = isGpt5 ? "Max Output Tokens" : "Max Tokens";
+        TopPRow.IsVisible = FrequencyPenaltyRow.IsVisible = PresencePenaltyRow.IsVisible = !isGpt5 && !isClaude;
+    }
+
+    // ═══ Selectie / laden / opslaan ═══
+
+    private void HotkeyListBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (HotkeyListBox.SelectedItem is HotkeyViewModel vm)
+        {
+            _selectedHotkey = vm.Config;
+            LoadHotkeyToEditor(vm.Config);
+            DeleteButton.IsVisible = true;
+            TourBtn.IsVisible = true;
         }
         else
         {
-            TempSlider.Value = 0.7;
-            TokensSlider.Value = 8000;
+            DeleteButton.IsVisible = false;
+            TourBtn.IsVisible = false;
         }
     }
 
-    // ═══ ADD / SAVE / DELETE ═══
-
-    private void Instructions_Click(object? sender, RoutedEventArgs e)
-        => (TopLevel.GetTopLevel(this) as MainWindow)?.StartHotkeyTour();
-
-    /// <summary>Voor de rondleiding: zorg dat er een (voorbeeld-)mAIkey geselecteerd is zodat de editor zichtbaar is.</summary>
-    public void TourAddDemo()
+    private void LoadHotkeyToEditor(HotkeyConfig hotkey)
     {
-        if (_selectedHotkey == null) AddHotkey_Click(null, null!);
+        _isLoadingHotkey = true;
+        NameTextBox.Text = hotkey.Name;
+        PrefixButtonText.Text = hotkey.PrefixLanguage == "EN" ? "The selected text is" : "De geselecteerde tekst is";
+        CustomPromptTextBox.Text = hotkey.CustomPrompt ?? "";
+        HotkeyTextBox.Text = HotkeyKeys.Format(hotkey.ModifierKeys, hotkey.Key);
+
+        string tag = hotkey.IntegrationType switch
+        {
+            "jira" => hotkey.IntegrationAction?.ShowReviewWindow != false ? "jira_review" : "jira_direct",
+            "github" => hotkey.IntegrationAction?.ShowReviewWindow != false ? "github_review" : "github_direct",
+            "slack" => hotkey.IntegrationAction?.ShowReviewWindow != false ? "slack_review" : "slack_direct",
+            "teams" => hotkey.IntegrationAction?.ShowReviewWindow != false ? "teams_review" : "teams_direct",
+            "zapier" => hotkey.IntegrationAction?.ShowReviewWindow != false ? "zapier_review" : "zapier_direct",
+            "todoist" => hotkey.IntegrationAction?.ShowReviewWindow != false ? "todoist_review" : "todoist_direct",
+            "trello" => hotkey.IntegrationAction?.ShowReviewWindow != false ? "trello_review" : "trello_direct",
+            "asana" => hotkey.IntegrationAction?.ShowReviewWindow != false ? "asana_review" : "asana_direct",
+            "gmail" => "gmail_review",
+            "google_calendar" => "calendar_review",
+            "google_tasks" => hotkey.IntegrationAction?.ShowReviewWindow != false ? "gtasks_review" : "gtasks_direct",
+            _ => hotkey.OutputMode == "prompt" ? "window" : (hotkey.OutputMode ?? "replace")
+        };
+        SelectComboByTag(tag);
+
+        GitHubRepoBox.Text = hotkey.IntegrationAction?.DefaultRepo ?? "";
+        GitHubLabelsBox.Text = hotkey.IntegrationAction?.DefaultLabels ?? "";
+        GmailToBox.Text = hotkey.IntegrationAction?.DefaultTo ?? "";
+        GmailSubjectBox.Text = hotkey.IntegrationAction?.DefaultSubject ?? "";
+        GmailCcBox.Text = hotkey.IntegrationAction?.DefaultCc ?? "";
+        UpdatePanelVisibility();
+
+        AskForContextCheckbox.IsChecked = hotkey.AskForContext || hotkey.OutputMode == "prompt";
+        IncludeImagesCheckbox.IsChecked = hotkey.IncludeImages;
+        IncludeAssistantContextCheckbox.IsChecked = hotkey.IncludeAssistantContext;
+        UseScreenCaptureCheckbox.IsChecked = hotkey.UseScreenCapture;
+        UseInputInsteadOfSelectionCheckbox.IsChecked = hotkey.UseInputInsteadOfSelection;
+
+        if (!string.IsNullOrEmpty(hotkey.Model))
+        {
+            ModelComboBox.SelectedModelId = hotkey.Model;
+            UpdateParameterVisibilityForModel(hotkey.Model);
+        }
+
+        SelectStyle(hotkey.StyleId);
+
+        FrozenBanner.IsVisible = hotkey.FrozenByDowngrade;
+        SaveHotkeyBtn.IsEnabled = !hotkey.FrozenByDowngrade;
+
+        LoadTemplateVariablesPanel(hotkey);
+
+        var p = hotkey.CustomAIParameters;
+        UseCustomAIParamsCheckbox.IsChecked = p != null;
+        AIParametersPanel.IsVisible = p != null;
+        TemperatureSlider.Value = p?.Temperature ?? 0.7;
+        MaxTokensSlider.Value = p?.MaxTokens ?? 8000;
+        TopPSlider.Value = p?.TopP ?? 1.0;
+        FrequencyPenaltySlider.Value = p?.FrequencyPenalty ?? 0.0;
+        PresencePenaltySlider.Value = p?.PresencePenalty ?? 0.0;
+        UpdateParamTexts();
+
+        UpdateModelUsageWarning(ModelComboBox.SelectedModelId);
+        _isLoadingHotkey = false;
     }
 
-    private void AddHotkey_Click(object? sender, RoutedEventArgs e)
+    private void UpdateParamTexts()
     {
-        try
-        {
-            if (ListError != null) ListError.IsVisible = false;
-
-            var newHk = new HotkeyConfig
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = "Nieuwe mAIkey",
-                CustomPrompt = "Verbeter de volgende tekst.",
-                Model = "gpt-4o-mini",
-                OutputMode = "replace",
-                Enabled = true
-            };
-
-            var hotkeys = _config.Hotkeys.ToList();
-            hotkeys.Add(newHk);
-            _config.Hotkeys = hotkeys.ToArray();
-
-            PopulateHotkeyList();
-
-            // Select the new hotkey
-            var lastItem = HotkeyListPanel.Children.LastOrDefault() as Border;
-            if (lastItem != null)
-                SelectHotkey(newHk, lastItem);
-        }
-        catch (Exception ex)
-        {
-            if (ListError != null)
-            {
-                ListError.Text = "Aanmaken mislukt: " + ex.Message;
-                ListError.IsVisible = true;
-            }
-        }
+        TemperatureValueText.Text = TemperatureSlider.Value.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+        MaxTokensValueBox.Text = ((int)MaxTokensSlider.Value).ToString();
+        TopPValueText.Text = TopPSlider.Value.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+        FrequencyPenaltyValueText.Text = FrequencyPenaltySlider.Value.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+        PresencePenaltyValueText.Text = PresencePenaltySlider.Value.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
     }
 
-    private void SaveHotkey_Click(object? sender, RoutedEventArgs e)
+    private void SaveEditorToHotkey()
     {
         if (_selectedHotkey == null) return;
+        var h = _selectedHotkey;
+        h.Name = NameTextBox.Text ?? "";
+        h.CustomPrompt = CustomPromptTextBox.Text ?? "";
+        h.Description = HotkeyTextBox.Text ?? "";
 
-        try
+        var tag = SelectedOutputTag;
+        if (tag == null)
         {
-            if (ListError != null) ListError.IsVisible = false;
-
-            _selectedHotkey.Name = string.IsNullOrWhiteSpace(HotkeyNameBox.Text) ? "Naamloos" : HotkeyNameBox.Text;
-            _selectedHotkey.ModifierKeys = _recordedModifiers;
-            _selectedHotkey.Key = _recordedKey;
-            _selectedHotkey.CustomPrompt = PromptBox.Text;
-            _selectedHotkey.AskForContext = AskContextCheck.IsChecked ?? false;
-            _selectedHotkey.IncludeImages = IncludeImagesCheck.IsChecked ?? true;
-            _selectedHotkey.UseScreenCapture = ScreenCaptureCheck.IsChecked ?? false;
-            _selectedHotkey.UseInputInsteadOfSelection = UseInputCheck.IsChecked ?? false;
-
-            // Model
-            if (ModelComboBox.SelectedItem is AvailableModel modelItem)
-                _selectedHotkey.Model = modelItem.Id;
-
-            // Style
-            if (StyleComboBox.SelectedItem is ComboBoxItem styleItem)
-                _selectedHotkey.StyleId = styleItem.Tag?.ToString();
-
-            // Output mode
-            if (OutputModeComboBox.SelectedItem is ComboBoxItem modeItem)
-                _selectedHotkey.OutputMode = modeItem.Tag?.ToString() ?? "replace";
-
-            // AI parameters
-            _selectedHotkey.CustomAIParameters = new AIParameters
+            h.OutputMode = "replace";
+            h.IntegrationType = null;
+            h.IntegrationAction = null;
+        }
+        else
+        {
+            string? Opt(TextBox t) => string.IsNullOrWhiteSpace(t.Text) ? null : t.Text.Trim();
+            (string? type, string action) = tag switch
             {
-                Temperature = TempSlider.Value,
-                MaxTokens = (int)TokensSlider.Value
+                "jira_review" or "jira_direct" => ("jira", "create-ticket"),
+                "github_review" or "github_direct" => ("github", "create-issue"),
+                "slack_review" or "slack_direct" => ("slack", "send-message"),
+                "teams_review" or "teams_direct" => ("teams", "send-message"),
+                "zapier_review" or "zapier_direct" => ("zapier", "send-data"),
+                "todoist_review" or "todoist_direct" => ("todoist", "create-task"),
+                "trello_review" or "trello_direct" => ("trello", "create-card"),
+                "asana_review" or "asana_direct" => ("asana", "create-task"),
+                "gmail_review" or "gmail_send" => ("gmail", "send"),
+                "calendar_review" or "calendar_direct" => ("google_calendar", "create-event"),
+                "gtasks_review" or "gtasks_direct" => ("google_tasks", "create-task"),
+                _ => ((string?)null, "")
             };
 
-            // Save all hotkeys
-            var hotkeys = _config.Hotkeys.ToList();
-            var idx = hotkeys.FindIndex(h => h.Id == _selectedHotkey.Id);
-            if (idx >= 0) hotkeys[idx] = _selectedHotkey;
-            else hotkeys.Add(_selectedHotkey);
-            _config.Hotkeys = hotkeys.ToArray();
-
-            // Hotkeys opnieuw aanmelden bij het systeem — mag het opslaan nooit blokkeren
-            // (op Windows/preview kan de hotkeydienst een stub zijn die een fout gooit).
-            try { App.Hotkeys?.RegisterAll(); } catch { /* genegeerd */ }
-
-            PopulateHotkeyList();
-            ReselectById(_selectedHotkey.Id);
-            ShowSaved();
-        }
-        catch (Exception ex)
-        {
-            if (ListError != null)
+            if (type == null)
             {
-                ListError.Text = "Opslaan mislukt: " + ex.Message;
-                ListError.IsVisible = true;
+                h.IntegrationType = null;
+                h.IntegrationAction = null;
+                h.OutputMode = tag;
+            }
+            else
+            {
+                h.IntegrationType = type;
+                h.IntegrationAction = new IntegrationAction
+                {
+                    Action = action,
+                    ShowReviewWindow = tag.EndsWith("_review"),
+                    DefaultRepo = type == "github" ? Opt(GitHubRepoBox) : null,
+                    DefaultLabels = type == "github" ? Opt(GitHubLabelsBox) : null,
+                    DefaultTo = type == "gmail" ? Opt(GmailToBox) : null,
+                    DefaultSubject = type == "gmail" ? Opt(GmailSubjectBox) : null,
+                    DefaultCc = type == "gmail" ? Opt(GmailCcBox) : null,
+                };
+                h.OutputMode = "replace";
             }
         }
-    }
 
-    /// <summary>Herselecteer (highlight) het lijstitem met dit id na een verversing.</summary>
-    private void ReselectById(string id)
-    {
-        foreach (var child in HotkeyListPanel.Children)
-        {
-            if (child is Border b && (b.Tag as string) == id)
+        h.AskForContext = AskForContextCheckbox.IsChecked == true;
+        h.IncludeImages = IncludeImagesCheckbox.IsChecked ?? true;
+        h.IncludeAssistantContext = IncludeAssistantContextCheckbox.IsChecked == true;
+        h.UseScreenCapture = UseScreenCaptureCheckbox.IsChecked == true;
+        h.UseInputInsteadOfSelection = UseInputInsteadOfSelectionCheckbox.IsChecked == true;
+        if (ModelComboBox.SelectedModelId != null) h.Model = ModelComboBox.SelectedModelId;
+        h.StyleId = (StyleComboBox.SelectedItem as StyleOption)?.Id;
+
+        h.CustomAIParameters = UseCustomAIParamsCheckbox.IsChecked == true
+            ? new AIParameters
             {
-                if (_selectedListItem != null) _selectedListItem.Background = Brushes.Transparent;
-                _selectedListItem = b;
-                b.Background = TB("BackgroundHover");
-                break;
+                Temperature = TemperatureSlider.Value,
+                MaxTokens = (int)MaxTokensSlider.Value,
+                TopP = TopPSlider.Value == 1.0 ? null : TopPSlider.Value,
+                FrequencyPenalty = FrequencyPenaltySlider.Value == 0.0 ? null : FrequencyPenaltySlider.Value,
+                PresencePenalty = PresencePenaltySlider.Value == 0.0 ? null : PresencePenaltySlider.Value
             }
+            : null;
+
+        if (HotkeyListBox.SelectedItem is HotkeyViewModel vm)
+        {
+            vm.Description = h.Description;
+            vm.Name = h.Name;
         }
     }
 
-    /// <summary>Toont kort een "Opgeslagen"-bevestiging naast de opslaan-knop.</summary>
-    private async void ShowSaved()
+    private void CustomPromptTextBox_TextChanged(object? sender, TextChangedEventArgs e)
     {
-        if (SaveStatus == null) return;
-        SaveStatus.IsVisible = true;
-        try { await System.Threading.Tasks.Task.Delay(2000); } catch { }
-        SaveStatus.IsVisible = false;
+        if (_selectedHotkey != null) _selectedHotkey.CustomPrompt = CustomPromptTextBox.Text;
     }
 
-    private void DeleteHotkey_Click(object? sender, RoutedEventArgs e)
+    private void PrefixDropdownButton_Click(object? sender, RoutedEventArgs e) => PrefixLanguagePopup.IsOpen = true;
+
+    private void PrefixLanguageOption_Click(object? sender, RoutedEventArgs e)
     {
+        if (sender is Button { Tag: string language })
+        {
+            PrefixButtonText.Text = language == "EN" ? "The selected text is" : "De geselecteerde tekst is";
+            if (_selectedHotkey != null) _selectedHotkey.PrefixLanguage = language;
+            PrefixLanguagePopup.IsOpen = false;
+        }
+    }
+
+    // ═══ Template kiezen ═══
+
+    private async void TemplatePickerSearchBox_TextChanged(object? sender, TextChangedEventArgs e)
+    {
+        var query = TemplatePickerSearchBox.Text?.Trim() ?? "";
+        if (query.Length == 0)
+        {
+            TemplatePickerResultsBorder.IsVisible = false;
+            return;
+        }
+
+        if (_templatePickerTemplates == null && !_templatePickerLoading)
+        {
+            _templatePickerLoading = true;
+            try
+            {
+                var response = await _apiClient.GetPromptTemplatesAsync(_config.InterfaceLanguage);
+                _templatePickerTemplates = response?.Templates ?? new List<RemotePromptTemplate>();
+            }
+            catch { _templatePickerTemplates = new List<RemotePromptTemplate>(); }
+            finally { _templatePickerLoading = false; }
+        }
+
+        query = TemplatePickerSearchBox.Text?.Trim() ?? "";
+        if (query.Length == 0) return;
+        var q = query.ToLowerInvariant();
+        var matches = (_templatePickerTemplates ?? new List<RemotePromptTemplate>())
+            .Where(t => $"{t.Name} {t.Description} {t.Category}".ToLowerInvariant().Contains(q))
+            .Take(8).ToList();
+        TemplatePickerResultsList.ItemsSource = matches;
+        TemplatePickerResultsBorder.IsVisible = matches.Count > 0;
+    }
+
+    private async void TemplatePickerResultsList_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (e.AddedItems.Count == 0 || e.AddedItems[0] is not RemotePromptTemplate tpl) return;
+        TemplatePickerResultsBorder.IsVisible = false;
+        TemplatePickerResultsList.ItemsSource = null;
+        TemplatePickerSearchBox.Text = "";
         if (_selectedHotkey == null) return;
 
-        var hotkeys = _config.Hotkeys.Where(h => h.Id != _selectedHotkey.Id).ToArray();
-        _config.Hotkeys = hotkeys;
-        try { App.Hotkeys?.RegisterAll(); } catch { /* afmelden mag verwijderen niet blokkeren */ }
-
-        _selectedHotkey = null;
-        _selectedListItem = null;
-        EmptyEditorState.IsVisible = true;
-        EditorPanel.IsVisible = false;
-
-        PopulateHotkeyList();
-    }
-
-    // ═══ HOTKEY RECORDING ═══
-
-    private void HotkeyCombo_KeyDown(object? sender, KeyEventArgs e)
-    {
-        e.Handled = true;
-
-        // Record modifiers
-        int mods = 0;
-        if (e.KeyModifiers.HasFlag(KeyModifiers.Control)) mods |= 2;
-        if (e.KeyModifiers.HasFlag(KeyModifiers.Alt)) mods |= 1;
-        if (e.KeyModifiers.HasFlag(KeyModifiers.Shift)) mods |= 4;
-        if (e.KeyModifiers.HasFlag(KeyModifiers.Meta)) mods |= 8;
-
-        // Skip if only modifier pressed
-        if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl ||
-            e.Key == Key.LeftAlt || e.Key == Key.RightAlt ||
-            e.Key == Key.LeftShift || e.Key == Key.RightShift ||
-            e.Key == Key.LWin || e.Key == Key.RWin)
+        var owner = TopLevel.GetTopLevel(this) as Window;
+        if (!string.IsNullOrWhiteSpace(_selectedHotkey.CustomPrompt) &&
+            !await MkDialog.ShowConfirm(L.T("HotkeyEditor_TemplateOverwriteTitle"), L.T("HotkeyEditor_TemplateOverwriteDesc"), owner))
             return;
 
-        // Zet de Avalonia-toets om naar een Windows virtual-key-code. Zo staat de
-        // config in hetzelfde formaat als de Windows-app en kan de macOS-hotkeydienst
-        // hem correct naar een macOS-toetscode vertalen.
-        int vk = AvaloniaKeyToVk(e.Key);
-        if (vk == 0) return; // niet-ondersteunde toets, negeren
+        var data = await TemplateApplyHelper.BuildAsync(tpl, _apiClient, _config, owner);
+        if (data == null) return;
 
-        _recordedModifiers = mods;
-        _recordedKey = vk;
+        var h = _selectedHotkey;
+        h.Name = data.Name;
+        h.CustomPrompt = data.Prompt;
+        h.OutputMode = data.OutputMode == "prompt" ? "window" : data.OutputMode;
+        h.Model = data.Model;
+        h.AskForContext = data.AskForContext || data.OutputMode == "prompt";
+        h.IncludeImages = data.IncludeImages;
+        h.TemplateVariables = data.TemplateVariables;
+        h.StyleId = data.StyleId;
+        h.IntegrationType = data.IntegrationType;
+        h.IntegrationAction = data.IntegrationAction;
+        h.UseScreenCapture = data.UseScreenCapture;
+        h.CustomAIParameters = new AIParameters { Temperature = data.Temperature, MaxTokens = 8000 };
 
-        // Display
-        var parts = new List<string>();
-        if ((mods & 2) != 0) parts.Add("Ctrl");
-        if ((mods & 1) != 0) parts.Add("Alt");
-        if ((mods & 4) != 0) parts.Add("Shift");
-        if ((mods & 8) != 0) parts.Add("Cmd");
-        parts.Add(VkToDisplay(vk));
-
-        HotkeyComboBox.Text = string.Join(" + ", parts);
+        LoadHotkeyToEditor(h);
+        if (HotkeyListBox.SelectedItem is HotkeyViewModel vm) vm.Name = h.Name;
     }
 
-    /// <summary>
-    /// Avalonia Key -> Windows virtual-key-code. Gebruikt de (aaneengesloten,
-    /// geordende) enum-reeksen zodat het niet afhangt van absolute enum-waarden.
-    /// Retourneert 0 voor niet-ondersteunde toetsen.
-    /// </summary>
-    private static int AvaloniaKeyToVk(Key key)
+    // ═══ Toevoegen / verwijderen / opslaan ═══
+
+    private async void AddHotkey_Click(object? sender, RoutedEventArgs e)
     {
-        if (key >= Key.A && key <= Key.Z) return 0x41 + (key - Key.A);
-        if (key >= Key.D0 && key <= Key.D9) return 0x30 + (key - Key.D0);
-        if (key >= Key.NumPad0 && key <= Key.NumPad9) return 0x30 + (key - Key.NumPad0);
-        if (key >= Key.F1 && key <= Key.F12) return 0x70 + (key - Key.F1);
-
-        return key switch
-        {
-            Key.Space => 0x20,
-            Key.Enter => 0x0D,
-            Key.Escape => 0x1B,
-            Key.Tab => 0x09,
-            Key.Back => 0x08,
-            Key.Left => 0x25,
-            Key.Up => 0x26,
-            Key.Right => 0x27,
-            Key.Down => 0x28,
-            Key.OemComma => 0xBC,
-            Key.OemPeriod => 0xBE,
-            Key.OemQuestion => 0xBF,
-            Key.OemSemicolon => 0xBA,
-            Key.OemMinus => 0xBD,
-            Key.OemPlus => 0xBB,
-            Key.OemTilde => 0xC0,
-            Key.OemOpenBrackets => 0xDB,
-            Key.OemCloseBrackets => 0xDD,
-            Key.OemPipe => 0xDC,
-            _ => 0
-        };
-    }
-
-    /// <summary>Windows virtual-key-code -> leesbare weergave (identiek aan het dashboard).</summary>
-    private static string VkToDisplay(int vk) => vk switch
-    {
-        >= 0x30 and <= 0x39 => ((char)vk).ToString(),
-        >= 0x41 and <= 0x5A => ((char)vk).ToString(),
-        >= 0x70 and <= 0x7B => $"F{vk - 0x6F}",
-        0x20 => "Space",
-        0x0D => "Enter",
-        0x1B => "Esc",
-        0x09 => "Tab",
-        _ => $"Key{vk}"
-    };
-
-    // ═══ MODELS & STYLES ═══
-
-    private async void LoadModels()
-    {
-        // Eén gedeelde sjabloon voor zowel de lijstitems als de geselecteerde (dichtgeklapte) weergave,
-        // zodat ze er gegarandeerd identiek uitzien.
-        ModelComboBox.ItemTemplate = new FuncDataTemplate<AvailableModel>((m, _) => BuildModelContent(m), true);
-
-        // Standaardmodellen (worden vervangen zodra de API-lijst binnen is)
-        _models = new List<AvailableModel>
-        {
-            new() { Id = "gpt-4o-mini", Name = "GPT-4o Mini", Provider = "OpenAI",    Speed = 4, Intelligence = 2, Usage = 1 },
-            new() { Id = "gpt-4.1-mini", Name = "GPT-4.1 Mini", Provider = "OpenAI",   Speed = 4, Intelligence = 3, Usage = 2 },
-            new() { Id = "claude-haiku-4-5", Name = "Claude Haiku 4.5", Provider = "Anthropic", Speed = 4, Intelligence = 3, Usage = 2 },
-        };
-        ModelComboBox.ItemsSource = _models;
-        ModelComboBox.SelectedIndex = 0;
-
-        // Try to load from API
+        var owner = TopLevel.GetTopLevel(this) as Window;
         try
         {
-            var response = await _api.GetAvailableModelsAsync();
-            if (response.Success && response.Models?.Length > 0)
+            var status = await _apiClient.GetSubscriptionStatusAsync();
+            if (status.Success && status.MaxHotkeys.HasValue && _hotkeyViewModels.Count(vm => !vm.Frozen) >= status.MaxHotkeys.Value)
             {
-                var selectedId = (ModelComboBox.SelectedItem as AvailableModel)?.Id;
-                _models = response.Models.ToList();
-                ModelComboBox.ItemsSource = _models;
-                if (!string.IsNullOrEmpty(selectedId)) SelectModelInComboBox(selectedId);
-                if (ModelComboBox.SelectedItem == null && _models.Count > 0) ModelComboBox.SelectedIndex = 0;
-            }
-        }
-        catch { /* gebruik standaardmodellen */ }
-    }
-
-    /// <summary>Rijke model-rij: naam + provider links, meters (snelheid/slimheid/verbruik) rechts.
-    /// Gebruikt als sjabloon voor zowel de dropdown-items als de geselecteerde weergave.</summary>
-    private Control BuildModelContent(AvailableModel m)
-    {
-        var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), MinHeight = 34 };
-
-        var left = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 6, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 12, 0) };
-        left.Children.Add(new TextBlock { Text = m.Name, FontSize = 13, FontWeight = FontWeight.Medium, VerticalAlignment = VerticalAlignment.Center });
-        if (!string.IsNullOrEmpty(m.Provider))
-            left.Children.Add(new TextBlock { Text = m.Provider, FontSize = 10, Foreground = TB("Text3"), VerticalAlignment = VerticalAlignment.Center });
-        grid.Children.Add(left);
-
-        var meters = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Right };
-        meters.Children.Add(BuildMeter("SNELHEID", m.Speed, Color.Parse("#F59E0B")));   // oranje
-        meters.Children.Add(BuildMeter("SLIMHEID", m.Intelligence, Color.Parse("#A78BFA"))); // paars
-        meters.Children.Add(BuildMeter("VERBRUIK", m.Usage, Color.Parse("#10B981")));  // groen
-        Grid.SetColumn(meters, 1);
-        grid.Children.Add(meters);
-
-        return grid;
-    }
-
-    /// <summary>Eén meter met vaste breedte (voor nette kolom-uitlijning): gekleurd label
-    /// bovenop + 5 segmentjes (gevuld tot de waarde, 1–5), zoals de Windows-versie.</summary>
-    private Control BuildMeter(string label, int value, Color color)
-    {
-        var stack = new StackPanel { Spacing = 3, Width = 58, VerticalAlignment = VerticalAlignment.Center };
-        stack.Children.Add(new TextBlock
-        {
-            Text = label, FontSize = 8, FontWeight = FontWeight.Bold, LetterSpacing = 0.5,
-            Foreground = new SolidColorBrush(color), HorizontalAlignment = HorizontalAlignment.Center
-        });
-        var segs = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 2, HorizontalAlignment = HorizontalAlignment.Center };
-        var empty = TB("BorderStrong");
-        var filled = new SolidColorBrush(color);
-        for (int i = 1; i <= 5; i++)
-            segs.Children.Add(new Border
-            {
-                Width = 7, Height = 4, CornerRadius = new CornerRadius(2),
-                Background = i <= value ? filled : empty
-            });
-        stack.Children.Add(segs);
-        return stack;
-    }
-
-    private void LoadStyles()
-    {
-        StyleComboBox.Items.Clear();
-        StyleComboBox.Items.Add(new ComboBoxItem { Content = "Geen stijl", Tag = "" });
-
-        foreach (var style in _config.WritingStyles)
-            StyleComboBox.Items.Add(new ComboBoxItem { Content = style.Name, Tag = style.Id });
-
-        StyleComboBox.SelectedIndex = 0;
-    }
-
-    private void SelectModelInComboBox(string modelId)
-    {
-        var match = _models.FirstOrDefault(m => m.Id == modelId);
-        if (match != null) { ModelComboBox.SelectedItem = match; return; }
-        if (_models.Count > 0) ModelComboBox.SelectedIndex = 0;
-    }
-
-    private void SelectStyleInComboBox(string? styleId)
-    {
-        if (string.IsNullOrEmpty(styleId))
-        {
-            StyleComboBox.SelectedIndex = 0;
-            return;
-        }
-        foreach (ComboBoxItem item in StyleComboBox.Items)
-        {
-            if (item.Tag?.ToString() == styleId)
-            {
-                StyleComboBox.SelectedItem = item;
+                if (await MkDialog.ShowUpgrade(Loc.T("HotkeyEditor_TooManyTitle", "Te veel mAIkeys"),
+                        Loc.Tf("HotkeyEditor_TooManyBody", "Je {0}-abonnement staat maximaal {1} mAIkeys toe.\n\nUpgrade om meer mAIkeys aan te maken.", status.Tier, status.MaxHotkeys.Value), owner))
+                    Ui.Main?.OpenPricingPage();
                 return;
             }
         }
+        catch { }
+
+        // Zoek een vrije combinatie: ⌃ + cijfer, dan ⌥ + cijfer, dan ⇧ + cijfer (zoals Windows).
+        int? foundKey = null;
+        int foundMods = 2;
+        foreach (var mods in new[] { 2, 1, 4 })
+        {
+            var occupied = _hotkeyViewModels.Where(vm => vm.Config.Enabled && vm.Config.ModifierKeys == mods).Select(vm => vm.Config.Key).ToHashSet();
+            var free = Enumerable.Range(0, 10).Select(i => HotkeyKeys.D0 + i).FirstOrDefault(k => !occupied.Contains(k), -1);
+            if (free >= 0) { foundKey = free; foundMods = mods; break; }
+        }
+
+        if (foundKey == null)
+        {
+            await MkDialog.ShowError(L.T("HotkeyEditor_NoCombosTitle"), L.T("HotkeyEditor_NoCombosDesc"), owner);
+            return;
+        }
+
+        var newHotkey = new HotkeyConfig
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = L.T("HotkeyEditor_NewHotkeyName"),
+            Description = HotkeyKeys.Format(foundMods, foundKey.Value),
+            ModifierKeys = foundMods,
+            Key = foundKey.Value,
+            Enabled = true,
+            OutputMode = "replace"
+        };
+        var vmNew = NewViewModel(newHotkey, _hotkeyViewModels.Count);
+        _hotkeyViewModels.Add(vmNew);
+        UpdateEmptyState();
+        HotkeyListBox.SelectedItem = vmNew;
+    }
+
+    private void TourBtn_Click(object? sender, RoutedEventArgs e) => Ui.Main?.StartTour("hotkey");
+
+    private void EmptyStateTourBtn_Click(object? sender, RoutedEventArgs e)
+    {
+        if (_hotkeyViewModels.Count == 0)
+        {
+            var demo = new HotkeyConfig
+            {
+                Id = Services.HotkeyRuntime.DemoHotkeyId,
+                Name = L.CurrentLanguage switch { "en" => "Spelling & Grammar", "de" => "Rechtschreibung & Grammatik", _ => "Spelling & Grammatica" },
+                Description = L.CurrentLanguage switch
+                {
+                    "en" => "Correct spelling and grammar of the selected text",
+                    "de" => "Rechtschreibung und Grammatik des markierten Textes korrigieren",
+                    _ => "Verbeter spelling en grammatica van de geselecteerde tekst"
+                },
+                CustomPrompt = L.CurrentLanguage switch
+                {
+                    "en" => "A text that may contain spelling or grammar mistakes. Check and correct the spelling and grammar. Preserve the original writing style and meaning as much as possible. Return only the corrected text, without any explanation.",
+                    "de" => "Ein Text, der möglicherweise Rechtschreib- oder Grammatikfehler enthält. Prüfe und korrigiere Rechtschreibung und Grammatik. Behalte den ursprünglichen Schreibstil und die Bedeutung so weit wie möglich bei. Gib nur den korrigierten Text zurück, ohne Erklärung.",
+                    _ => "Een tekst die mogelijk spellings- of grammaticale fouten bevat. Controleer en verbeter de spelling en grammatica. Behoud de oorspronkelijke schrijfstijl en betekenis zo veel mogelijk. Geef alleen de verbeterde tekst terug, zonder uitleg."
+                },
+                Model = "gpt-4o-mini",
+                OutputMode = "replace",
+                ModifierKeys = 2,
+                Key = HotkeyKeys.D0 + 1,
+                Enabled = true,
+                IncludeImages = true,
+            };
+            _hotkeyViewModels.Add(NewViewModel(demo, 0));
+            _config.Hotkeys = _hotkeyViewModels.Select(vm => vm.Config).ToArray();
+            _config.HasShownDemoHotkey = true;
+            UpdateEmptyState();
+            HotkeyListBox.SelectedIndex = 0;
+        }
+        Ui.Main?.StartTour("hotkey");
+    }
+
+    private async void DeleteHotkey_Click(object? sender, RoutedEventArgs e)
+    {
+        if (_selectedHotkey == null) return;
+        var owner = TopLevel.GetTopLevel(this) as Window;
+        if (!await MkDialog.ShowConfirm(L.T("HotkeyEditor_ConfirmDelete"),
+                $"{L.T("HotkeyEditor_ConfirmDeleteMsg").Replace("?", "")} '{_selectedHotkey.Name}'?", owner))
+            return;
+
+        var vm = _hotkeyViewModels.FirstOrDefault(v => v.Config == _selectedHotkey);
+        if (vm != null) _hotkeyViewModels.Remove(vm);
+        _config.Hotkeys = _hotkeyViewModels.Select(v => v.Config).ToArray();
+        _selectedHotkey = null;
+        if (_hotkeyViewModels.Count > 0) HotkeyListBox.SelectedIndex = 0;
+        UpdateEmptyState();
+        Ui.Main?.ReloadHotkeys();
+    }
+
+    private async void SaveChanges_Click(object? sender, RoutedEventArgs e)
+    {
+        if (_selectedHotkey == null || _selectedHotkey.FrozenByDowngrade) return;
+        var owner = TopLevel.GetTopLevel(this) as Window;
+
+        if (_selectedHotkey.ModifierKeys == 0 || _selectedHotkey.Key == 0)
+        {
+            await MkDialog.ShowError(L.T("HotkeyEditor_ComboRequired"), L.T("HotkeyEditor_ComboRequiredDesc"), owner);
+            return;
+        }
+
+        SaveEditorToHotkey();
+
+        try
+        {
+            var status = await _apiClient.GetSubscriptionStatusAsync();
+            if (_selectedHotkey.IncludeImages && status.Success && !status.ImageAnalysis)
+            {
+                await MkDialog.ShowInfo(L.T("HotkeyEditor_ImagesUnavailTitle"), L.T("HotkeyEditor_ImagesUnavailDesc"), owner);
+                _selectedHotkey.IncludeImages = false;
+                IncludeImagesCheckbox.IsChecked = false;
+            }
+
+            var chosen = _selectedHotkey.Model ?? "";
+            bool allowed = status.AllowedModels == null || status.AllowedModels.Count == 0
+                           || status.AllowedModels.Contains("*") || status.AllowedModels.Contains(chosen);
+            if (status.Success && !string.IsNullOrEmpty(chosen) && !allowed)
+            {
+                await MkDialog.ShowInfo(L.T("HotkeyEditor_ModelUnavailTitle"), L.Tf("HotkeyEditor_ModelUnavailDesc", chosen, status.Tier), owner);
+                _selectedHotkey.Model = "gpt-4o-mini";
+                ModelComboBox.SelectedModelId = "gpt-4o-mini";
+            }
+        }
+        catch { }
+
+        _config.Hotkeys = _hotkeyViewModels.Select(vm => vm.Config).ToArray();
+        await MkDialog.ShowInfo(L.T("HotkeyEditor_Save"), L.T("HotkeyEditor_SavedOk"), owner);
+        NavigateBack?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void BackButton_Click(object? sender, RoutedEventArgs e) => NavigateBack?.Invoke(this, EventArgs.Empty);
+
+    // ═══ Stijlen ═══
+
+    private void LoadStyles()
+    {
+        var options = new List<StyleOption> { new() { Id = null, Name = L.T("HotkeyEditor_NoStyle") } };
+        options.AddRange(_config.GetWritingStyles().Select(s => new StyleOption
+        {
+            Id = s.Id,
+            Name = $"{s.Name} ({s.TextExamples?.Length ?? 0} voorbeelden)"
+        }));
+        StyleComboBox.ItemsSource = options;
         StyleComboBox.SelectedIndex = 0;
     }
 
-    // ═══ HELPERS ═══
-
-    private static string FormatHotkey(HotkeyConfig hk)
+    private void SelectStyle(string? styleId)
     {
-        var parts = new List<string>();
-        var mods = hk.ModifierKeys;
-        if ((mods & 2) != 0) parts.Add("Ctrl");
-        if ((mods & 1) != 0) parts.Add("Alt");
-        if ((mods & 4) != 0) parts.Add("Shift");
-        if ((mods & 8) != 0) parts.Add("Cmd");
+        if (StyleComboBox.ItemsSource is not List<StyleOption> options) return;
+        var idx = string.IsNullOrEmpty(styleId) ? 0 : options.FindIndex(o => o.Id == styleId);
+        StyleComboBox.SelectedIndex = idx >= 0 ? idx : 0;
+    }
 
-        var keyStr = hk.Key switch
+    private void StyleComboBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (!_isLoadingHotkey && _selectedHotkey != null)
+            _selectedHotkey.StyleId = (StyleComboBox.SelectedItem as StyleOption)?.Id;
+    }
+
+    private async void AddStyleLink_Click(object? sender, RoutedEventArgs e)
+    {
+        try
         {
-            >= 48 and <= 57 => ((char)hk.Key).ToString(),
-            >= 65 and <= 90 => ((char)hk.Key).ToString(),
-            >= 112 and <= 123 => $"F{hk.Key - 111}",
-            _ => hk.Key > 0 ? $"Key{hk.Key}" : "..."
-        };
-        parts.Add(keyStr);
-        return string.Join(" + ", parts);
+            var status = await _apiClient.GetSubscriptionStatusAsync();
+            bool atLimit = status?.Success == true && status.MaxStyleProfiles.HasValue
+                           && _config.GetWritingStyles().Length >= status.MaxStyleProfiles.Value;
+            if (atLimit)
+                await MkDialog.ShowInfo(L.T("StyleTour_LimitTitle"), L.T("StyleTour_LimitBody"), TopLevel.GetTopLevel(this) as Window);
+            Ui.Main?.StartTour(atLimit ? "style_edit" : "style_new");
+        }
+        catch { Ui.Main?.StartTour("style_new"); }
+    }
+
+    // ═══ Template-variabelen ═══
+
+    private void LoadTemplateVariablesPanel(HotkeyConfig hotkey)
+    {
+        TemplateVariablesFieldsPanel.Children.Clear();
+        if (hotkey.TemplateVariables == null || hotkey.TemplateVariables.Count == 0)
+        {
+            TemplateVariablesPanel.IsVisible = false;
+            return;
+        }
+        TemplateVariablesPanel.IsVisible = true;
+        foreach (var kv in hotkey.TemplateVariables.ToList())
+        {
+            var label = new TextBlock { Text = kv.Key, FontSize = 12, Margin = new Thickness(0, 0, 0, 4) };
+            label.Bind(TextBlock.ForegroundProperty, this.GetResourceObservable("TextSecondary"));
+            var box = new TextBox { Text = kv.Value, Height = 38, FontSize = 13, Padding = new Thickness(10, 0), Margin = new Thickness(0, 0, 0, 12), VerticalContentAlignment = VerticalAlignment.Center, Tag = kv.Key };
+            box.TextChanged += (_, _) =>
+            {
+                if (_selectedHotkey?.TemplateVariables != null && box.Tag is string key)
+                    _selectedHotkey.TemplateVariables[key] = box.Text ?? "";
+            };
+            TemplateVariablesFieldsPanel.Children.Add(label);
+            TemplateVariablesFieldsPanel.Children.Add(box);
+        }
+    }
+
+    // ═══ Checkboxes / AI-parameters ═══
+
+    private void AskForContext_Changed(object? sender, RoutedEventArgs e)
+    {
+        if (_selectedHotkey != null) _selectedHotkey.AskForContext = AskForContextCheckbox.IsChecked == true;
+    }
+
+    private void UseInputInsteadOfSelection_Changed(object? sender, RoutedEventArgs e)
+    {
+        if (_selectedHotkey != null) _selectedHotkey.UseInputInsteadOfSelection = UseInputInsteadOfSelectionCheckbox.IsChecked == true;
+    }
+
+    private void UseScreenCapture_Changed(object? sender, RoutedEventArgs e)
+    {
+        if (_selectedHotkey != null) _selectedHotkey.UseScreenCapture = UseScreenCaptureCheckbox.IsChecked == true;
+    }
+
+    private void UseCustomAIParams_Changed(object? sender, RoutedEventArgs e)
+    {
+        AIParametersPanel.IsVisible = UseCustomAIParamsCheckbox.IsChecked == true;
+        if (!_isLoadingHotkey) SaveEditorToHotkey();
+    }
+
+    private void AIParameter_Changed(object? sender, RangeBaseValueChangedEventArgs e)
+    {
+        if (_selectedHotkey == null) return;
+        UpdateParamTexts();
+        if (!_isLoadingHotkey) SaveEditorToHotkey();
+    }
+
+    private void CommitValue(TextBox box, Slider slider, string format)
+    {
+        var input = (box.Text ?? "").Replace(',', '.');
+        if (double.TryParse(input, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var v))
+        {
+            v = Math.Max(slider.Minimum, Math.Min(slider.Maximum, format == "0" ? Math.Round(v) : Math.Round(v, 2)));
+            slider.Value = v;
+        }
+        UpdateParamTexts();
+        if (_selectedHotkey != null) SaveEditorToHotkey();
+    }
+
+    private void MaxTokensValueBox_LostFocus(object? sender, RoutedEventArgs e) => CommitValue(MaxTokensValueBox, MaxTokensSlider, "0");
+    private void TemperatureValueBox_LostFocus(object? sender, RoutedEventArgs e) => CommitValue(TemperatureValueText, TemperatureSlider, "F2");
+    private void TopPValueBox_LostFocus(object? sender, RoutedEventArgs e) => CommitValue(TopPValueText, TopPSlider, "F2");
+    private void FrequencyPenaltyValueBox_LostFocus(object? sender, RoutedEventArgs e) => CommitValue(FrequencyPenaltyValueText, FrequencyPenaltySlider, "F2");
+    private void PresencePenaltyValueBox_LostFocus(object? sender, RoutedEventArgs e) => CommitValue(PresencePenaltyValueText, PresencePenaltySlider, "F2");
+
+    // ═══ AI-hulp ═══
+
+    private void ApplyAiConfig(AIHotkeyConfig config, bool applyImageOptions)
+    {
+        NameTextBox.Text = string.IsNullOrEmpty(config.Name) ? NameTextBox.Text : config.Name;
+        CustomPromptTextBox.Text = config.CustomPrompt ?? "";
+        if (!string.IsNullOrEmpty(config.Model))
+        {
+            ModelComboBox.SelectedModelId = config.Model;
+            UpdateParameterVisibilityForModel(config.Model);
+        }
+        if (!string.IsNullOrEmpty(config.OutputMode))
+        {
+            if (config.OutputMode == "prompt") AskForContextCheckbox.IsChecked = true;
+            SelectComboByTag(config.OutputMode == "prompt" ? "window" : config.OutputMode);
+        }
+        if (!string.IsNullOrEmpty(config.StyleId)) SelectStyle(config.StyleId);
+        if (applyImageOptions)
+        {
+            IncludeImagesCheckbox.IsChecked = config.IncludeImages;
+            UseScreenCaptureCheckbox.IsChecked = config.UseScreenCapture;
+            UseInputInsteadOfSelectionCheckbox.IsChecked = config.UseInputInsteadOfSelection;
+        }
+        if (config.CustomAIParameters is { } p)
+        {
+            UseCustomAIParamsCheckbox.IsChecked = true;
+            AIParametersPanel.IsVisible = true;
+            if (p.Temperature.HasValue) TemperatureSlider.Value = p.Temperature.Value;
+            if (p.MaxTokens.HasValue) MaxTokensSlider.Value = p.MaxTokens.Value;
+            if (p.TopP.HasValue) TopPSlider.Value = p.TopP.Value;
+            if (p.FrequencyPenalty.HasValue) FrequencyPenaltySlider.Value = p.FrequencyPenalty.Value;
+            if (p.PresencePenalty.HasValue) PresencePenaltySlider.Value = p.PresencePenalty.Value;
+        }
+    }
+
+    private async void CreateWithAI_Click(object? sender, RoutedEventArgs e)
+    {
+        var owner = TopLevel.GetTopLevel(this) as Window;
+        try
+        {
+            var builder = new AIHotkeyBuilderWindow(_apiClient);
+            await builder.ShowModalAsync(owner);
+            if (builder.GeneratedConfig != null)
+            {
+                ApplyAiConfig(builder.GeneratedConfig, true);
+                await MkDialog.ShowInfo(L.T("Common_Success"), L.T("HotkeyEditor_AIBuilderApplied"), owner);
+            }
+        }
+        catch (Exception ex)
+        {
+            await MkDialog.ShowError(L.T("Error_General_Title"), $"{L.T("HotkeyEditor_AIBuilderError")}\n\n{ex.Message}", owner);
+        }
+    }
+
+    private async void OptimizePrompt_Click(object? sender, RoutedEventArgs e)
+    {
+        var owner = TopLevel.GetTopLevel(this) as Window;
+        try
+        {
+            if (_selectedHotkey == null)
+            {
+                await MkDialog.ShowError(L.T("HotkeyEditor_NoHotkeySelected"), L.T("HotkeyEditor_NoHotkeySelectedDesc"), owner);
+                return;
+            }
+            SaveEditorToHotkey();
+
+            if ((_selectedHotkey.RecentUsage == null || _selectedHotkey.RecentUsage.Count == 0) &&
+                !await MkDialog.ShowConfirm(L.T("HotkeyEditor_NoUsageTitle"), L.T("HotkeyEditor_NoUsageDesc"), owner))
+                return;
+
+            var optimizer = new AIPromptOptimizerWindow(_apiClient, _selectedHotkey);
+            await optimizer.ShowModalAsync(owner);
+            if (optimizer.OptimizedConfig != null)
+            {
+                ApplyAiConfig(optimizer.OptimizedConfig, false);
+                await MkDialog.ShowInfo(L.T("Common_Success"), L.T("HotkeyEditor_OptimizeApplied"), owner);
+            }
+        }
+        catch (Exception ex)
+        {
+            await MkDialog.ShowError(L.T("Error_General_Title"), $"{L.T("HotkeyEditor_OptimizeError")}\n\n{ex.Message}", owner);
+        }
+    }
+
+    // ═══ Toetscombinatie vastleggen ═══
+
+    private void HotkeyTextBox_GotFocus(object? sender, GotFocusEventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(HotkeyTextBox.Text))
+            HotkeyTextBox.Watermark = L.T("HotkeyEditor_KeyComboPlaceholder");
+    }
+
+    private static bool IsModifierKey(Key key) =>
+        key is Key.LeftCtrl or Key.RightCtrl or Key.LeftAlt or Key.RightAlt or Key.LeftShift or Key.RightShift
+            or Key.LWin or Key.RWin or Key.System;
+
+    /// <summary>Avalonia-modifiers → WPF-ModifierKeys-waarden (Alt=1, Ctrl=2, Shift=4, Cmd=8).</summary>
+    private static int ToWpfModifiers(KeyModifiers m) =>
+        (m.HasFlag(KeyModifiers.Alt) ? 1 : 0) | (m.HasFlag(KeyModifiers.Control) ? 2 : 0) |
+        (m.HasFlag(KeyModifiers.Shift) ? 4 : 0) | (m.HasFlag(KeyModifiers.Meta) ? 8 : 0);
+
+    private async void HotkeyTextBox_KeyDown(object? sender, KeyEventArgs e)
+    {
+        e.Handled = true;
+        var key = e.Key;
+        if (IsModifierKey(key) || key == Key.None) return;
+
+        int mods = ToWpfModifiers(e.KeyModifiers);
+        int keyCode = (int)key; // Avalonia Key == WPF Key (zelfde getallen)
+        var owner = TopLevel.GetTopLevel(this) as Window;
+
+        if (mods == 0)
+        {
+            await MkDialog.ShowInfo(L.T("HotkeyEditor_ModifierRequired"), L.T("HotkeyEditor_ModifierRequiredDesc"), owner);
+            return;
+        }
+
+        var duplicate = _hotkeyViewModels.FirstOrDefault(vm => vm.Config.Id != _selectedHotkey?.Id && vm.Config.Enabled
+                                                                && vm.Config.Key == keyCode && vm.Config.ModifierKeys == mods);
+        string combo = HotkeyKeys.Format(mods, keyCode);
+        if (duplicate != null)
+        {
+            await MkDialog.ShowError(L.T("HotkeyEditor_DuplicateTitle"), L.Tf("HotkeyEditor_DuplicateDesc", combo, duplicate.Config.Name), owner);
+            return;
+        }
+
+        if (IsSystemShortcut(mods, key) &&
+            !await MkDialog.ShowConfirm(L.T("HotkeyEditor_SysShortcutTitle"), L.Tf("HotkeyEditor_SysShortcutDesc", combo), owner))
+            return;
+
+        if (_selectedHotkey != null)
+        {
+            _selectedHotkey.ModifierKeys = mods;
+            _selectedHotkey.Key = keyCode;
+            _selectedHotkey.Description = combo;
+        }
+        HotkeyTextBox.Text = combo;
+    }
+
+    /// <summary>Veelgebruikte macOS-systeemcombinaties waarvoor we waarschuwen.</summary>
+    private static bool IsSystemShortcut(int mods, Key key) =>
+        (mods == 8 && key is Key.Q or Key.W or Key.Tab or Key.Space or Key.H or Key.M or Key.C or Key.V or Key.X or Key.Z or Key.A)
+        || (mods == (8 | 4) && key is Key.D3 or Key.D4 or Key.D5)
+        || (mods == (8 | 1) && key == Key.Escape)
+        || (mods == 2 && key is Key.Up or Key.Down or Key.Left or Key.Right);
+
+    // ═══ Panelen ═══
+
+    private void OutputModeComboBox_SelectionChanged(object? sender, SelectionChangedEventArgs e) => UpdatePanelVisibility();
+
+    private void UpdatePanelVisibility()
+    {
+        var tag = SelectedOutputTag ?? "";
+        PromptPanel.IsVisible = true;
+        AIOptionsPanel.IsVisible = true;
+        GitHubPanel.IsVisible = tag.StartsWith("github");
+        SlackPanel.IsVisible = tag.StartsWith("slack");
+        GmailPanel.IsVisible = tag.StartsWith("gmail");
+        CalendarPanel.IsVisible = tag.StartsWith("calendar");
+    }
+
+    public class StyleOption
+    {
+        public string? Id { get; set; }
+        public string Name { get; set; } = "";
+        public override string ToString() => Name;
+    }
+
+    public class HotkeyViewModel : System.ComponentModel.INotifyPropertyChanged
+    {
+        private string _name = "";
+        private string _description = "";
+        public HotkeyConfig Config { get; set; } = null!;
+        public string Name { get => _name; set { _name = value; OnChanged(nameof(Name)); } }
+        public string Description { get => _description; set { _description = value; OnChanged(nameof(Description)); } }
+        public bool Enabled { get; set; }
+        public bool Frozen { get; set; }
+        public string FrozenLabel => Loc.T("HotkeyEditor_FrozenBadge", "Bevroren");
+        public IBrush ColorBrush { get; set; } = Brushes.Purple;
+        public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
+        private void OnChanged(string p) => PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(p));
     }
 }

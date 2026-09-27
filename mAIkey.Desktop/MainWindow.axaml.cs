@@ -1,41 +1,81 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Layout;
-using Avalonia.Media;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
-using mAIkey.Core.Services;
+using mAIkey.Desktop.Controls;
+using mAIkey.Desktop.Views;
+using mAIkey.Desktop.Windows;
 
 namespace mAIkey.Desktop;
 
+/// <summary>
+/// Hoofdvenster: zijbalk-navigatie + content (port van frontend/MainWindow). De
+/// sneltoets-afhandeling zit op de Mac in Services/HotkeyRuntime.
+/// </summary>
 public partial class MainWindow : Window
 {
     private readonly ConfigService _config;
     private readonly ApiClient _api;
     private Button? _activeNavButton;
+    private bool _reallyClose;
+    private DateTime _lastCreditsRefresh = DateTime.MinValue;
 
     public MainWindow()
     {
         InitializeComponent();
-
         _config = App.Config;
         _api = App.Api;
 
-        if (UserEmailText != null)
-            UserEmailText.Text = _config.UserEmail ?? "Profiel";
+        UpdateProfileLabel();
 
-        LogoutBtn.Click += LogoutBtn_Click;
-
-        // Titelbalk slepen
         TitleBarArea.PointerPressed += TitleBar_PointerPressed;
         ContentTitleBar.PointerPressed += TitleBar_PointerPressed;
 
-        // Start op dashboard
         _activeNavButton = NavDashboard;
-        NavigateTo(new Views.DashboardView());
+        NavigateToDashboard();
+
+        Opened += (_, _) =>
+        {
+            _ = UpdateInboxBadgeAsync();
+            var t = new DispatcherTimer { Interval = TimeSpan.FromMinutes(5) };
+            t.Tick += async (_, _) => await UpdateInboxBadgeAsync();
+            t.Start();
+        };
+
+        // Abonnement verversen als de gebruiker terugkomt (max 1× per 30 s), zoals Windows.
+        Activated += async (_, _) =>
+        {
+            if ((DateTime.UtcNow - _lastCreditsRefresh).TotalSeconds < 30) return;
+            _lastCreditsRefresh = DateTime.UtcNow;
+            if (App.Hotkeys != null) await App.Hotkeys.RefreshSubscriptionAsync();
+            if (ContentArea.Content is DashboardView dash) dash.ForceRefreshStats();
+        };
+
+        // Sluiten = naar de achtergrond (menubalk), tenzij "minimaliseer naar tray" uit staat.
+        Closing += (_, e) =>
+        {
+            if (_reallyClose) return;
+            e.Cancel = true;
+            if (_config.MinimizeToTray) Hide();
+            else App.Quit();
+        };
+    }
+
+    public void CloseForReal()
+    {
+        _reallyClose = true;
+        Close();
+    }
+
+    public void UpdateProfileLabel()
+    {
+        if (!string.IsNullOrEmpty(_config.UserEmail)) UserEmailText.Text = _config.UserEmail;
     }
 
     // ═══ NAVIGATIE ═══
@@ -47,169 +87,167 @@ public partial class MainWindow : Window
         _activeNavButton = button;
     }
 
-    private void NavigateTo(Control view)
+    private void NavigateTo(Button nav, Control view)
     {
+        SetActiveNav(nav);
         ContentArea.Content = view;
     }
 
-    /// <summary>Publiek: open de hotkey-editor (aangeroepen vanuit andere views, bv. Dashboard).</summary>
-    public void ShowHotkeyEditor()
+    public void NavigateToDashboard() => NavigateTo(NavDashboard, new DashboardView(_config, _api));
+
+    public void NavigateToHotkeyEditor(string? hotkeyIdToSelect = null)
     {
-        SetActiveNav(NavHotkeys);
-        NavigateTo(new Views.HotkeyEditorView());
+        var view = new HotkeyEditorView(_config, _api, hotkeyIdToSelect);
+        view.NavigateBack += (_, _) =>
+        {
+            NavigateToDashboard();
+            ReloadHotkeys();
+        };
+        NavigateTo(NavHotkeys, view);
     }
 
-    private Control Placeholder(string title) => new TextBlock
-    {
-        Text = title + " — Binnenkort beschikbaar",
-        Foreground = new SolidColorBrush(Color.Parse("#9A9AA3")),
-        FontSize = 16,
-        Margin = new Avalonia.Thickness(24),
-        VerticalAlignment = VerticalAlignment.Center,
-        HorizontalAlignment = HorizontalAlignment.Center
-    };
+    public void NavigateToHotkeys() => NavigateToHotkeyEditor();
 
-    private void NavDashboard_Click(object? sender, RoutedEventArgs e)
+    public void NavigateToHotkeysWithDemo()
     {
-        SetActiveNav(NavDashboard);
-        NavigateTo(new Views.DashboardView());
+        var demo = _config.Hotkeys.FirstOrDefault(h => h.Id == Services.HotkeyRuntime.DemoHotkeyId) ?? _config.Hotkeys.FirstOrDefault();
+        NavigateToHotkeyEditor(demo?.Id);
     }
 
-    private void NavHotkeys_Click(object? sender, RoutedEventArgs e)
+    public void NavigateToStyleLibrary() => NavigateTo(NavStyles, new StyleLibraryView(_config, _api));
+    public void NavigateToStyleLibraryPublic() => NavigateToStyleLibrary();
+
+    public void NavigateToStyleEditor(WritingStyle? existingStyle = null)
     {
-        SetActiveNav(NavHotkeys);
-        NavigateTo(new Views.HotkeyEditorView());
+        var editor = new StyleEditorView(_config, _api, existingStyle);
+        editor.NavigateBack += (_, _) => NavigateToStyleLibrary();
+        NavigateTo(NavStyles, editor);
     }
 
-    private void NavStyles_Click(object? sender, RoutedEventArgs e)
+    public void NavigateToTemplates()
     {
-        SetActiveNav(NavStyles);
-        NavigateTo(new Views.StyleLibraryView());
+        var view = new PromptTemplatesView(_config, _api);
+        view.NavigateBack += (_, e) =>
+        {
+            NavigateToHotkeyEditor(e.HotkeyId);
+            ReloadHotkeys();
+        };
+        NavigateTo(NavTemplates, view);
     }
+    public void NavigateToTemplatesPublic() => NavigateToTemplates();
 
-    private void NavTemplates_Click(object? sender, RoutedEventArgs e)
-    {
-        SetActiveNav(NavTemplates);
-        NavigateTo(new Views.PromptTemplatesView());
-    }
+    public void NavigateToIntegrations() => NavigateTo(NavIntegrations, new IntegrationsView(_api));
+    public void NavigateToKoppelingen() => NavigateTo(NavKoppelingen, new KoppelingenView(_config, _api));
+    public void NavigateToCloudSync() => NavigateTo(NavCloudSync, new CloudSyncView(_config, _api));
+    public void NavigateToSettings() => NavigateTo(NavSettings, new SettingsView(_config));
+    public void NavigateToAssistant() => NavigateTo(NavAssistant, new AssistantSettingsView(_config, _api));
 
-    private void NavIntegrations_Click(object? sender, RoutedEventArgs e)
-    {
-        SetActiveNav(NavIntegrations);
-        NavigateTo(new Views.IntegrationsView());
-    }
+    /// <summary>Herregistreert alle globale sneltoetsen (na een wijziging).</summary>
+    public void ReloadHotkeys() => App.Hotkeys?.RegisterAll();
 
-    private void NavCloudSync_Click(object? sender, RoutedEventArgs e)
-    {
-        SetActiveNav(NavCloudSync);
-        NavigateTo(new Views.CloudSyncView());
-    }
+    public void OpenPricingPage() => App.Hotkeys?.OpenPricingPage();
 
-    private void NavSettings_Click(object? sender, RoutedEventArgs e)
-    {
-        SetActiveNav(NavSettings);
-        NavigateTo(new Views.SettingsView());
-    }
+    private void NavDashboard_Click(object? s, RoutedEventArgs e) => NavigateToDashboard();
+    private void NavHotkeys_Click(object? s, RoutedEventArgs e) => NavigateToHotkeyEditor();
+    private void NavStyles_Click(object? s, RoutedEventArgs e) => NavigateToStyleLibrary();
+    private void NavTemplates_Click(object? s, RoutedEventArgs e) => NavigateToTemplates();
+    private void NavIntegrations_Click(object? s, RoutedEventArgs e) => NavigateToIntegrations();
+    private void NavKoppelingen_Click(object? s, RoutedEventArgs e) => NavigateToKoppelingen();
+    private void NavCloudSync_Click(object? s, RoutedEventArgs e) => NavigateToCloudSync();
+    private void NavSettings_Click(object? s, RoutedEventArgs e) => NavigateToSettings();
+    private void NavAssistant_Click(object? s, RoutedEventArgs e) => NavigateToAssistant();
 
-    private void NavProfile_Click(object? sender, RoutedEventArgs e)
-    {
-        SetActiveNav(NavSettings);
-        NavigateTo(new Views.SettingsView());
-    }
+    /// <summary>Profiel opent de accountpagina op de website (zoals Windows).</summary>
+    private void NavProfile_Click(object? s, RoutedEventArgs e) => Ui.OpenUrl("https://maikey.nl/account.html");
 
-    private void NavAssistant_Click(object? sender, RoutedEventArgs e)
+    private void Logout_Click(object? s, RoutedEventArgs e) => App.Logout();
+
+    /// <summary>Badge op het Koppelingen-menu met het aantal openstaande werklijst-tickets.</summary>
+    public async Task UpdateInboxBadgeAsync()
     {
-        SetActiveNav(NavAssistant);
-        NavigateTo(new Views.AssistantSettingsView());
+        try
+        {
+            var res = await _api.ListInboxAsync();
+            int count = res?.Success == true ? res.Items.Count : 0;
+            InboxBadgeText.Text = count > 99 ? "99+" : count.ToString();
+            InboxBadge.IsVisible = count > 0;
+        }
+        catch { /* badge mag nooit de app breken */ }
     }
 
     // ═══ ONBOARDING-TOUR ═══
 
     private sealed record TourStep(string? Nav, string? Target, string TitleKey, string BodyKey);
 
-    private Views.TourOverlay? _tour;
+    private TourOverlay? _tour;
     private int _tourStep;
-    private System.Collections.Generic.List<TourStep> _steps = new();
+    private string _tourId = "";
+    private List<TourStep> _steps = new();
 
-    // Windows element-naam → mogelijke Mac-namen (eerste die in beeld staat wint).
-    private static readonly System.Collections.Generic.Dictionary<string, string[]> TargetMap = new()
+    private static readonly Dictionary<string, string[]> TargetAliases = new()
     {
-        ["NavHotkeys"] = new[] { "NavHotkeys" },
         ["NavStyleLibrary"] = new[] { "NavStyles" },
         ["NavPrompts"] = new[] { "NavTemplates" },
-        ["AddHotkeyBtn"] = new[] { "AddHotkeyBtn" },
-        ["NameTextBox"] = new[] { "HotkeyNameBox", "NameBox" },
-        ["HotkeyTextBox"] = new[] { "HotkeyComboBox" },
-        ["CustomPromptTextBox"] = new[] { "PromptBox" },
-        ["ModelComboBox"] = new[] { "ModelComboBox" },
-        ["StyleComboBox"] = new[] { "StyleComboBox" },
-        ["CreateWithAIButton"] = new[] { "AiBuilderBtn" },
-        ["OptimizeButton"] = new[] { "OptimizeBtn" },
-        ["OutputModeComboBox"] = new[] { "OutputModeComboBox" },
-        ["AskForContextCheckbox"] = new[] { "AskContextCheck" },
-        ["IncludeImagesCheckbox"] = new[] { "IncludeImagesCheck" },
-        ["UseInputInsteadOfSelectionCheckbox"] = new[] { "UseInputCheck" },
-        ["UseCustomAIParamsCheckbox"] = System.Array.Empty<string>(),
-        ["SaveHotkeyBtn"] = new[] { "SaveBtn" },
-        ["NewStyleBtn"] = new[] { "NewStyleBtn" },
-        ["UsageContextTextBox"] = new[] { "UsageBox" },
-        ["AddExampleBtn"] = new[] { "AddExampleBtn" },
-        ["GenerateStyleBtn"] = new[] { "GenerateBtn" },
-        ["SaveBtn"] = new[] { "StyleSaveBtn" },
-        ["Template1"] = System.Array.Empty<string>(),
     };
 
-    public void StartHotkeyTour() => StartTour(new()
+    public void StartTour(string tourId)
     {
-        new(null, "NavHotkeys", "Tour_Hotkey_1_Title", "Tour_Hotkey_1_Body"),
-        new("hotkeys", "AddHotkeyBtn", "Tour_Hotkey_2_Title", "Tour_Hotkey_2_Body"),
-        new("hotkeys_demo", "NameTextBox", "Tour_Hotkey_3_Title", "Tour_Hotkey_3_Body"),
-        new(null, "HotkeyTextBox", "Tour_Hotkey_4_Title", "Tour_Hotkey_4_Body"),
-        new(null, "CustomPromptTextBox", "Tour_Hotkey_5_Title", "Tour_Hotkey_5_Body"),
-        new(null, "ModelComboBox", "Tour_Hotkey_6_Title", "Tour_Hotkey_6_Body"),
-        new(null, "StyleComboBox", "Tour_Hotkey_7_Title", "Tour_Hotkey_7_Body"),
-        new(null, "CreateWithAIButton", "Tour_Hotkey_8_Title", "Tour_Hotkey_8_Body"),
-        new(null, "OptimizeButton", "Tour_Hotkey_9_Title", "Tour_Hotkey_9_Body"),
-        new(null, "OutputModeComboBox", "Tour_Hotkey_10_Title", "Tour_Hotkey_10_Body"),
-        new(null, "AskForContextCheckbox", "Tour_Hotkey_11_Title", "Tour_Hotkey_11_Body"),
-        new(null, "IncludeImagesCheckbox", "Tour_Hotkey_12_Title", "Tour_Hotkey_12_Body"),
-        new(null, "UseInputInsteadOfSelectionCheckbox", "Tour_Hotkey_13_Title", "Tour_Hotkey_13_Body"),
-        new(null, "UseCustomAIParamsCheckbox", "Tour_Hotkey_14_Title", "Tour_Hotkey_14_Body"),
-        new(null, "SaveHotkeyBtn", "Tour_Hotkey_15_Title", "Tour_Hotkey_15_Body"),
-    });
+        var steps = tourId switch
+        {
+            "hotkey" => new List<TourStep>
+            {
+                new(null, "NavHotkeys", "Tour_Hotkey_1_Title", "Tour_Hotkey_1_Body"),
+                new("hotkeys", "AddHotkeyBtn", "Tour_Hotkey_2_Title", "Tour_Hotkey_2_Body"),
+                new("hotkeys_demo", "NameTextBox", "Tour_Hotkey_3_Title", "Tour_Hotkey_3_Body"),
+                new(null, "HotkeyTextBox", "Tour_Hotkey_4_Title", "Tour_Hotkey_4_Body"),
+                new(null, "CustomPromptTextBox", "Tour_Hotkey_5_Title", "Tour_Hotkey_5_Body"),
+                new(null, "ModelComboBox", "Tour_Hotkey_6_Title", "Tour_Hotkey_6_Body"),
+                new(null, "StyleComboBox", "Tour_Hotkey_7_Title", "Tour_Hotkey_7_Body"),
+                new(null, "CreateWithAIButton", "Tour_Hotkey_8_Title", "Tour_Hotkey_8_Body"),
+                new(null, "OptimizeButton", "Tour_Hotkey_9_Title", "Tour_Hotkey_9_Body"),
+                new(null, "OutputModeComboBox", "Tour_Hotkey_10_Title", "Tour_Hotkey_10_Body"),
+                new(null, "AskForContextCheckbox", "Tour_Hotkey_11_Title", "Tour_Hotkey_11_Body"),
+                new(null, "IncludeImagesCheckbox", "Tour_Hotkey_12_Title", "Tour_Hotkey_12_Body"),
+                new(null, "UseInputInsteadOfSelectionCheckbox", "Tour_Hotkey_13_Title", "Tour_Hotkey_13_Body"),
+                new(null, "UseCustomAIParamsCheckbox", "Tour_Hotkey_14_Title", "Tour_Hotkey_14_Body"),
+                new(null, "SaveHotkeyBtn", "Tour_Hotkey_15_Title", "Tour_Hotkey_15_Body"),
+            },
+            "style" or "style_new" => new List<TourStep>
+            {
+                new("styles", "NewStyleBtn", "Tour_StyleNew_1_Title", "Tour_StyleNew_1_Body"),
+                new("styles_new", "NameTextBox", "Tour_StyleNew_2_Title", "Tour_StyleNew_2_Body"),
+                new(null, "UsageContextTextBox", "Tour_StyleNew_3_Title", "Tour_StyleNew_3_Body"),
+                new(null, "AddExampleBtn", "Tour_StyleNew_4_Title", "Tour_StyleNew_4_Body"),
+                new(null, "GenerateStyleBtn", "Tour_StyleNew_5_Title", "Tour_StyleNew_5_Body"),
+                new(null, "SaveBtn", "Tour_StyleNew_6_Title", "Tour_StyleNew_6_Body"),
+            },
+            "style_edit" => new List<TourStep>
+            {
+                new("styles", "StylesListView", "Tour_StyleEdit_1_Title", "Tour_StyleEdit_1_Body"),
+                new(null, "AddExampleBtn", "Tour_StyleEdit_2_Title", "Tour_StyleEdit_2_Body"),
+                new(null, "GenerateStyleBtn", "Tour_StyleEdit_3_Title", "Tour_StyleEdit_3_Body"),
+                new(null, "SaveBtn", "Tour_StyleEdit_4_Title", "Tour_StyleEdit_4_Body"),
+            },
+            "template" => new List<TourStep>
+            {
+                new(null, "NavPrompts", "Tour_Template_1_Title", "Tour_Template_1_Body"),
+                new("templates", "Template1", "Tour_Template_2_Title", "Tour_Template_2_Body"),
+            },
+            "pin" => new List<TourStep> { new(null, null, "Tour_Pin_Title_Mac", "Tour_Pin_Body_Mac") },
+            _ => new List<TourStep>()
+        };
+        if (steps.Count == 0) return;
 
-    public void StartStyleTour() => StartTour(new()
-    {
-        new("styles", "NewStyleBtn", "Tour_StyleNew_1_Title", "Tour_StyleNew_1_Body"),
-        new("styles_new", "NameTextBox", "Tour_StyleNew_2_Title", "Tour_StyleNew_2_Body"),
-        new(null, "UsageContextTextBox", "Tour_StyleNew_3_Title", "Tour_StyleNew_3_Body"),
-        new(null, "AddExampleBtn", "Tour_StyleNew_4_Title", "Tour_StyleNew_4_Body"),
-        new(null, "GenerateStyleBtn", "Tour_StyleNew_5_Title", "Tour_StyleNew_5_Body"),
-        new(null, "SaveBtn", "Tour_StyleNew_6_Title", "Tour_StyleNew_6_Body"),
-    });
-
-    public void StartTemplateTour() => StartTour(new()
-    {
-        new(null, "NavPrompts", "Tour_Template_1_Title", "Tour_Template_1_Body"),
-        new("templates", "Template1", "Tour_Template_2_Title", "Tour_Template_2_Body"),
-    });
-
-    public void StartPinTour() => StartTour(new()
-    {
-        new(null, null, "Tour_Pin_Title", "Tour_Pin_Body"),
-    });
-
-    private void StartTour(System.Collections.Generic.List<TourStep> steps)
-    {
+        _tourId = tourId;
         _steps = steps;
         _tourStep = 0;
         if (_tour == null)
         {
-            _tour = new Views.TourOverlay
+            _tour = new TourOverlay
             {
-                OnNext = () => { _tourStep++; if (_tourStep >= _steps.Count) EndTour(); else ShowTourStep(); },
+                OnNext = () => { _tourStep++; if (_tourStep >= _steps.Count) EndTour(true); else ShowTourStep(); },
                 OnPrev = () => { if (_tourStep > 0) { _tourStep--; ShowTourStep(); } },
-                OnClose = EndTour
+                OnClose = () => EndTour(false)
             };
             Grid.SetColumnSpan(_tour, 2);
             RootGrid.Children.Add(_tour);
@@ -222,24 +260,19 @@ public partial class MainWindow : Window
         if (_tour == null) return;
         var step = _steps[_tourStep];
 
-        // Navigeer indien nodig en geef de lay-out even tijd.
         if (step.Nav != null)
         {
             NavigateForTour(step.Nav);
-            await System.Threading.Tasks.Task.Delay(160);
+            await Task.Delay(180);
         }
-        else
-        {
-            await System.Threading.Tasks.Task.Delay(30);
-        }
+        else await Task.Delay(30);
         if (_tour == null) return;
 
         var target = ResolveTarget(step.Target);
         if (target != null)
         {
-            // Centreer het doel in het scroll-gebied (zodat er ruimte is voor de ballon).
             CenterInScrollViewer(target);
-            await System.Threading.Tasks.Task.Delay(150);
+            await Task.Delay(150);
             if (_tour == null) return;
         }
 
@@ -252,28 +285,24 @@ public partial class MainWindow : Window
         _tour.ShowStep(spot, L.T(step.TitleKey), L.T(step.BodyKey), _tourStep, _steps.Count);
     }
 
-    /// <summary>Scroll het scroll-gebied zo dat het doel verticaal gecentreerd staat.</summary>
     private static void CenterInScrollViewer(Control target)
     {
         var sv = target.FindAncestorOfType<ScrollViewer>();
         if (sv == null) return;
         var pos = target.TranslatePoint(new Point(0, 0), sv);
         if (!pos.HasValue) return;
-
-        var targetCenter = sv.Offset.Y + pos.Value.Y + target.Bounds.Height / 2;
-        var newY = targetCenter - sv.Viewport.Height / 2;
-        var max = Math.Max(0, sv.Extent.Height - sv.Viewport.Height);
-        newY = Math.Max(0, Math.Min(newY, max));
+        var center = sv.Offset.Y + pos.Value.Y + target.Bounds.Height / 2;
+        var newY = Math.Max(0, Math.Min(center - sv.Viewport.Height / 2, Math.Max(0, sv.Extent.Height - sv.Viewport.Height)));
         sv.Offset = new Vector(sv.Offset.X, newY);
     }
 
-    private Control? ResolveTarget(string? winName)
+    private Control? ResolveTarget(string? name)
     {
-        if (winName == null || !TargetMap.TryGetValue(winName, out var candidates)) return null;
-        foreach (var mac in candidates)
+        if (name == null) return null;
+        var candidates = TargetAliases.TryGetValue(name, out var a) ? a.Prepend(name) : new[] { name };
+        foreach (var n in candidates)
         {
-            var found = this.GetVisualDescendants().OfType<Control>()
-                .FirstOrDefault(c => c.Name == mac && c.IsVisible);
+            var found = this.GetVisualDescendants().OfType<Control>().FirstOrDefault(c => c.Name == n && c.IsVisible);
             if (found != null) return found;
         }
         return null;
@@ -285,84 +314,53 @@ public partial class MainWindow : Window
         {
             case "hotkeys":
             case "hotkeys_demo":
-                if (ContentArea.Content is not Views.HotkeyEditorView hv)
+                if (ContentArea.Content is not HotkeyEditorView)
                 {
-                    hv = new Views.HotkeyEditorView();
-                    SetActiveNav(NavHotkeys);
-                    NavigateTo(hv);
+                    if (nav == "hotkeys_demo") NavigateToHotkeysWithDemo();
+                    else NavigateToHotkeyEditor();
                 }
-                if (nav == "hotkeys_demo") hv.TourAddDemo();
+                else if (nav == "hotkeys_demo" && ContentArea.Content is HotkeyEditorView hv)
+                    hv.SelectHotkey(Services.HotkeyRuntime.DemoHotkeyId);
                 break;
             case "styles":
+                if (ContentArea.Content is not StyleLibraryView) NavigateToStyleLibrary();
+                break;
             case "styles_new":
-                if (ContentArea.Content is not Views.StyleLibraryView sv)
-                {
-                    sv = new Views.StyleLibraryView();
-                    SetActiveNav(NavStyles);
-                    NavigateTo(sv);
-                }
-                if (nav == "styles_new") sv.TourStartNew();
+                if (ContentArea.Content is not StyleEditorView) NavigateToStyleEditor();
                 break;
             case "templates":
-                if (ContentArea.Content is not Views.PromptTemplatesView)
-                {
-                    SetActiveNav(NavTemplates);
-                    NavigateTo(new Views.PromptTemplatesView());
-                }
+                if (ContentArea.Content is not PromptTemplatesView) NavigateToTemplates();
                 break;
         }
     }
 
-    private void EndTour()
+    private void EndTour(bool completed)
     {
         if (_tour != null)
         {
             RootGrid.Children.Remove(_tour);
             _tour = null;
         }
+        if (completed && !string.IsNullOrEmpty(_tourId))
+            _config.SetOnboardingStepDone(_tourId == "style_new" || _tourId == "style_edit" ? "style" : _tourId);
+        RefreshDashboardOnboarding();
     }
 
-    // ═══ VENSTERKNOPPEN ═══
+    public void RefreshDashboardOnboarding()
+    {
+        if (ContentArea.Content is DashboardView dashboard) dashboard.RefreshOnboarding();
+    }
+
+    // ═══ VENSTER ═══
 
     private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e)
     {
         if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
-            BeginMoveDrag(e);
-    }
-
-    private void MinimizeBtn_Click(object? sender, RoutedEventArgs e)
-    {
-        WindowState = WindowState.Minimized;
-    }
-
-    private void MaximizeBtn_Click(object? sender, RoutedEventArgs e)
-    {
-        WindowState = WindowState == WindowState.Maximized
-            ? WindowState.Normal
-            : WindowState.Maximized;
-    }
-
-    private void CloseBtn_Click(object? sender, RoutedEventArgs e)
-    {
-        Close();
-    }
-
-    // ═══ UITLOGGEN ═══
-
-    private void LogoutBtn_Click(object? sender, RoutedEventArgs e)
-    {
-        _config.ClearAuth();
-        _api.ClearAuthToken();
-
-        var login = new Windows.LoginWindow();
-        login.LoginSucceeded += (s, ev) =>
         {
-            if (UserEmailText != null)
-                UserEmailText.Text = _config.UserEmail ?? "Profiel";
-            Show();
-            login.Close();
-        };
-        login.Show();
-        Hide();
+            if (e.ClickCount == 2)
+                WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+            else
+                BeginMoveDrag(e);
+        }
     }
 }

@@ -1,249 +1,492 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="mAIkey.Desktop.Views.HotkeyEditorView"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
-             xmlns:loc="using:mAIkey.Desktop"
-             x:Class="mAIkey.Desktop.Views.HotkeyEditorView">
+             xmlns:c="using:mAIkey.Desktop.Controls"
+             Background="{DynamicResource Bg1}">
+
+  <UserControl.Styles>
+    <!-- Lijst-items: geen standaard-highlight, eigen selectie-look (zoals Windows) -->
+    <Style Selector="ListBox#HotkeyListBox ListBoxItem">
+      <Setter Property="Padding" Value="0"/>
+      <Setter Property="Margin" Value="0"/>
+      <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+      <Setter Property="Background" Value="Transparent"/>
+    </Style>
+    <Style Selector="ListBox#HotkeyListBox ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource Bg2}"/>
+    </Style>
+    <Style Selector="ListBox#HotkeyListBox ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource Bg2}"/>
+    </Style>
+    <Style Selector="ListBox#HotkeyListBox ListBoxItem Border.bar">
+      <Setter Property="IsVisible" Value="False"/>
+    </Style>
+    <Style Selector="ListBox#HotkeyListBox ListBoxItem:selected Border.bar">
+      <Setter Property="IsVisible" Value="True"/>
+    </Style>
+    <Style Selector="ListBox#HotkeyListBox ListBoxItem TextBlock.desc">
+      <Setter Property="Foreground" Value="{DynamicResource Text2}"/>
+    </Style>
+    <Style Selector="ListBox#HotkeyListBox ListBoxItem:selected TextBlock.desc">
+      <Setter Property="Foreground" Value="{DynamicResource Text1}"/>
+    </Style>
+
+    <!-- Naamveld zonder rand (grote titel) -->
+    <Style Selector="TextBox.bare">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    <Style Selector="TextBox.bare:pointerover /template/ Border#PART_BorderElement, TextBox.bare:focus /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <!-- Link-knoppen (terug, tour, stijl toevoegen) -->
+    <Style Selector="Button.link">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="Padding" Value="0"/>
+      <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+    <Style Selector="Button.link:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="Transparent"/>
+    </Style>
+    <Style Selector="Button.menuItem">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="Padding" Value="12,8"/>
+      <Setter Property="HorizontalAlignment" Value="Stretch"/>
+      <Setter Property="HorizontalContentAlignment" Value="Left"/>
+      <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+    <Style Selector="Button.menuItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource Bg4}"/>
+    </Style>
+
+    <!-- Kleine waarde-invoer naast sliders -->
+    <Style Selector="TextBox.value">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="BorderThickness" Value="0,0,0,1"/>
+      <Setter Property="CornerRadius" Value="0"/>
+      <Setter Property="Padding" Value="2,2"/>
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="MinHeight" Value="0"/>
+      <Setter Property="HorizontalContentAlignment" Value="Right"/>
+    </Style>
+
+    <Style Selector="Border.section">
+      <Setter Property="Background" Value="{DynamicResource Bg2}"/>
+      <Setter Property="CornerRadius" Value="14"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Border1}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="Margin" Value="0,0,0,16"/>
+      <Setter Property="Padding" Value="0"/>
+    </Style>
+    <Style Selector="Border.sectionHeader">
+      <Setter Property="Padding" Value="20,16"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Border1}"/>
+      <Setter Property="BorderThickness" Value="0,0,0,1"/>
+    </Style>
+    <Style Selector="TextBlock.fieldLabel">
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="FontWeight" Value="Medium"/>
+      <Setter Property="Foreground" Value="{DynamicResource Text3}"/>
+      <Setter Property="Margin" Value="0,0,0,6"/>
+    </Style>
+    <Style Selector="Border.intPanel">
+      <Setter Property="Background" Value="{DynamicResource Bg3}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Border1}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="Padding" Value="14,12"/>
+    </Style>
+    <Style Selector="Border.intPanel TextBox">
+      <Setter Property="Background" Value="{DynamicResource Bg2}"/>
+      <Setter Property="Height" Value="34"/>
+      <Setter Property="Padding" Value="10,0"/>
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="i|Icon.info">
+      <Setter Property="Foreground" Value="{DynamicResource Text3}"/>
+      <Setter Property="Opacity" Value="0.6"/>
+      <Setter Property="Margin" Value="4,0,0,0"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="Cursor" Value="Help"/>
+      <Setter Property="ToolTip.ShowDelay" Value="0"/>
+    </Style>
+  </UserControl.Styles>
 
   <Grid ColumnDefinitions="260,*">
 
-    <!-- ═══ LEFT: HOTKEY LIST ═══ -->
-    <Border Grid.Column="0" Background="{DynamicResource Bg0}" BorderBrush="{DynamicResource Border1}"
-            BorderThickness="0,0,1,0">
-      <DockPanel>
-        <StackPanel DockPanel.Dock="Top" Margin="16,16,16,0" Spacing="12">
-          <TextBlock loc:Tr.Key="HotkeyEditor_Title" FontSize="16" FontWeight="SemiBold"
-                     Foreground="{DynamicResource Text1}"/>
-          <Separator Background="{DynamicResource Border1}" Height="1"/>
-        </StackPanel>
+    <!-- ===== LINKS: lijst met mAIkeys ===== -->
+    <Grid Grid.Column="0" Background="{DynamicResource Bg0}" RowDefinitions="Auto,*,Auto">
+      <Border Grid.Row="0" Padding="20,18" BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,1,1">
+        <TextBlock Name="HotkeyListHeader" Text="Hotkeys" FontSize="13" FontWeight="SemiBold"
+                   Foreground="{DynamicResource Text1}"/>
+      </Border>
 
-        <Button DockPanel.Dock="Bottom" Classes="accent" loc:Tr.Key="HotkeyEditor_NewHotkey"
-                Margin="16,8,16,16" HorizontalAlignment="Stretch"
-                HorizontalContentAlignment="Center" FontSize="12"
-                Name="AddHotkeyBtn" Click="AddHotkey_Click"/>
-
-        <ScrollViewer Margin="8,8,8,0">
-          <StackPanel Spacing="2">
-            <StackPanel Name="HotkeyListPanel" Spacing="2"/>
-            <!-- Lege staat -->
-            <StackPanel Name="ListEmptyHint" Margin="8,32,8,8" Spacing="8"
-                        HorizontalAlignment="Center">
-              <i:Icon Value="mdi-lightning-bolt-outline" FontSize="28"
-                      Foreground="{DynamicResource Text3}" HorizontalAlignment="Center"/>
-              <TextBlock loc:Tr.Key="HotkeyEditor_EmptyTitle" FontSize="12" FontWeight="SemiBold"
-                         Foreground="{DynamicResource Text2}" HorizontalAlignment="Center"/>
-              <TextBlock loc:Tr.Key="HotkeyEditor_EmptySub"
-                         FontSize="11" Foreground="{DynamicResource Text3}"
-                         TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
-            </StackPanel>
-            <TextBlock Name="ListError" IsVisible="False" Margin="8,8"
-                       FontSize="11" TextWrapping="Wrap"
-                       Foreground="{DynamicResource Error}"/>
-          </StackPanel>
-        </ScrollViewer>
-      </DockPanel>
-    </Border>
-
-    <!-- ═══ RIGHT: EDITOR ═══ -->
-    <Border Grid.Column="1" Background="{DynamicResource Bg1}">
-      <DockPanel>
-        <!-- Top Bar -->
-        <Border DockPanel.Dock="Top" Height="52" Padding="16,0"
-                BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
-          <Grid>
-            <TextBlock loc:Tr.Key="HotkeyEditor_Back" FontSize="13" Foreground="{DynamicResource Text2}"
-                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
-                        VerticalAlignment="Center" Spacing="10">
-              <TextBlock Name="SaveStatus" loc:Tr.Key="HotkeyEditor_SavedOk" IsVisible="False"
-                         FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Success}"
-                         VerticalAlignment="Center"/>
-              <Button Classes="ghost" loc:Tr.Key="HotkeyEditor_TourLabel"
-                      FontSize="12" Click="Instructions_Click"/>
-              <Button Name="DeleteBtn" Classes="danger" loc:Tr.Key="HotkeyEditor_Delete"
-                      FontSize="12" Click="DeleteHotkey_Click"/>
-              <Button Name="SaveBtn" Classes="accent" loc:Tr.Key="HotkeyEditor_Save"
-                      FontSize="12" Padding="16,8" Click="SaveHotkey_Click"/>
-            </StackPanel>
-          </Grid>
-        </Border>
-
-        <!-- Vult de rest van het venster; lege staat gecentreerd, editor eroverheen -->
-        <Grid>
-
-        <!-- Empty state -->
-        <StackPanel Name="EmptyEditorState" VerticalAlignment="Center"
-                    HorizontalAlignment="Center" Spacing="14" MaxWidth="360"
-                    Margin="0,0,0,40">
-          <Border Width="72" Height="72" CornerRadius="20"
-                  Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource Border1}"
-                  BorderThickness="1" HorizontalAlignment="Center">
-            <i:Icon Value="mdi-lightning-bolt" FontSize="34" Foreground="{DynamicResource Accent}"
-                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
-          </Border>
-          <TextBlock loc:Tr.Key="HotkeyEditor_EditorEmptyTitle" FontSize="16" FontWeight="SemiBold"
-                     Foreground="{DynamicResource Text1}" HorizontalAlignment="Center"/>
-          <TextBlock loc:Tr.Key="HotkeyEditor_EditorEmptySub"
-                     FontSize="12.5" Foreground="{DynamicResource Text3}"
-                     TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center"/>
-          <Button Classes="accent" loc:Tr.Key="HotkeyEditor_NewHotkey" HorizontalAlignment="Center"
-                  Padding="16,9" FontSize="13" Click="AddHotkey_Click"/>
-        </StackPanel>
-
-        <!-- Editor content -->
-        <ScrollViewer Name="EditorPanel" IsVisible="False"
-                      VerticalScrollBarVisibility="Auto">
-          <StackPanel Margin="24,20,24,24" Spacing="20" MaxWidth="680">
-
-            <!-- Hero: Name -->
-            <TextBox Name="HotkeyNameBox" FontSize="22" FontWeight="SemiBold"
-                     loc:Tr.WatermarkKey="HotkeyEditor_NameWatermark"
-                     Background="Transparent" BorderThickness="0" Padding="0,8"/>
-
-            <!-- Section: Trigger -->
-            <Border Classes="card">
-              <StackPanel Spacing="12">
-                <TextBlock loc:Tr.Key="HotkeyEditor_TriggerSection" FontSize="13" FontWeight="SemiBold"
-                           Foreground="{DynamicResource Text1}"/>
-
-                <StackPanel Spacing="6">
-                  <TextBlock loc:Tr.Key="HotkeyEditor_KeyCombo" FontSize="11" Foreground="{DynamicResource Text2}"/>
-                  <TextBox Name="HotkeyComboBox" IsReadOnly="True"
-                           loc:Tr.WatermarkKey="HotkeyEditor_ComboWatermark"
-                           Height="40" FontSize="13"
-                           Background="{DynamicResource Bg3}" Cursor="Hand"
-                           KeyDown="HotkeyCombo_KeyDown"/>
-                  <TextBlock loc:Tr.Key="HotkeyEditor_KeyComboHint"
-                             FontSize="10" Foreground="{DynamicResource Text3}"/>
-                </StackPanel>
-              </StackPanel>
-            </Border>
-
-            <!-- Section: AI Prompt -->
-            <Border Classes="card">
-              <StackPanel Spacing="12">
-                <TextBlock loc:Tr.Key="HotkeyEditor_PromptSection" FontSize="13" FontWeight="SemiBold"
-                           Foreground="{DynamicResource Text1}"/>
-
-                <!-- Sneller instellen met een template -->
-                <StackPanel Spacing="6">
-                  <TextBlock loc:Tr.Key="HotkeyEditor_TemplatePickerLabel" FontSize="11"
-                             Foreground="{DynamicResource Text2}"/>
-                  <ComboBox Name="TemplatePickerCombo" HorizontalAlignment="Stretch" FontSize="13"
-                            loc:Tr.WatermarkKey="HotkeyEditor_TemplatePickerPlaceholder"
-                            SelectionChanged="TemplatePicker_Changed"/>
-                </StackPanel>
-
-                <StackPanel Spacing="6">
-                  <TextBlock loc:Tr.Key="HotkeyEditor_PromptLabel" FontSize="12"
-                             FontWeight="Medium" Foreground="{DynamicResource Text1}"/>
-                  <TextBlock loc:Tr.Key="HotkeyEditor_PromptHint" FontSize="11"
-                             Foreground="{DynamicResource Text3}" TextWrapping="Wrap"/>
-                  <TextBox Name="PromptBox" AcceptsReturn="True"
-                           TextWrapping="Wrap" MinHeight="80" MaxHeight="200"
-                           loc:Tr.WatermarkKey="HotkeyEditor_PromptWatermark"
-                           FontSize="13" Margin="0,4,0,0"/>
-                </StackPanel>
-
-                <!-- Model -->
-                <StackPanel Spacing="6">
-                  <TextBlock loc:Tr.Key="HotkeyEditor_AIModel" FontSize="11" Foreground="{DynamicResource Text2}"/>
-                  <ComboBox Name="ModelComboBox" HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center"
-                            MinHeight="48" FontSize="13"/>
-                </StackPanel>
-
-                <!-- Writing style -->
-                <StackPanel Spacing="6">
-                  <TextBlock loc:Tr.Key="HotkeyEditor_WriteStyle" FontSize="11" Foreground="{DynamicResource Text2}"/>
-                  <ComboBox Name="StyleComboBox" HorizontalAlignment="Stretch"
-                            FontSize="13"/>
-                </StackPanel>
-
-                <!-- AI-hulp -->
-                <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,4,0,0">
-                  <Button Name="AiBuilderBtn" Classes="ghost" FontSize="12" Click="AiBuilder_Click"
-                          loc:Tr.Key="HotkeyEditor_AIBuilder"/>
-                  <Button Name="OptimizeBtn" Classes="ghost" FontSize="12" Click="Optimize_Click"
-                          loc:Tr.Key="HotkeyEditor_AIOptimizer"/>
-                </StackPanel>
-              </StackPanel>
-            </Border>
-
-            <!-- Section: Gedrag -->
-            <Border Classes="card">
-              <StackPanel Spacing="12">
-                <TextBlock loc:Tr.Key="HotkeyEditor_BehaviorSection" FontSize="13" FontWeight="SemiBold"
-                           Foreground="{DynamicResource Text1}"/>
-
-                <StackPanel Spacing="6">
-                  <TextBlock loc:Tr.Key="HotkeyEditor_OutputMode" FontSize="11" Foreground="{DynamicResource Text2}"/>
-                  <ComboBox Name="OutputModeComboBox" HorizontalAlignment="Stretch"
-                            FontSize="13">
-                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutReplace" Tag="replace"/>
-                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutCopy" Tag="clipboard"/>
-                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutWindow" Tag="window"/>
-                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutJiraReview" Tag="jira_review"/>
-                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutJira" Tag="jira_direct"/>
-                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutGitHubReview" Tag="github_review"/>
-                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutGitHub" Tag="github_direct"/>
-                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutSlackReview" Tag="slack_review"/>
-                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutSlack" Tag="slack_direct"/>
-                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutEmailReview" Tag="gmail_review"/>
-                    <ComboBoxItem loc:Tr.Key="HotkeyEditor_OutCalendarReview" Tag="calendar_review"/>
-                  </ComboBox>
-                </StackPanel>
-
-                <CheckBox Name="AskContextCheck" loc:Tr.Key="HotkeyEditor_AskContext"
-                          FontSize="12"/>
-                <CheckBox Name="IncludeImagesCheck" loc:Tr.Key="HotkeyEditor_SendImages"
-                          FontSize="12"/>
-                <CheckBox Name="ScreenCaptureCheck" loc:Tr.Key="HotkeyEditor_ScreenCapture"
-                          FontSize="12"/>
-                <CheckBox Name="UseInputCheck" loc:Tr.Key="HotkeyEditor_UseInput"
-                          FontSize="12"/>
-              </StackPanel>
-            </Border>
-
-            <!-- Section: Geavanceerd -->
-            <Expander FontSize="12"
-                      Foreground="{DynamicResource Text2}" Margin="0,0,0,20">
-              <Expander.Header>
-                <TextBlock loc:Tr.Key="HotkeyEditor_AdvancedParams" FontSize="12"
-                           Foreground="{DynamicResource Text2}"/>
-              </Expander.Header>
-              <Border Classes="card" Margin="0,8,0,0">
-                <StackPanel Spacing="16">
-                  <!-- Temperature -->
-                  <StackPanel Spacing="4">
-                    <Grid ColumnDefinitions="*,Auto">
-                      <TextBlock Text="Temperature" FontSize="11" Foreground="{DynamicResource Text2}"/>
-                      <TextBlock Name="TempValueText" Grid.Column="1" Text="0.7"
-                                 FontSize="11" Foreground="{DynamicResource Text1}"/>
-                    </Grid>
-                    <Slider Name="TempSlider" Minimum="0" Maximum="2"
-                            Value="0.7" TickFrequency="0.1"
-                            IsSnapToTickEnabled="True"/>
+      <ListBox Name="HotkeyListBox" Grid.Row="1" Background="Transparent" BorderThickness="0,0,1,0"
+               BorderBrush="{DynamicResource Border1}" SelectionChanged="HotkeyListBox_SelectionChanged"
+               ScrollViewer.HorizontalScrollBarVisibility="Disabled" Padding="0,8">
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <Border MinHeight="52" Padding="0,0,12,0" Background="Transparent" Cursor="Hand">
+              <Grid ColumnDefinitions="3,12,*">
+                <Border Classes="bar" Grid.Column="0" CornerRadius="0,2,2,0" Background="{Binding ColorBrush}"/>
+                <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="0,10">
+                  <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                    <Border Background="{DynamicResource Bg3}" CornerRadius="5" Padding="7,2">
+                      <TextBlock Text="{Binding Name}" FontSize="11" FontFamily="{DynamicResource FontMono}"
+                                 Foreground="{DynamicResource Text2}"/>
+                    </Border>
+                    <Border Margin="6,0,0,0" CornerRadius="4" Padding="6,1" IsVisible="{Binding Frozen}"
+                            Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                      <TextBlock Text="{Binding FrozenLabel}" FontSize="10" FontWeight="Medium" Foreground="{DynamicResource Text3}"/>
+                    </Border>
                   </StackPanel>
-
-                  <!-- Max tokens -->
-                  <StackPanel Spacing="4">
-                    <Grid ColumnDefinitions="*,Auto">
-                      <TextBlock Text="Max Tokens" FontSize="11" Foreground="{DynamicResource Text2}"/>
-                      <TextBlock Name="TokensValueText" Grid.Column="1" Text="8000"
-                                 FontSize="11" Foreground="{DynamicResource Text1}"/>
-                    </Grid>
-                    <Slider Name="TokensSlider" Minimum="2000" Maximum="16000"
-                            Value="8000" TickFrequency="1000"
-                            IsSnapToTickEnabled="True"/>
-                  </StackPanel>
+                  <TextBlock Classes="desc" Text="{Binding Description}" FontSize="12.5" FontWeight="Medium"
+                             TextTrimming="CharacterEllipsis"/>
                 </StackPanel>
-              </Border>
-            </Expander>
+              </Grid>
+            </Border>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
 
+      <Border Grid.Row="2" Padding="16,12" BorderBrush="{DynamicResource Border1}" BorderThickness="0,1,1,0">
+        <Button Name="AddHotkeyBtn" Content="+ Nieuwe hotkey" Height="36" Click="AddHotkey_Click"
+                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                Classes="AccentButton" Padding="12,0"/>
+      </Border>
+    </Grid>
+
+    <!-- ===== RECHTS: editor ===== -->
+    <Grid Grid.Column="1" RowDefinitions="Auto,*">
+      <Border Grid.Row="0" Padding="20,0" Height="52" BorderBrush="{DynamicResource Border1}"
+              BorderThickness="0,0,0,1" Background="{DynamicResource Bg1}">
+        <Grid ColumnDefinitions="*,Auto">
+          <Button Name="BackButton" Classes="link" Content="← Hotkeys" Click="BackButton_Click"
+                  Foreground="{DynamicResource Text3}" FontSize="13" VerticalAlignment="Center"/>
+          <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+            <Button Name="TourBtn" Height="32" Padding="12,0" Click="TourBtn_Click" IsVisible="False"
+                    Margin="0,0,8,0" Classes="GhostButton" VerticalContentAlignment="Center">
+              <StackPanel Orientation="Horizontal">
+                <TextBlock Text="&#x25B6;" FontSize="10" VerticalAlignment="Center" Margin="0,0,5,0"
+                           Foreground="{DynamicResource Accent}"/>
+                <TextBlock Name="TourBtnLabel" Text="Instructies" FontSize="13" VerticalAlignment="Center"/>
+              </StackPanel>
+            </Button>
+            <Button Name="DeleteButton" Content="Verwijder" Height="32" Padding="14,0" Click="DeleteHotkey_Click"
+                    IsVisible="False" Margin="0,0,8,0" Classes="GhostButton" Foreground="#D9605A" FontSize="13"
+                    VerticalContentAlignment="Center"/>
+            <Button Name="SaveHotkeyBtn" Content="Opslaan" Height="32" Padding="16,0" Click="SaveChanges_Click"
+                    Classes="AccentButton" VerticalContentAlignment="Center"/>
           </StackPanel>
-        </ScrollViewer>
         </Grid>
-      </DockPanel>
-    </Border>
+      </Border>
+
+      <!-- Lege staat -->
+      <Border Name="EmptyStatePanel" Grid.Row="1" IsVisible="False" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <StackPanel HorizontalAlignment="Center">
+          <TextBlock Name="EmptyStateTitle" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource Text1}"
+                     HorizontalAlignment="Center" Margin="0,0,0,8"/>
+          <TextBlock Name="EmptyStateSub" FontSize="13" Foreground="{DynamicResource Text3}"
+                     HorizontalAlignment="Center" Margin="0,0,0,16"/>
+          <Button Name="EmptyStateTourBtn" Classes="link" Click="EmptyStateTourBtn_Click" HorizontalAlignment="Center"
+                  Foreground="{DynamicResource Accent}" FontSize="13"/>
+        </StackPanel>
+      </Border>
+
+      <ScrollViewer Grid.Row="1" Name="EditorScrollViewer" VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Name="EditorPanel" Margin="28,24,28,40">
+
+          <!-- Bevroren-banner -->
+          <Border Name="FrozenBanner" IsVisible="False" Background="{DynamicResource Bg2}"
+                  BorderBrush="{DynamicResource Border1}" BorderThickness="1" CornerRadius="10"
+                  Padding="16,12" Margin="0,0,0,20">
+            <StackPanel>
+              <TextBlock Name="FrozenBannerTitle" FontWeight="SemiBold" FontSize="13"
+                         Foreground="{DynamicResource Text1}" Margin="0,0,0,4"/>
+              <TextBlock Name="FrozenBannerBody" TextWrapping="Wrap" FontSize="12" Foreground="{DynamicResource Text3}"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Naam + combo-chip -->
+          <StackPanel Margin="0,0,0,28">
+            <TextBox Name="NameTextBox" Classes="bare" FontSize="22" FontWeight="SemiBold"
+                     Foreground="{DynamicResource Text1}" Padding="0,4" Margin="0,0,0,6"/>
+            <Border Background="{DynamicResource Bg3}" CornerRadius="6" Padding="8,3" HorizontalAlignment="Left">
+              <TextBlock FontSize="11" FontFamily="{DynamicResource FontMono}" Foreground="{DynamicResource Text2}"
+                         Text="{Binding #HotkeyTextBox.Text}"/>
+            </Border>
+          </StackPanel>
+
+          <!-- Template kiezen -->
+          <Border Classes="section">
+            <StackPanel Margin="20,16,20,20">
+              <TextBlock Name="TemplatePickerHeader" FontSize="13" FontWeight="SemiBold"
+                         Foreground="{DynamicResource Text1}" Margin="0,0,0,10"/>
+              <TextBox Name="TemplatePickerSearchBox" Classes="MkTextBox" TextChanged="TemplatePickerSearchBox_TextChanged"/>
+              <Border Name="TemplatePickerResultsBorder" IsVisible="False" Background="{DynamicResource Bg1}"
+                      BorderBrush="{DynamicResource Border1}" BorderThickness="1" CornerRadius="8"
+                      Margin="0,8,0,0" MaxHeight="260">
+                <ListBox Name="TemplatePickerResultsList" BorderThickness="0" Background="Transparent"
+                         SelectionChanged="TemplatePickerResultsList_SelectionChanged">
+                  <ListBox.ItemTemplate>
+                    <DataTemplate>
+                      <StackPanel Margin="8,6">
+                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="13" Foreground="{DynamicResource Text1}"/>
+                        <TextBlock Text="{Binding Description}" FontSize="11" Foreground="{DynamicResource Text3}"
+                                   TextWrapping="Wrap" Margin="0,2,0,0"/>
+                      </StackPanel>
+                    </DataTemplate>
+                  </ListBox.ItemTemplate>
+                </ListBox>
+              </Border>
+            </StackPanel>
+          </Border>
+
+          <!-- Trigger -->
+          <Border Classes="section">
+            <StackPanel>
+              <Border Classes="sectionHeader">
+                <TextBlock Name="TriggerSectionHeader" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource Text1}"/>
+              </Border>
+              <StackPanel Margin="20,16,20,20">
+                <TextBlock Name="KeyComboLabel" Classes="fieldLabel"/>
+                <TextBox Name="HotkeyTextBox" Classes="MkTextBox" IsReadOnly="True" Cursor="Hand"
+                         FontFamily="{DynamicResource FontMono}" GotFocus="HotkeyTextBox_GotFocus"/>
+                <TextBlock Name="KeyComboHintLabel" FontSize="11" Foreground="{DynamicResource Text3}"
+                           Margin="0,6,0,0" TextWrapping="Wrap"/>
+              </StackPanel>
+            </StackPanel>
+          </Border>
+
+          <!-- AI-prompt -->
+          <Border Classes="section">
+            <StackPanel>
+              <Border Classes="sectionHeader">
+                <TextBlock Name="PromptSectionHeader" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource Text1}"/>
+              </Border>
+              <StackPanel Margin="20,16,20,20">
+
+                <StackPanel Name="PromptPanel" Margin="0,0,0,16">
+                  <TextBlock Name="PromptLabel" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource Text1}" Margin="0,0,0,4"/>
+                  <TextBlock Name="PromptHintLabel" FontSize="11" Foreground="{DynamicResource Text3}" TextWrapping="Wrap" Margin="0,0,0,8"/>
+                  <Border Name="PromptBorder" Background="{DynamicResource Bg3}" BorderBrush="{DynamicResource Border1}"
+                          BorderThickness="1" CornerRadius="10">
+                    <StackPanel>
+                      <Border BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
+                        <Button Name="PrefixDropdownButton" Classes="link" HorizontalAlignment="Left"
+                                Padding="12,10,8,10" Click="PrefixDropdownButton_Click">
+                          <StackPanel Orientation="Horizontal">
+                            <TextBlock Name="PrefixButtonText" Text="De geselecteerde tekst is"
+                                       Foreground="{DynamicResource Text1}" FontSize="13" VerticalAlignment="Center"/>
+                            <Path Data="M 0 0 L 5 5 L 10 0 Z" Fill="{DynamicResource Text1}" Margin="5,3,0,0" VerticalAlignment="Center"/>
+                          </StackPanel>
+                        </Button>
+                      </Border>
+                      <TextBox Name="CustomPromptTextBox" Classes="bare" AcceptsReturn="True" TextWrapping="Wrap"
+                               MinHeight="60" MaxHeight="280" FontSize="13" Padding="12,10"
+                               VerticalContentAlignment="Top" TextChanged="CustomPromptTextBox_TextChanged"/>
+                      <Popup Name="PrefixLanguagePopup" PlacementTarget="{Binding #PrefixDropdownButton}"
+                             Placement="Bottom" IsLightDismissEnabled="True">
+                        <Border Background="{DynamicResource Bg3}" BorderBrush="{DynamicResource Border1}"
+                                BorderThickness="1" CornerRadius="8" Padding="4" Margin="0,4,0,0" MinWidth="160">
+                          <StackPanel>
+                            <Button Classes="menuItem" Content="Nederlands" Tag="NL" Click="PrefixLanguageOption_Click"
+                                    Foreground="{DynamicResource Text1}" FontSize="13"/>
+                            <Button Classes="menuItem" Content="English" Tag="EN" Click="PrefixLanguageOption_Click"
+                                    Foreground="{DynamicResource Text1}" FontSize="13"/>
+                          </StackPanel>
+                        </Border>
+                      </Popup>
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+
+                <StackPanel Name="AIOptionsPanel">
+                  <TextBlock Name="AIModelLabel" Classes="fieldLabel"/>
+                  <c:ModelPicker Name="ModelComboBox" Margin="0,0,0,16"/>
+                  <TextBlock Name="ModelUsageWarning" IsVisible="False" TextWrapping="Wrap" FontSize="11"
+                             Foreground="#E0A400" Margin="0,-12,0,14"/>
+
+                  <TextBlock Name="WriteStyleLabel" Classes="fieldLabel"/>
+                  <ComboBox Name="StyleComboBox" Height="40" Margin="0,0,0,16" HorizontalAlignment="Stretch"
+                            Classes="MkComboBox" SelectionChanged="StyleComboBox_SelectionChanged">
+                    <ComboBox.ItemTemplate>
+                      <DataTemplate>
+                        <TextBlock Text="{Binding Name}" FontSize="13" VerticalAlignment="Center"/>
+                      </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                  </ComboBox>
+
+                  <Border Background="{DynamicResource Bg1}" CornerRadius="10" Padding="14,12" Margin="0,0,0,4"
+                          BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                    <StackPanel>
+                      <TextBlock Name="StyleHintText" TextWrapping="Wrap" Foreground="{DynamicResource Text3}" FontSize="11.5"/>
+                      <Button Name="AddStyleLink" Classes="link" Click="AddStyleLink_Click" HorizontalAlignment="Left"
+                              Margin="0,2,0,0">
+                        <TextBlock Name="AddStyleLinkText" Foreground="{DynamicResource Accent}" FontSize="11.5"/>
+                      </Button>
+                    </StackPanel>
+                  </Border>
+
+                  <StackPanel Name="TemplateVariablesPanel" IsVisible="False" Margin="0,16,0,0">
+                    <TextBlock Name="PersonalContextLabel" FontSize="12" FontWeight="Medium"
+                               Foreground="{DynamicResource Text3}" Margin="0,0,0,8"/>
+                    <TextBlock Name="PersonalContextHint" FontSize="11.5" Foreground="{DynamicResource Text3}"
+                               Margin="0,0,0,10" TextWrapping="Wrap"/>
+                    <StackPanel Name="TemplateVariablesFieldsPanel"/>
+                  </StackPanel>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                  <Button Name="CreateWithAIButton" Height="36" Padding="14,0" Margin="0,0,10,0"
+                          Click="CreateWithAI_Click" Classes="GhostButton" FontSize="12.5" VerticalContentAlignment="Center"/>
+                  <Button Name="OptimizeButton" Height="36" Padding="14,0" Click="OptimizePrompt_Click"
+                          Classes="GhostButton" FontSize="12.5" VerticalContentAlignment="Center"/>
+                </StackPanel>
+              </StackPanel>
+            </StackPanel>
+          </Border>
+
+          <!-- Gedrag -->
+          <Border Classes="section">
+            <StackPanel>
+              <Border Classes="sectionHeader">
+                <TextBlock Name="BehaviorSectionHeader" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource Text1}"/>
+              </Border>
+              <StackPanel Margin="20,16,20,20">
+                <TextBlock Name="OutputModeLabel" Classes="fieldLabel"/>
+                <ComboBox Name="OutputModeComboBox" Height="40" Margin="0,0,0,16" HorizontalAlignment="Stretch"
+                          Classes="MkComboBox" SelectionChanged="OutputModeComboBox_SelectionChanged"/>
+
+                <StackPanel Name="GitHubPanel" IsVisible="False" Margin="0,0,0,16">
+                  <Border Classes="intPanel">
+                    <StackPanel>
+                      <TextBlock Name="GHSectionHeader" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Text1}" Margin="0,0,0,10"/>
+                      <TextBlock Name="GHRepoLabel" FontSize="11" Foreground="{DynamicResource Text3}" Margin="0,0,0,4"/>
+                      <TextBox Name="GitHubRepoBox" Margin="0,0,0,10"/>
+                      <TextBlock Name="GHLabelsLabel" FontSize="11" Foreground="{DynamicResource Text3}" Margin="0,0,0,4"/>
+                      <TextBox Name="GitHubLabelsBox"/>
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+
+                <StackPanel Name="SlackPanel" IsVisible="False" Margin="0,0,0,16">
+                  <Border Classes="intPanel">
+                    <StackPanel>
+                      <TextBlock Name="SlackSectionHeader" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Text1}" Margin="0,0,0,6"/>
+                      <TextBlock Name="SlackPanelHint" FontSize="11" Foreground="{DynamicResource Text3}" TextWrapping="Wrap"/>
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+
+                <StackPanel Name="GmailPanel" IsVisible="False" Margin="0,0,0,16">
+                  <Border Classes="intPanel">
+                    <StackPanel>
+                      <TextBlock Name="GmailSectionHeader" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Text1}" Margin="0,0,0,10"/>
+                      <TextBlock Name="GmailToLabel" FontSize="11" Foreground="{DynamicResource Text3}" Margin="0,0,0,4"/>
+                      <TextBox Name="GmailToBox" Margin="0,0,0,10"/>
+                      <TextBlock Name="GmailSubjectLabel" FontSize="11" Foreground="{DynamicResource Text3}" Margin="0,0,0,4"/>
+                      <TextBox Name="GmailSubjectBox" Margin="0,0,0,10"/>
+                      <TextBlock Name="GmailCcLabel" FontSize="11" Foreground="{DynamicResource Text3}" Margin="0,0,0,4"/>
+                      <TextBox Name="GmailCcBox"/>
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+
+                <StackPanel Name="CalendarPanel" IsVisible="False" Margin="0,0,0,16">
+                  <Border Classes="intPanel">
+                    <StackPanel>
+                      <TextBlock Name="CalSectionHeader" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Text1}" Margin="0,0,0,6"/>
+                      <TextBlock Name="CalPanelHint" FontSize="11" Foreground="{DynamicResource Text3}" TextWrapping="Wrap"/>
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+
+                <CheckBox Name="AskForContextCheckbox" Margin="0,0,0,12" FontSize="13" IsCheckedChanged="AskForContext_Changed"/>
+                <CheckBox Name="IncludeImagesCheckbox" IsChecked="True" FontSize="13" Margin="0,0,0,12"/>
+                <CheckBox Name="UseScreenCaptureCheckbox" FontSize="13" Margin="0,0,0,12" IsCheckedChanged="UseScreenCapture_Changed"/>
+                <CheckBox Name="UseInputInsteadOfSelectionCheckbox" FontSize="13" Margin="0,0,0,12" IsCheckedChanged="UseInputInsteadOfSelection_Changed"/>
+                <CheckBox Name="IncludeAssistantContextCheckbox" FontSize="13" Margin="0,0,0,16"/>
+                <CheckBox Name="UseCustomAIParamsCheckbox" Margin="0,0,0,12" FontSize="13" IsCheckedChanged="UseCustomAIParams_Changed"/>
+
+                <StackPanel Name="AIParametersPanel" IsVisible="False">
+                  <StackPanel Name="TemperatureRow" Margin="0,0,0,16">
+                    <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,4">
+                      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Temperature" FontSize="12" Foreground="{DynamicResource Text3}"/>
+                        <i:Icon Name="TemperatureInfoIcon" Classes="info" Value="mdi-information-outline" FontSize="14"/>
+                      </StackPanel>
+                      <TextBox Name="TemperatureValueText" Grid.Column="1" Classes="value" Width="50" Text="0.70"
+                               LostFocus="TemperatureValueBox_LostFocus"/>
+                    </Grid>
+                    <Slider Name="TemperatureSlider" Minimum="0" Maximum="2" Value="0.7" TickFrequency="0.01"
+                            IsSnapToTickEnabled="True" ValueChanged="AIParameter_Changed"/>
+                  </StackPanel>
+
+                  <StackPanel Name="MaxTokensRow" Margin="0,0,0,16">
+                    <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,4">
+                      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Name="MaxTokensLabel" FontSize="12" Foreground="{DynamicResource Text3}" Text="Max Tokens"/>
+                        <i:Icon Name="MaxTokensInfoIcon" Classes="info" Value="mdi-information-outline" FontSize="14"/>
+                      </StackPanel>
+                      <TextBox Name="MaxTokensValueBox" Grid.Column="1" Classes="value" Width="60" Text="8000"
+                               LostFocus="MaxTokensValueBox_LostFocus"/>
+                    </Grid>
+                    <Slider Name="MaxTokensSlider" Minimum="2000" Maximum="16000" Value="8000" TickFrequency="100"
+                            IsSnapToTickEnabled="True" ValueChanged="AIParameter_Changed"/>
+                  </StackPanel>
+
+                  <StackPanel Name="TopPRow" Margin="0,0,0,16">
+                    <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,4">
+                      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Top P" FontSize="12" Foreground="{DynamicResource Text3}"/>
+                        <i:Icon Name="TopPInfoIcon" Classes="info" Value="mdi-information-outline" FontSize="14"/>
+                      </StackPanel>
+                      <TextBox Name="TopPValueText" Grid.Column="1" Classes="value" Width="50" Text="1.00"
+                               LostFocus="TopPValueBox_LostFocus"/>
+                    </Grid>
+                    <Slider Name="TopPSlider" Minimum="0" Maximum="1" Value="1" TickFrequency="0.01"
+                            IsSnapToTickEnabled="True" ValueChanged="AIParameter_Changed"/>
+                  </StackPanel>
+
+                  <StackPanel Name="FrequencyPenaltyRow" Margin="0,0,0,16">
+                    <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,4">
+                      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Frequency Penalty" FontSize="12" Foreground="{DynamicResource Text3}"/>
+                        <i:Icon Name="FrequencyPenaltyInfoIcon" Classes="info" Value="mdi-information-outline" FontSize="14"/>
+                      </StackPanel>
+                      <TextBox Name="FrequencyPenaltyValueText" Grid.Column="1" Classes="value" Width="50" Text="0.00"
+                               LostFocus="FrequencyPenaltyValueBox_LostFocus"/>
+                    </Grid>
+                    <Slider Name="FrequencyPenaltySlider" Minimum="0" Maximum="2" Value="0" TickFrequency="0.01"
+                            IsSnapToTickEnabled="True" ValueChanged="AIParameter_Changed"/>
+                  </StackPanel>
+
+                  <StackPanel Name="PresencePenaltyRow">
+                    <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,4">
+                      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Presence Penalty" FontSize="12" Foreground="{DynamicResource Text3}"/>
+                        <i:Icon Name="PresencePenaltyInfoIcon" Classes="info" Value="mdi-information-outline" FontSize="14"/>
+                      </StackPanel>
+                      <TextBox Name="PresencePenaltyValueText" Grid.Column="1" Classes="value" Width="50" Text="0.00"
+                               LostFocus="PresencePenaltyValueBox_LostFocus"/>
+                    </Grid>
+                    <Slider Name="PresencePenaltySlider" Minimum="0" Maximum="2" Value="0" TickFrequency="0.01"
+                            IsSnapToTickEnabled="True" ValueChanged="AIParameter_Changed"/>
+                  </StackPanel>
+                </StackPanel>
+              </StackPanel>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </ScrollViewer>
+    </Grid>
   </Grid>
 </UserControl>

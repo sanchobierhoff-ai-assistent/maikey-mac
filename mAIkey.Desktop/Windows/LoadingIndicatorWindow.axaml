@@ -1,0 +1,111 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="https://github.com/projektanker/icons.avalonia"
+        x:Class="mAIkey.Desktop.Windows.LoadingIndicatorWindow"
+        Title="mAIkey"
+        Width="360"
+        SizeToContent="Height"
+        SystemDecorations="None"
+        Background="Transparent"
+        TransparencyLevelHint="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        ShowActivated="False"
+        CanResize="False">
+
+  <Window.Styles>
+    <!-- Draaiende korte boog (2.2s, ease-in-out, oneindig) -->
+    <Style Selector="Path#ArcPath">
+      <Style.Animations>
+        <Animation Duration="0:0:2.2" IterationCount="Infinite" Easing="SineEaseInOut">
+          <KeyFrame Cue="0%"><Setter Property="RotateTransform.Angle" Value="0"/></KeyFrame>
+          <KeyFrame Cue="100%"><Setter Property="RotateTransform.Angle" Value="360"/></KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+    <!-- Track-ring pulseert -->
+    <Style Selector="Ellipse#TrackRing">
+      <Style.Animations>
+        <Animation Duration="0:0:2.4" IterationCount="Infinite" Easing="SineEaseInOut">
+          <KeyFrame Cue="0%"><Setter Property="Opacity" Value="0.35"/></KeyFrame>
+          <KeyFrame Cue="50%"><Setter Property="Opacity" Value="0.8"/></KeyFrame>
+          <KeyFrame Cue="100%"><Setter Property="Opacity" Value="0.35"/></KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+    <!-- Logo ademt mee -->
+    <Style Selector="Image#LogoMark">
+      <Style.Animations>
+        <Animation Duration="0:0:2.4" IterationCount="Infinite" Easing="SineEaseInOut">
+          <KeyFrame Cue="0%"><Setter Property="ScaleTransform.ScaleX" Value="1"/><Setter Property="ScaleTransform.ScaleY" Value="1"/></KeyFrame>
+          <KeyFrame Cue="50%"><Setter Property="ScaleTransform.ScaleX" Value="1.05"/><Setter Property="ScaleTransform.ScaleY" Value="1.05"/></KeyFrame>
+          <KeyFrame Cue="100%"><Setter Property="ScaleTransform.ScaleX" Value="1"/><Setter Property="ScaleTransform.ScaleY" Value="1"/></KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+    <Style Selector="Button#CancelBtn:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="#E3DAC6"/>
+    </Style>
+  </Window.Styles>
+
+  <Border Name="MainBorder" Margin="16">
+    <Border CornerRadius="16" BorderThickness="1" BorderBrush="#E3DAC6"
+            BoxShadow="0 9 40 0 #2423372D">
+      <Border.Background>
+        <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+          <GradientStop Color="#F7F1E5" Offset="0"/>
+          <GradientStop Color="#EFE7D6" Offset="1"/>
+        </LinearGradientBrush>
+      </Border.Background>
+
+      <Grid>
+        <StackPanel Margin="28,26,28,22" HorizontalAlignment="Center">
+          <Grid Width="96" Height="96" HorizontalAlignment="Center">
+            <Canvas Width="96" Height="96">
+              <Ellipse Name="TrackRing" Canvas.Left="4" Canvas.Top="4" Width="88" Height="88"
+                       Stroke="{DynamicResource Accent}" StrokeThickness="2.5" Opacity="0.35"/>
+              <Path Name="ArcPath" Data="M 48,4 A 44,44 0 0 1 84.9,22.8"
+                    Stroke="{DynamicResource AccentDim}" StrokeThickness="4"
+                    StrokeLineCap="Round" RenderTransformOrigin="48,48">
+                <Path.RenderTransform>
+                  <RotateTransform/>
+                </Path.RenderTransform>
+              </Path>
+            </Canvas>
+            <Image Name="LogoMark" Source="avares://mAIkey.Desktop/Resources/maikey-loading-mark.png"
+                   Width="72" Height="72" HorizontalAlignment="Center" VerticalAlignment="Center"
+                   RenderTransformOrigin="0.5,0.5">
+              <Image.RenderTransform>
+                <ScaleTransform/>
+              </Image.RenderTransform>
+            </Image>
+            <i:Icon Name="DoneIcon" Value="mdi-check-circle" FontSize="30" Foreground="#0E9C6E"
+                    HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="False"/>
+            <i:Icon Name="ErrorIcon" Value="mdi-alert-circle" FontSize="30" Foreground="#D33A3A"
+                    HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="False"/>
+          </Grid>
+
+          <TextBlock Name="MetaText" Margin="0,14,0,0" MaxWidth="290"
+                     HorizontalAlignment="Center" TextAlignment="Center"
+                     FontSize="18" FontWeight="SemiBold" Foreground="#23372D"
+                     TextTrimming="CharacterEllipsis"/>
+          <TextBlock Name="StatusText" Margin="0,4,0,0"
+                     HorizontalAlignment="Center" TextAlignment="Center"
+                     FontSize="12.5" FontWeight="SemiBold" Foreground="#6A6253"/>
+          <TextBlock Name="TimerText" Text="0s" Margin="0,8,0,0"
+                     HorizontalAlignment="Center" TextAlignment="Center"
+                     FontSize="14" FontWeight="Bold" FontFamily="{DynamicResource FontMono}"
+                     Foreground="{DynamicResource Accent}"/>
+        </StackPanel>
+
+        <Button Name="CancelBtn" Width="24" Height="24" Padding="0"
+                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,12,14,0"
+                Click="Cancel_Click" Background="Transparent" BorderThickness="0"
+                CornerRadius="6" Cursor="Hand" ToolTip.Tip="Esc">
+          <i:Icon Value="mdi-close" FontSize="13" Foreground="#8B9A90"
+                  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Button>
+      </Grid>
+    </Border>
+  </Border>
+</Window>

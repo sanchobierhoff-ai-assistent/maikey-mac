@@ -1,31 +1,33 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using mAIkey.Desktop.Windows;
 
 namespace mAIkey.Desktop.Services;
 
 /// <summary>
-/// Controleert de macOS Toegankelijkheids-toestemming. Die is nodig om Cmd+C/Cmd+V
-/// in andere apps te simuleren (de selectie pakken en het resultaat terugplakken).
-/// De hotkey-registratie zelf heeft dit NIET nodig.
-///
-/// We gebruiken bewust alleen de parameterloze AXIsProcessTrusted() (een simpele
-/// bool-aanroep) en openen zo nodig het instellingen-paneel. De variant met opties
-/// (AXIsProcessTrustedWithOptions) vereist een handmatig opgebouwde CFDictionary en
-/// crashte in de praktijk — die vermijden we.
+/// macOS-toestemmingen die mAIkey nodig heeft:
+///  • Toegankelijkheid — om Cmd+C/Cmd+V in andere apps te simuleren (selectie pakken en
+///    het resultaat terugplakken). De sneltoetsen zelf werken zonder deze toestemming.
+///  • Schermopname — alleen voor de screenshot-functie.
+/// Gebruikt de eenvoudige CoreGraphics-aanroepen (CGPreflight…/CGRequest…), die ook de
+/// systeemvraag tonen; de variant met een CFDictionary crashte eerder in de praktijk.
 /// </summary>
 public static class MacAccessibility
 {
-    private const string AppServices =
-        "/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices";
+    private const string AppServices = "/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices";
+    private const string CoreGraphics = "/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics";
 
-    [DllImport(AppServices)]
-    private static extern bool AXIsProcessTrusted();
+    [DllImport(AppServices)] private static extern bool AXIsProcessTrusted();
+    [DllImport(CoreGraphics)] private static extern bool CGRequestPostEventAccess();
+    [DllImport(CoreGraphics)] private static extern bool CGPreflightScreenCaptureAccess();
+    [DllImport(CoreGraphics)] private static extern bool CGRequestScreenCaptureAccess();
 
-    private static bool IsMac => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
-    private static bool _settingsOpened;
+    private static bool IsMac => OperatingSystem.IsMacOS();
+    private static bool _requested;
 
-    /// <summary>Is de app al vertrouwd (Toegankelijkheid aan)?</summary>
+    /// <summary>Heeft mAIkey Toegankelijkheids-toestemming?</summary>
     public static bool IsTrusted()
     {
         if (!IsMac) return true;
@@ -34,32 +36,67 @@ public static class MacAccessibility
     }
 
     /// <summary>
-    /// True als de toestemming er is. Zo niet, dan wordt (één keer) het
-    /// Toegankelijkheids-paneel geopend zodat de gebruiker mAIkey kan aanzetten.
+    /// True als de toestemming er is. Zo niet, dan vraagt macOS (één keer per sessie) om
+    /// mAIkey toe te voegen aan Toegankelijkheid.
     /// </summary>
     public static bool EnsureTrusted()
     {
         if (IsTrusted()) return true;
-
-        if (!_settingsOpened)
+        if (!_requested)
         {
-            _settingsOpened = true;
-            OpenAccessibilitySettings();
+            _requested = true;
+            try { CGRequestPostEventAccess(); } catch { }
         }
         return false;
     }
 
-    private static void OpenAccessibilitySettings()
+    /// <summary>Leg uit waarom de toestemming nodig is en open desgewenst de instellingen.</summary>
+    public static async Task ExplainAsync()
     {
-        try
-        {
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = "open",
-                Arguments = "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility",
-                UseShellExecute = false
-            });
-        }
+        if (await MkDialog.ShowConfirm(
+                L.T("MacPerm_Accessibility_Title"),
+                L.T("MacPerm_Accessibility_Body"),
+                null,
+                L.T("MacPerm_OpenSettings"),
+                L.T("Common_Close")))
+            OpenAccessibilitySettings();
+    }
+
+    public static void OpenAccessibilitySettings() =>
+        Open("x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility");
+
+    public static bool HasScreenCapture()
+    {
+        if (!IsMac) return true;
+        try { return CGPreflightScreenCaptureAccess(); }
+        catch { return true; }
+    }
+
+    public static void RequestScreenCapture()
+    {
+        if (!IsMac) return;
+        try { CGRequestScreenCaptureAccess(); } catch { }
+    }
+
+    /// <summary>Vraag (eenmalig) om Schermopname-toestemming en leg uit waar die staat als hij ontbreekt.</summary>
+    public static async Task EnsureScreenCaptureAsync(Avalonia.Controls.Window? owner = null)
+    {
+        if (HasScreenCapture()) return;
+        RequestScreenCapture();
+        if (HasScreenCapture()) return;
+        if (await MkDialog.ShowConfirm(
+                Loc.T("MacPerm_Screen_Title", "Toestemming voor schermopnames"),
+                Loc.T("MacPerm_Screen_Body", "Om screenshots aan de assistent toe te voegen heeft mAIkey toestemming nodig voor Schermopname. Zet mAIkey aan in Systeeminstellingen → Privacy en beveiliging → Schermopname en start mAIkey daarna opnieuw."),
+                owner, L.T("MacPerm_OpenSettings"), L.T("Common_Close")))
+            OpenScreenCaptureSettings();
+    }
+
+    public static void OpenScreenCaptureSettings() =>
+        Open("x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture");
+
+    private static void Open(string url)
+    {
+        try { Process.Start(new ProcessStartInfo { FileName = "open", Arguments = url, UseShellExecute = false }); }
         catch { /* nooit crashen op het openen van instellingen */ }
     }
 }

@@ -29,11 +29,14 @@
           <!-- Logo + titelbalk-sleepgebied (linkermarge houdt de macOS-stoplichten vrij) -->
           <Border DockPanel.Dock="Top" Height="40" Margin="76,0,0,0"
                   IsHitTestVisible="True" Name="TitleBarArea" Background="Transparent">
+            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+            <Image Source="avares://mAIkey.Desktop/Resources/maikey-128.png" Width="18" Height="18" VerticalAlignment="Center" />
             <TextBlock VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold">
               <Run Text="m" Foreground="{DynamicResource Text1}" />
-              <Run Text="AI" Foreground="#F5A524" FontWeight="Bold" />
+              <Run Text="AI" Foreground="{DynamicResource Accent}" FontWeight="Bold" />
               <Run Text="key" Foreground="{DynamicResource Text1}" />
             </TextBlock>
+            </StackPanel>
           </Border>
 
           <!-- Profiel + uitloggen onderaan -->
@@ -52,13 +55,13 @@
                   <i:Icon Value="mdi-account" FontSize="14" Foreground="#0B0B0D"
                           HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Border>
-                <TextBlock Name="UserEmailText" Text="Profiel" VerticalAlignment="Center"
+                <TextBlock Name="UserEmailText" loc:Tr.Key="Nav_Profile" VerticalAlignment="Center"
                            FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource Text1}"
                            TextTrimming="CharacterEllipsis" />
               </StackPanel>
             </Button>
 
-            <Button Name="LogoutBtn" Classes="NavLogoutButton" Height="36">
+            <Button Name="LogoutBtn" Classes="NavLogoutButton" Height="36" Click="Logout_Click">
               <StackPanel Orientation="Horizontal" Spacing="10">
                 <i:Icon Value="mdi-logout" FontSize="16" VerticalAlignment="Center" />
                 <TextBlock loc:Tr.Key="Nav_Logout" VerticalAlignment="Center" FontSize="13" FontWeight="Medium" />
@@ -103,6 +106,18 @@
               </StackPanel>
             </Button>
 
+            <Button Name="NavKoppelingen" Classes="NavButton" Height="36" Click="NavKoppelingen_Click">
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <i:Icon Value="mdi-link-variant" FontSize="16" VerticalAlignment="Center" />
+                <TextBlock loc:Tr.Key="Nav_Koppelingen" VerticalAlignment="Center" FontSize="13" FontWeight="Medium" />
+                <Border Name="InboxBadge" IsVisible="False" VerticalAlignment="Center"
+                        Background="{DynamicResource Accent}" CornerRadius="9" Height="18" MinWidth="18" Padding="5,0">
+                  <TextBlock Name="InboxBadgeText" Text="0" Foreground="White" FontSize="10.5" FontWeight="Bold"
+                             VerticalAlignment="Center" HorizontalAlignment="Center" />
+                </Border>
+              </StackPanel>
+            </Button>
+
             <Button Name="NavCloudSync" Classes="NavButton" Height="36" Click="NavCloudSync_Click">
               <StackPanel Orientation="Horizontal" Spacing="10">
                 <i:Icon Value="mdi-cloud-sync-outline" FontSize="16" VerticalAlignment="Center" />
@@ -119,7 +134,7 @@
 
             <Button Name="NavAssistant" Classes="NavButton" Height="36" Click="NavAssistant_Click">
               <StackPanel Orientation="Horizontal" Spacing="10">
-                <i:Icon Value="mdi-robot-outline" FontSize="16" VerticalAlignment="Center" />
+                <Image Source="avares://mAIkey.Desktop/Resources/maikey-loading-mark.png" Width="16" Height="16" VerticalAlignment="Center" />
                 <TextBlock loc:Tr.Key="Nav_Assistant" VerticalAlignment="Center" FontSize="13" FontWeight="Medium" />
               </StackPanel>
             </Button>

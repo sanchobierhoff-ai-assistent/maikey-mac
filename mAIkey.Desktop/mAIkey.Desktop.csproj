@@ -7,6 +7,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <ApplicationIcon>Resources\maikey.ico</ApplicationIcon>
+    <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
+    <NoWarn>$(NoWarn);CS0618;AVLN3001</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,41 +19,27 @@
     <!-- MaterialDesign vector icons (matcht WPF materialDesign:PackIcon Kind-namen) -->
     <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.4.0" />
     <PackageReference Include="Projektanker.Icons.Avalonia.MaterialDesign" Version="9.4.0" />
-    <!-- Auto-update (zelfde tool + GitHub-feed als de Windows-app) -->
+    <!-- Auto-update (zelfde tool als de Windows-app) -->
     <PackageReference Include="Velopack" Version="1.2.0" />
+    <!-- Markdown-weergave (zelfde parser als de Windows-app) -->
+    <PackageReference Include="Markdig" Version="0.37.0" />
   </ItemGroup>
 
-  <!-- Ingebouwde lettertypen (Geist UI + JetBrains Mono) -->
+  <!-- Ingebouwde lettertypen en afbeeldingen -->
   <ItemGroup>
     <AvaloniaResource Include="Resources\Fonts\*.ttf" />
+    <AvaloniaResource Include="Resources\*.png" />
+    <AvaloniaResource Include="Resources\maikey.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\mAIkey.Core\mAIkey.Core.csproj" />
   </ItemGroup>
 
-  <!-- Windows-only packages (DPAPI, Windows.Forms clipboard) — only when targeting Windows -->
-  <ItemGroup Condition="'$(RuntimeIdentifier)' == '' OR $(RuntimeIdentifier.StartsWith('win'))">
-    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="6.0.0" />
-  </ItemGroup>
-  <ItemGroup Condition="('$(RuntimeIdentifier)' == '' OR $(RuntimeIdentifier.StartsWith('win'))) AND $([MSBuild]::IsOSPlatform('Windows'))">
-    <FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" />
-  </ItemGroup>
-
-  <!-- Exclude Windows platform code when targeting macOS -->
-  <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('osx'))">
-    <Compile Remove="Platform\Windows\**" />
-  </ItemGroup>
-
-  <!-- Exclude macOS platform code when targeting Windows -->
-  <ItemGroup Condition="'$(RuntimeIdentifier)' != '' AND $(RuntimeIdentifier.StartsWith('win'))">
-    <Compile Remove="Platform\macOS\**" />
-  </ItemGroup>
-
-  <!-- Localization files (zelfstandig in het Mac-project) -->
+  <!-- Lokalisatie (NL/EN/DE) — gelijk aan frontend/Resources/Localization + Mac-specifieke sleutels -->
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Localization\nl.txt" Link="Resources\Localization\nl.txt" />
-    <EmbeddedResource Include="Resources\Localization\en.txt" Link="Resources\Localization\en.txt" />
-    <EmbeddedResource Include="Resources\Localization\de.txt" Link="Resources\Localization\de.txt" />
+    <EmbeddedResource Include="Resources\Localization\nl.txt" />
+    <EmbeddedResource Include="Resources\Localization\en.txt" />
+    <EmbeddedResource Include="Resources\Localization\de.txt" />
   </ItemGroup>
 </Project>

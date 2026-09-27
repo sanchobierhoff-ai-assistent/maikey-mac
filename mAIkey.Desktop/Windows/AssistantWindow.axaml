@@ -1,0 +1,212 @@
+<Window x:Class="mAIkey.Desktop.Windows.AssistantWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="mAIkey Assistent"
+        Height="600" Width="680"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent" TransparencyLevelHint="Transparent" SystemDecorations="None" CanResize="True"
+        Topmost="True"
+        ShowInTaskbar="False">
+
+    <Border x:Name="AssistantShell" CornerRadius="16" BorderThickness="1"
+            BorderBrush="{DynamicResource Border1}"
+            Background="{DynamicResource Bg1}"
+            DragDrop.AllowDrop="True">
+        
+        
+
+        <Grid Margin="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>   <!-- header -->
+                <RowDefinition Height="*"/>      <!-- gesprek -->
+                <RowDefinition Height="Auto"/>   <!-- invoerbalk (onderaan) -->
+                <RowDefinition Height="Auto"/>   <!-- status/hint -->
+            </Grid.RowDefinitions>
+
+            <!-- Header + input (top, spotlight-style) -->
+            <Grid Grid.Row="0" Margin="22,20,22,8" PointerPressed="Header_MouseLeftButtonDown">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Image x:Name="MascotImage" Width="34" Height="34" Margin="0,0,10,0"
+                           Stretch="Uniform" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="TitleLabel" Text="mAIkey Assistent"
+                               FontSize="13" FontWeight="SemiBold"
+                               Foreground="{DynamicResource Text2}" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button x:Name="NewChatBtn" Content="&#43;"
+                            Width="28" Height="28" Click="NewChat_Click"
+                            Classes="GhostButton" FontSize="16" Padding="0"
+                            ToolTip.Tip="Nieuw gesprek"/>
+                    <Button x:Name="HistoryBtn" Content="&#9776;"
+                            Width="28" Height="28" Click="History_Click"
+                            Classes="GhostButton" FontSize="13" Padding="0"
+                            ToolTip.Tip="Geschiedenis"/>
+                    <Button x:Name="MemoryBtn" Content="&#129504;"
+                            Width="28" Height="28" Click="Memory_Click"
+                            Classes="GhostButton" FontSize="13" Padding="0"
+                            ToolTip.Tip="Wat ik over je weet"/>
+                    <Button x:Name="CloseBtn" Content="&#10005;"
+                            Width="28" Height="28" Click="Close_Click"
+                            Classes="GhostButton" FontSize="12" Padding="0"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Input box (onderaan) -->
+            <StackPanel Grid.Row="2" Margin="22,8,22,8">
+                <Border x:Name="ContextChip" IsVisible="False"
+                        Background="{DynamicResource Bg2}" CornerRadius="8"
+                        BorderBrush="{DynamicResource Border1}" BorderThickness="1"
+                        Padding="10,6" Margin="0,0,0,8">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="ContextChipText" Grid.Column="0"
+                                   Foreground="{DynamicResource Text3}" FontSize="12"
+                                   TextTrimming="CharacterEllipsis"/>
+                        <Button Grid.Column="1" x:Name="ClearContextBtn" Content="&#10005;"
+                                Width="18" Height="18" Padding="0" FontSize="10"
+                                Click="ClearContext_Click" Classes="GhostButton"/>
+                    </Grid>
+                </Border>
+
+                <!-- Bijlagen (thumbnails) -->
+                <ItemsControl x:Name="AttachmentsPanel" IsVisible="False" Margin="0,0,0,8">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate><WrapPanel Orientation="Horizontal"/></ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Width="64" Height="64" CornerRadius="8" Margin="0,0,8,0"
+                                    BorderBrush="{DynamicResource Border1}" BorderThickness="1"
+                                    Background="{DynamicResource Bg2}" ClipToBounds="True">
+                                <Grid>
+                                    <Image Source="{Binding Thumb}" Stretch="UniformToFill"/>
+                                    <Button Content="&#10005;" Tag="{Binding Id}"
+                                            Width="18" Height="18" Padding="0" FontSize="9"
+                                            HorizontalAlignment="Right" VerticalAlignment="Top"
+                                            Margin="2" Click="RemoveAttachment_Click"
+                                            Classes="GhostButton"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Bijlagen (documenten) -->
+                <ItemsControl x:Name="DocAttachmentsPanel" IsVisible="False" Margin="0,0,0,8">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate><WrapPanel Orientation="Horizontal"/></ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border CornerRadius="8" Margin="0,0,8,8" Padding="8,5"
+                                    BorderBrush="{DynamicResource Border1}" BorderThickness="1"
+                                    Background="{DynamicResource Bg2}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#128196;" FontSize="13" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                    <TextBlock Text="{Binding Name}" Foreground="{DynamicResource Text2}" FontSize="12"
+                                               VerticalAlignment="Center" MaxWidth="180" TextTrimming="CharacterEllipsis"/>
+                                    <Button Content="&#10005;" Tag="{Binding Id}" Width="16" Height="16" Padding="0" FontSize="9"
+                                            Margin="8,0,0,0" Click="RemoveDocument_Click" Classes="GhostButton"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Border Background="{DynamicResource Bg2}" CornerRadius="12"
+                        BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="InputBox" Grid.Column="0" Classes="bare"
+                                 TextWrapping="Wrap" AcceptsReturn="True" MaxHeight="120"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 Background="Transparent" Foreground="{DynamicResource Text1}"
+                                 CaretBrush="{DynamicResource Text1}"
+                                 BorderThickness="0" FontSize="14" Padding="14,12"
+                                 VerticalContentAlignment="Center"/>
+                        <Button Grid.Column="1" x:Name="AttachBtn" Content="&#128206;"
+                                Height="38" Width="38" Margin="0,6,0,6" Padding="0" FontSize="15"
+                                Click="Attach_Click" Classes="GhostButton"
+                                ToolTip.Tip="Afbeelding toevoegen"/>
+                        <Button Grid.Column="2" x:Name="SendBtn" Content="Vraag"
+                                Height="38" Padding="18,0" Margin="6"
+                                Click="Send_Click" Classes="AccentButton"/>
+                    </Grid>
+                </Border>
+            </StackPanel>
+
+            <!-- Conversation -->
+            <ScrollViewer Grid.Row="1" x:Name="MessagesScroller"
+                          VerticalScrollBarVisibility="Auto" Margin="14,4,14,4"
+                          Padding="8,0">
+                <StackPanel x:Name="MessagesPanel"/>
+            </ScrollViewer>
+
+            <!-- Status / hint -->
+            <Border Grid.Row="3" Background="{DynamicResource Bg2}"
+                    BorderBrush="{DynamicResource Border1}" BorderThickness="0,1,0,0"
+                    Padding="22,10">
+                <Grid>
+                    <TextBlock x:Name="HintLabel"
+                               Text="Enter om te vragen · Esc om te sluiten"
+                               FontSize="11" Foreground="{DynamicResource Text3}"
+                               VerticalAlignment="Center"/>
+                    <TextBlock x:Name="StatusLabel" Text=""
+                               FontSize="11" Foreground="{DynamicResource Accent}"
+                               HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- Overlay: geschiedenis / geheugen -->
+            <Border x:Name="OverlayPanel" Grid.Row="0" Grid.RowSpan="4"
+                    Background="#B0000000" IsVisible="False"
+                    PointerPressed="OverlayBackdrop_Click">
+                <Border Width="440" MaxHeight="480" VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Background="{DynamicResource Bg1}" CornerRadius="14"
+                        BorderBrush="{DynamicResource Border1}" BorderThickness="1" Padding="16"
+                        PointerPressed="OverlayCard_Click">
+                    <DockPanel>
+                        <Grid DockPanel.Dock="Top" Margin="0,0,0,12">
+                            <TextBlock x:Name="OverlayTitle" Text="" FontSize="14" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
+                            <Button x:Name="OverlayCloseBtn" Content="&#10005;" HorizontalAlignment="Right"
+                                    Width="26" Height="26" Padding="0" FontSize="12"
+                                    Click="OverlayClose_Click" Classes="GhostButton"/>
+                        </Grid>
+                        <Border x:Name="OverlayAddBox" DockPanel.Dock="Bottom" IsVisible="False"
+                                Margin="0,12,0,0" Background="{DynamicResource Bg2}" CornerRadius="10"
+                                BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="OverlayAddInput" Grid.Column="0" Classes="bare" Background="Transparent"
+                                         Foreground="{DynamicResource Text1}" CaretBrush="{DynamicResource Text1}"
+                                         BorderThickness="0" FontSize="13" Padding="12,10"
+                                         VerticalContentAlignment="Center"/>
+                                <Button x:Name="OverlayAddBtn" Grid.Column="1" Content="+"
+                                        Height="34" Padding="16,0" Margin="6" FontSize="15"
+                                        Click="MemoryAdd_Click" Classes="AccentButton"/>
+                            </Grid>
+                        </Border>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel x:Name="OverlayList"/>
+                        </ScrollViewer>
+                    </DockPanel>
+                </Border>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

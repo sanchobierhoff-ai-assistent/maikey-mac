@@ -1,49 +1,370 @@
-<Window xmlns="https://github.com/avaloniaui"
+<Window x:Class="mAIkey.Desktop.Windows.RegisterWindow"
+        xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:loc="using:mAIkey.Desktop"
-        x:Class="mAIkey.Desktop.Windows.RegisterWindow"
         Title="mAIkey — Registreren"
-        Width="440" Height="560"
-        CanResize="False"
+        SizeToContent="Height"
+        Width="460"
         WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource Bg0}">
+        Background="Transparent" TransparencyLevelHint="Transparent" SystemDecorations="None" CanResize="False">
 
-  <ScrollViewer>
-    <StackPanel Margin="48,32,48,32" Spacing="18" MaxWidth="340" HorizontalAlignment="Center">
+    <Window.Styles>
+        <Style Selector="Path.spinner">
+            <Setter Property="RenderTransformOrigin" Value="50%,50%"/>
+            <Setter Property="RenderTransform"><RotateTransform/></Setter>
+            <Style.Animations>
+                <Animation Duration="0:0:0.9" IterationCount="INFINITE">
+                    <KeyFrame Cue="0%"><Setter Property="RotateTransform.Angle" Value="0"/></KeyFrame>
+                    <KeyFrame Cue="100%"><Setter Property="RotateTransform.Angle" Value="360"/></KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </Window.Styles>
 
-      <StackPanel HorizontalAlignment="Center" Spacing="8">
-        <TextBlock Text="Account aanmaken" FontSize="22" FontWeight="SemiBold"
-                   Foreground="{DynamicResource Text1}" HorizontalAlignment="Center"/>
-        <TextBlock loc:Tr.Key="Register_Subtitle"
-                   FontSize="13" Foreground="{DynamicResource Text2}" HorizontalAlignment="Center"/>
-      </StackPanel>
+    <Border x:Name="RegisterShell" BorderBrush="{DynamicResource Border1}" BorderThickness="1" CornerRadius="14"
+            Background="{DynamicResource Bg1}">
+        
+        
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-      <Border Name="ErrorBorder" IsVisible="False"
-              Background="#1FEF4444" BorderBrush="#55EF4444" BorderThickness="1"
-              CornerRadius="10" Padding="12,10">
-        <TextBlock Name="ErrorText" Foreground="{DynamicResource Error}" FontSize="12" TextWrapping="Wrap"/>
-      </Border>
+            <!-- Title Bar (alleen sluitknop, geen tekst) -->
+            <Border Grid.Row="0" Background="Transparent"
+                    CornerRadius="14,14,0,0"
+                    PointerPressed="TitleBar_MouseLeftButtonDown">
+                <Grid Height="40">
+                    <Button Content="✕"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Width="40" Height="40"
+                            Background="Transparent"
+                            Foreground="{DynamicResource Text3}"
+                            BorderThickness="0"
+                            FontSize="14"
+                            Click="CloseButton_Click"
+                            Cursor="Hand"/>
+                </Grid>
+            </Border>
 
-      <StackPanel Spacing="6">
-        <TextBlock loc:Tr.Key="Register_Name" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource Text2}"/>
-        <TextBox Name="NameBox" Watermark="Je naam" FontSize="13"/>
-      </StackPanel>
-      <StackPanel Spacing="6">
-        <TextBlock loc:Tr.Key="Register_Email" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource Text2}"/>
-        <TextBox Name="EmailBox" Watermark="naam@voorbeeld.nl" FontSize="13"/>
-      </StackPanel>
-      <StackPanel Spacing="6">
-        <TextBlock loc:Tr.Key="Register_Password" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource Text2}"/>
-        <TextBox Name="PasswordBox" PasswordChar="●" Watermark="Minimaal 8 tekens" FontSize="13"/>
-      </StackPanel>
+            <!-- Content -->
+            <Grid Grid.Row="1" Margin="36,0,36,28">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-      <Button Name="RegisterBtn" Classes="accent" loc:Tr.Key="Register_Button"
-              HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-              Height="44" FontSize="14" Click="Register_Click"/>
+                <!-- Logo -->
+                <Image Grid.Row="0"
+                       Source="avares://mAIkey.Desktop/Resources/maikey-128.png"
+                       Height="56"
+                       HorizontalAlignment="Center"
+                       Margin="0,4,0,24"/>
 
-      <Button Classes="ghost" Content="Terug naar inloggen" BorderThickness="0"
-              HorizontalAlignment="Center" FontSize="12" Foreground="{DynamicResource Text2}"
-              Click="Cancel_Click"/>
-    </StackPanel>
-  </ScrollViewer>
+                <!-- Subtitle -->
+                <TextBlock x:Name="RegSubtitleText"
+                           Grid.Row="1"
+                           Text="Maak gratis je account aan."
+                           Foreground="{DynamicResource Text2}"
+                           FontSize="13"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,24"/>
+
+                <!-- Name -->
+                <StackPanel Grid.Row="2" Margin="0,0,0,14">
+                    <TextBlock x:Name="NameLabel"
+                               Text="Naam"
+                               Foreground="{DynamicResource Text2}"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,6"/>
+                    <TextBox x:Name="NameTextBox"
+                             Text=""
+                             KeyDown="Input_KeyDown"/>
+                </StackPanel>
+
+                <!-- Email -->
+                <StackPanel Grid.Row="3" Margin="0,0,0,14">
+                    <TextBlock x:Name="RegEmailLabel"
+                               Text="E-mail"
+                               Foreground="{DynamicResource Text2}"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,6"/>
+                    <TextBox x:Name="EmailTextBox"
+                             Text=""
+                             KeyDown="Input_KeyDown"/>
+                </StackPanel>
+
+                <!-- Password -->
+                <StackPanel Grid.Row="4" Margin="0,0,0,6">
+                    <TextBlock x:Name="RegPasswordLabel"
+                               Text="Wachtwoord"
+                               Foreground="{DynamicResource Text2}"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,6"/>
+                    <TextBox PasswordChar="•" x:Name="PasswordBox"
+                                 KeyDown="Input_KeyDown"/>
+
+                    <!-- Password Requirements Checklist -->
+                    <Border Background="{DynamicResource Bg2}"
+                            BorderBrush="{DynamicResource Border1}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="14,12"
+                            Margin="0,10,0,0">
+                        <StackPanel>
+                            <TextBlock x:Name="ReqTitle"
+                                       Text="Wachtwoord vereisten"
+                                       Foreground="{DynamicResource Text2}"
+                                       FontSize="11"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,8"/>
+                            <TextBlock x:Name="RequirementLength"
+                                       Text="• Minimaal 8 tekens"
+                                       Foreground="{DynamicResource Text3}"
+                                       FontSize="11"
+                                       Margin="0,2"/>
+                            <TextBlock x:Name="RequirementUppercase"
+                                       Text="• Hoofdletter (A–Z)"
+                                       Foreground="{DynamicResource Text3}"
+                                       FontSize="11"
+                                       Margin="0,2"/>
+                            <TextBlock x:Name="RequirementLowercase"
+                                       Text="• Kleine letter (a–z)"
+                                       Foreground="{DynamicResource Text3}"
+                                       FontSize="11"
+                                       Margin="0,2"/>
+                            <TextBlock x:Name="RequirementDigit"
+                                       Text="• Cijfer (0–9)"
+                                       Foreground="{DynamicResource Text3}"
+                                       FontSize="11"
+                                       Margin="0,2"/>
+                            <TextBlock x:Name="RequirementSpecial"
+                                       Text="• Speciaal teken (bijv. ! ? @ #)"
+                                       Foreground="{DynamicResource Text3}"
+                                       FontSize="11"
+                                       Margin="0,2"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Terms & privacy consent -->
+                    <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                        <CheckBox x:Name="TermsCheckBox"
+                                  VerticalAlignment="Top"
+                                  Margin="0,2,8,0"/>
+                        <WrapPanel x:Name="TermsTextBlock" MaxWidth="330" Orientation="Horizontal">
+                            <TextBlock x:Name="TermsText1Run" Text="Ik ga akkoord met de" FontSize="11.5" Foreground="{DynamicResource Text3}" Margin="0,0,3,0" VerticalAlignment="Center"/>
+                            <Button Classes="LinkButton" Padding="0" Margin="0,0,3,0" Tag="https://maikey.nl/voorwaarden" Click="Hyperlink_RequestNavigate"><TextBlock x:Name="TermsLinkRun" Text="algemene voorwaarden" FontSize="11.5" Foreground="{DynamicResource Text2}" TextDecorations="Underline"/></Button>
+                            <TextBlock x:Name="TermsText2Run" Text="en het" FontSize="11.5" Foreground="{DynamicResource Text3}" Margin="0,0,3,0" VerticalAlignment="Center"/>
+                            <Button Classes="LinkButton" Padding="0" Margin="0,0,3,0" Tag="https://maikey.nl/privacy" Click="Hyperlink_RequestNavigate"><TextBlock x:Name="PrivacyLinkRun" Text="privacybeleid" FontSize="11.5" Foreground="{DynamicResource Text2}" TextDecorations="Underline"/></Button>
+                            <TextBlock x:Name="TermsText3Run" Text="." FontSize="11.5" Foreground="{DynamicResource Text3}" Margin="0,0,3,0" VerticalAlignment="Center"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Error Message -->
+                <TextBlock x:Name="ErrorTextBlock"
+                           Grid.Row="5"
+                           Foreground="{DynamicResource Danger}"
+                           FontSize="12"
+                           TextWrapping="Wrap"
+                           Margin="0,10,0,0"
+                           IsVisible="False"/>
+
+                <!-- Forgot password button (alleen bij EMAIL_EXISTS) -->
+                <Button x:Name="EmailExistsForgotButton"
+                        Grid.Row="5"
+                        Content="Wachtwoord vergeten?"
+                        Classes="LinkButton"
+                        Click="EmailExistsForgotButton_Click"
+                        HorizontalAlignment="Left"
+                        Margin="0,32,0,0"
+                        IsVisible="False"/>
+
+                <!-- Register Button -->
+                <Button Grid.Row="6"
+                        x:Name="RegisterButton" HorizontalAlignment="Stretch"
+                        Content="Account aanmaken"
+                        Classes="AccentButton"
+                        Height="42"
+                        Click="RegisterButton_Click"
+                        Margin="0,22,0,0"/>
+
+                <!-- Divider + "Registreren met Google" -->
+                <StackPanel Grid.Row="7" VerticalAlignment="Top" Margin="0,18,0,0">
+                    <Grid Margin="0,0,0,14">
+                        <Border Height="1" Background="{DynamicResource Border1}" VerticalAlignment="Center"/>
+                        <Border Background="{DynamicResource Bg1}" HorizontalAlignment="Center" Padding="10,0">
+                            <TextBlock x:Name="OrText" Text="of" Foreground="{DynamicResource Text3}" FontSize="11"/>
+                        </Border>
+                    </Grid>
+                    <Button x:Name="GoogleLoginButton" HorizontalAlignment="Stretch"
+                            Height="42"
+                            Cursor="Hand"
+                            Click="GoogleLoginButton_Click"
+                            Background="{DynamicResource Bg2}"
+                            BorderBrush="{DynamicResource Border1}"
+                            BorderThickness="1"
+                            Foreground="{DynamicResource Text1}">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Viewbox Width="18" Height="18" VerticalAlignment="Center" Margin="0,0,10,0">
+                                <Canvas Width="48" Height="48">
+                                    <Path Fill="#FFC107" Data="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+                                    <Path Fill="#FF3D00" Data="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+                                    <Path Fill="#4CAF50" Data="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+                                    <Path Fill="#1976D2" Data="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+                                </Canvas>
+                            </Viewbox>
+                            <TextBlock x:Name="GoogleButtonText" Text="Registreren met Google"
+                                       FontSize="13" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="MicrosoftLoginButton" HorizontalAlignment="Stretch"
+                            Height="42"
+                            Margin="0,10,0,0"
+                            Cursor="Hand"
+                            Click="MicrosoftLoginButton_Click"
+                            Background="{DynamicResource Bg2}"
+                            BorderBrush="{DynamicResource Border1}"
+                            BorderThickness="1"
+                            Foreground="{DynamicResource Text1}">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Viewbox Width="16" Height="16" VerticalAlignment="Center" Margin="0,0,10,0">
+                                <Canvas Width="20" Height="20">
+                                    <Rectangle Canvas.Left="0" Canvas.Top="0" Width="9" Height="9" Fill="#F25022"/>
+                                    <Rectangle Canvas.Left="11" Canvas.Top="0" Width="9" Height="9" Fill="#7FBA00"/>
+                                    <Rectangle Canvas.Left="0" Canvas.Top="11" Width="9" Height="9" Fill="#00A4EF"/>
+                                    <Rectangle Canvas.Left="11" Canvas.Top="11" Width="9" Height="9" Fill="#FFB900"/>
+                                </Canvas>
+                            </Viewbox>
+                            <TextBlock x:Name="MicrosoftButtonText" Text="Registreren met Microsoft"
+                                       FontSize="13" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <!-- Login Link -->
+                <StackPanel Grid.Row="8"
+                            HorizontalAlignment="Center"
+                            Orientation="Horizontal"
+                            Margin="0,18,0,0">
+                    <TextBlock x:Name="HaveAccountText"
+                               Text="Al een account? "
+                               Foreground="{DynamicResource Text3}"
+                               FontSize="12"/>
+                    <Button x:Name="LoginLinkButton"
+                            Content="Log in"
+                            Classes="LinkButton"
+                            Foreground="{DynamicResource Text1}"
+                            FontWeight="SemiBold"
+                            Click="LoginButton_Click"/>
+                </StackPanel>
+
+                <!-- Taalwisselaar -->
+                <StackPanel Grid.Row="9"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0,16,0,0">
+                    <Button x:Name="LangNlButton" Content="NL"
+                            Classes="LinkButton"
+                            Click="LangNl_Click"
+                            FontSize="11" Padding="4,0"/>
+                    <TextBlock Text=" · " Foreground="{DynamicResource Text3}" FontSize="11" VerticalAlignment="Center"/>
+                    <Button x:Name="LangEnButton" Content="EN"
+                            Classes="LinkButton"
+                            Click="LangEn_Click"
+                            FontSize="11" Padding="4,0"/>
+                    <TextBlock Text=" · " Foreground="{DynamicResource Text3}" FontSize="11" VerticalAlignment="Center"/>
+                    <Button x:Name="LangDeButton" Content="DE"
+                            Classes="LinkButton"
+                            Click="LangDe_Click"
+                            FontSize="11" Padding="4,0"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Loading Overlay -->
+            <Border x:Name="LoadingOverlay"
+                    Grid.RowSpan="2"
+                    Background="#73201A10"
+                    CornerRadius="14"
+                    IsVisible="False">
+                <Border Background="{DynamicResource Bg2}"
+                        BorderBrush="{DynamicResource Border1}"
+                        BorderThickness="1"
+                        CornerRadius="12"
+                        Padding="32,28"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                    
+                    <StackPanel HorizontalAlignment="Center">
+                        <!-- Draaiende spinner -->
+                        <Canvas Width="40" Height="40" HorizontalAlignment="Center">
+                            <Ellipse Width="40" Height="40" Stroke="{DynamicResource Border1}" StrokeThickness="4"/>
+                            <Path Classes="spinner" Stroke="{DynamicResource Accent}" StrokeThickness="4"
+                                  StrokeLineCap="Round"
+                                  Data="M20,2 A18,18 0 0 1 38,20">
+                            </Path>
+                        </Canvas>
+                        <TextBlock x:Name="LoadingText"
+                                   Text="Account aanmaken…"
+                                   Foreground="{DynamicResource Text1}"
+                                   FontSize="13"
+                                   Margin="0,18,0,0"
+                                   TextWrapping="Wrap"
+                                   TextAlignment="Center"
+                                   MaxWidth="240"
+                                   HorizontalAlignment="Center"/>
+                        <Button x:Name="CancelGoogleButton"
+                                Classes="LinkButton"
+                                Foreground="{DynamicResource Text3}"
+                                FontSize="12"
+                                Margin="0,14,0,0"
+                                HorizontalAlignment="Center"
+                                IsVisible="False"
+                                Click="CancelGoogleButton_Click"/>
+                    </StackPanel>
+                </Border>
+            </Border>
+
+            <!-- Success Overlay -->
+            <Border x:Name="SuccessOverlay"
+                    Grid.RowSpan="2"
+                    Background="#CC0F0F12"
+                    CornerRadius="14"
+                    IsVisible="False">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="40">
+                    <TextBlock x:Name="SuccessTitle"
+                               Text="Account aangemaakt"
+                               Foreground="{DynamicResource Text1}"
+                               FontSize="20"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,10"/>
+                    <TextBlock x:Name="SuccessMessageTextBlock"
+                               Text="Check je e-mail om je account te verifiëren."
+                               Foreground="{DynamicResource Text3}"
+                               FontSize="13"
+                               TextWrapping="Wrap"
+                               TextAlignment="Center"
+                               Margin="0,0,0,22"/>
+                    <Button x:Name="SuccessToLoginButton" HorizontalAlignment="Stretch"
+                            Content="Naar inloggen"
+                            Classes="AccentButton"
+                            Click="LoginButton_Click"
+                            Width="160" Height="40"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
 </Window>

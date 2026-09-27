@@ -23,11 +23,11 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 # ── Config ──
-REPO_URL="https://github.com/sanchobierhoff-ai-assistent/ai-assistent"
+REPO_URL="https://github.com/sanchobierhoff-ai-assistent/maikey-mac"
 PROJECT="mAIkey.Desktop/mAIkey.Desktop.csproj"
 PACK_ID="mAIkey"
 MAIN_EXE="mAIkey.Desktop"          # naam van het binary in de publish-map
-CHANNEL="osx"
+CHANNEL="${RID:-osx-arm64}"   # zelfde kanaal als de app (osx-arm64 / osx-x64)
 PUBDIR="vpk_work/publish-osx"
 RELDIR="Releases-osx"
 # Architectuur: osx-arm64 (Apple Silicon) of osx-x64 (Intel)

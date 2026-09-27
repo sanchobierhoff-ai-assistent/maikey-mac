@@ -1,0 +1,113 @@
+<UserControl x:Class="mAIkey.Desktop.Views.KoppelingenView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{DynamicResource Bg1}"
+             FontFamily="{DynamicResource FontUi}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="28,24,28,24" MaxWidth="820" HorizontalAlignment="Left">
+
+            <TextBlock Text="Koppelingen" FontSize="22" FontWeight="Bold" Foreground="{DynamicResource Text1}"/>
+            <TextBlock Text="De schakel tussen je klanten en je developmentteam. Zet een Zendesk-ticket door naar Jira, en koppel de reactie van development weer terug naar de klant — in jouw stijl."
+                       FontSize="13" Foreground="{DynamicResource Text3}" TextWrapping="Wrap" Margin="0,6,0,18"/>
+
+            <!-- Open hub -->
+            <Border Background="{DynamicResource Bg2}" CornerRadius="{DynamicResource RadiusLg}" Padding="18"
+                    BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                <StackPanel>
+                    <TextBlock Text="Koppelingen-hub" FontWeight="SemiBold" FontSize="15" Foreground="{DynamicResource Text1}"/>
+                    <TextBlock Text="Kies links een Zendesk-ticket en rechts een Jira-issue (beide doorzoekbaar), en werk in het chatvenster onderin: maak een Jira-ticket, schrijf een klant-reactie of een dev-opmerking. Gesprekken worden bewaard."
+                               FontSize="12.5" Foreground="{DynamicResource Text3}" Margin="0,4,0,12" TextWrapping="Wrap"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="OpenHubButton" Content="Open koppelingen-hub →"
+                                Classes="AccentButton" Padding="22,11" Height="40" MinWidth="240"
+                                HorizontalAlignment="Left" Click="OpenHubButton_Click"/>
+                        <Button x:Name="ManageZendeskButton" Content="Beheer Zendesk-tickets"
+                                Classes="GhostButton"
+                                Padding="18,11" Height="40" MinWidth="200" Margin="10,0,0,0"
+                                HorizontalAlignment="Left" Click="ManageZendesk_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Werklijst / inbox -->
+            <Border Background="{DynamicResource Bg2}" CornerRadius="{DynamicResource RadiusLg}" Padding="18"
+                    BorderBrush="{DynamicResource Border1}" BorderThickness="1" Margin="0,16,0,0">
+                <StackPanel>
+                    <TextBlock Text="Werklijst — tickets automatisch ophalen" FontWeight="SemiBold" FontSize="15"
+                               Foreground="{DynamicResource Text1}"/>
+                    <TextBlock Text="Zet dit aan en mAIkey haalt op de achtergrond je openstaande Zendesk-tickets op en toont ze als werklijst in de hub — met een korte AI-inschatting van categorie en prioriteit. Je kiest zelf welk ticket je oppakt, voegt context toe en beoordeelt alles vóórdat er iets gebeurt. Er wordt niets automatisch aangemaakt."
+                               FontSize="12.5" Foreground="{DynamicResource Text3}" Margin="0,4,0,12" TextWrapping="Wrap"/>
+
+                    <CheckBox x:Name="InboxEnabledCheck" Content="Openstaande tickets automatisch ophalen (werklijst)"
+                              Foreground="{DynamicResource Text1}"
+                              IsCheckedChanged="InboxEnabled_Changed"/>
+
+                    <TextBlock Text="Toon alleen tickets van merk:" FontSize="12" FontWeight="SemiBold"
+                               Foreground="{DynamicResource Text3}" Margin="24,12,0,6"/>
+                    <ComboBox x:Name="BrandCombo" Classes="ModernComboBox" Width="300" HorizontalAlignment="Left"
+                              Height="34" Margin="24,0,0,0" SelectionChanged="BrandCombo_Changed"/>
+                    <TextBlock x:Name="BrandHint" FontSize="11" Foreground="{DynamicResource Text3}"
+                               Margin="24,4,0,0" TextWrapping="Wrap"
+                               Text="Merken worden automatisch uit Zendesk opgehaald. 'Alle merken' = geen filter."/>
+
+                    <Border Background="{DynamicResource Bg1}" CornerRadius="{DynamicResource RadiusMd}" Padding="12,10"
+                            BorderBrush="{DynamicResource Border1}" BorderThickness="1" Margin="24,10,0,0">
+                        <TextBlock FontSize="11.5" Foreground="{DynamicResource Text3}" TextWrapping="Wrap"
+                                   Text="🔒 Privacy: we bewaren géén ticketinhoud. In de werklijst staat alleen het onderwerp, de status en een korte label. De volledige tekst en reacties worden pas geladen wanneer jij een ticket opent. De AI-inschatting ziet enkel het onderwerp. Uitzetten kan altijd."/>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- Settings -->
+            <Border Background="{DynamicResource Bg2}" CornerRadius="{DynamicResource RadiusLg}" Padding="18"
+                    BorderBrush="{DynamicResource Border1}" BorderThickness="1" Margin="0,16,0,0">
+                <StackPanel>
+                    <TextBlock Text="Instellingen" FontWeight="SemiBold" FontSize="15"
+                               Foreground="{DynamicResource Text1}" Margin="0,0,0,12"/>
+
+                    <CheckBox x:Name="HotkeyEnabledCheck" Content="Sneltoets voor de hub inschakelen"
+                              Foreground="{DynamicResource Text1}"
+                              IsCheckedChanged="HotkeyEnabled_Changed"/>
+
+                    <CheckBox x:Name="AutoBacklinkCheck" Content="Automatisch een interne notitie in Zendesk plaatsen bij het koppelen"
+                              Foreground="{DynamicResource Text1}" Margin="0,10,0,0"
+                              IsCheckedChanged="AutoBacklink_Changed"/>
+                    <TextBlock Text="Uit = mAIkey plaatst zelf geen notities in Zendesk bij het aanmaken/koppelen van een Jira-ticket (de koppeling blijft wel bewaard in de geschiedenis)."
+                               FontSize="11.5" Foreground="{DynamicResource Text3}" Margin="24,4,0,0" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Sneltoets (klik in het veld en druk een combinatie):" FontSize="12" FontWeight="SemiBold"
+                               Foreground="{DynamicResource Text3}" Margin="0,14,0,6"/>
+                    <TextBox x:Name="HotkeyBox" IsReadOnly="True" Cursor="Hand" Width="260" HorizontalAlignment="Left"
+                             Background="{DynamicResource Bg1}" Foreground="{DynamicResource Text1}"
+                             BorderBrush="{DynamicResource Border1}" BorderThickness="1"
+                             FontSize="13" Padding="10,8" VerticalContentAlignment="Center"/>
+
+                    <TextBlock Text="Model voor de brug (kwaliteit van ticket &amp; terugkoppeling):" FontSize="12" FontWeight="SemiBold"
+                               Foreground="{DynamicResource Text3}" Margin="0,16,0,6"/>
+                    <ComboBox x:Name="ModelCombo" Classes="ModernComboBox" Width="340" HorizontalAlignment="Left"
+                              Height="36" SelectionChanged="ModelCombo_Changed"/>
+
+                    <TextBlock Text="Standaard-instructie voor Jira-tickets (optioneel):" FontSize="12" FontWeight="SemiBold"
+                               Foreground="{DynamicResource Text3}" Margin="0,16,0,6"/>
+                    <TextBox x:Name="JiraPromptBox" Classes="ModernTextBox" Width="480" HorizontalAlignment="Left"
+                             MinHeight="60" AcceptsReturn="True" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             Padding="10,8" LostFocus="JiraPrompt_LostFocus"/>
+                    <TextBlock Text="Wordt bij elk Jira-ticket meegegeven (bv. 'schrijf bondig, voeg stappen-om-te-reproduceren toe'). Je kunt bij het maken ook nog losse context typen."
+                               FontSize="11.5" Foreground="{DynamicResource Text3}" Margin="0,4,0,0" TextWrapping="Wrap"/>
+
+                    <TextBlock Text="Schrijfstijl voor klant-reacties:" FontSize="12" FontWeight="SemiBold"
+                               Foreground="{DynamicResource Text3}" Margin="0,16,0,6"/>
+                    <ComboBox x:Name="StyleCombo" Classes="ModernComboBox" Width="340" HorizontalAlignment="Left"
+                              Height="36" SelectionChanged="StyleCombo_Changed"/>
+                    <Button x:Name="ZendeskStyleBtn" Content="Maak stijl uit mijn Zendesk-antwoorden"
+                            Classes="GhostButton" Padding="16,8" Height="34" Margin="0,8,0,0"
+                            HorizontalAlignment="Left" Click="ZendeskStyle_Click"/>
+                    <TextBlock Text="Haalt je laatste publieke Zendesk-reacties op en maakt daar een schrijfstijl van, die meteen wordt ingesteld voor klant-reacties."
+                               FontSize="11.5" Foreground="{DynamicResource Text3}" Margin="0,6,0,0" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

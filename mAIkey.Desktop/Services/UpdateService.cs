@@ -27,12 +27,12 @@ public class UpdateInfo
 /// Auto-update voor de macOS-app via Velopack met GitHub Releases als bron —
 /// dezelfde feed en aanpak als de Windows-app (frontend/Services/UpdateService.cs).
 ///
-/// De macOS-releases staan als assets in dezelfde releases-repo, maar in het
-/// aparte kanaal "osx" zodat de Mac-app geen Windows-pakketten binnenhaalt.
+/// De macOS-releases staan in de openbare repo maikey-mac, per processor in een eigen
+/// kanaal (osx-arm64 / osx-x64), gebouwd door .github/workflows/build-mac.yml.
 /// </summary>
 public static class UpdateService
 {
-    // Releases-repo voor de desktop-app (gedeeld met de Windows-app).
+    // Openbare releases-repo van de Mac-app.
     private const string GithubRepoUrl = "https://github.com/sanchobierhoff-ai-assistent/maikey-mac";
 
     // Kanaal per processor, zodat een Intel-Mac geen Apple-Silicon-pakket haalt (en andersom).

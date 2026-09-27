@@ -1,0 +1,128 @@
+<Window x:Class="mAIkey.Desktop.Windows.JiraSearchEditWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Jira · Ticket zoeken en wijzigen"
+        Height="720" Width="900"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource Bg1}">
+
+
+    <Grid Margin="28">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+            <TextBlock x:Name="HeaderText" Text="JIRA · ZOEKEN EN WIJZIGEN"
+                       FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource Text3}"
+                       Margin="0,0,0,6" Opacity="0.85"/>
+            <TextBlock x:Name="TitleText" Text="Ticket zoeken en wijzigen"
+                       FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource Text1}"/>
+        </StackPanel>
+
+        <!-- Search bar -->
+        <Grid Grid.Row="1" Margin="0,0,0,14">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="SearchTextBox" Grid.Column="0" Height="38" FontSize="13" Padding="12,0"
+                     KeyDown="SearchTextBox_KeyDown" Classes="MkTextBox"
+                     Background="{DynamicResource Bg3}" Foreground="{DynamicResource Text1}"
+                     CaretBrush="{DynamicResource Accent}"
+                     BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                
+            </TextBox>
+            <ComboBox x:Name="ProjectFilterComboBox" Grid.Column="2" Classes="MkComboBox"
+                      Height="38" FontSize="13" DisplayMemberBinding="{Binding Name}"/>
+            <Button x:Name="SearchBtn" Grid.Column="4" Content="Zoeken" Click="Search_Click"
+                    Height="38" Padding="20,0" Classes="AccentButton"/>
+        </Grid>
+
+        <!-- Results + editor -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="320"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Results list -->
+            <Border Grid.Column="0" Background="{DynamicResource Bg2}" BorderBrush="{DynamicResource Border1}"
+                    BorderThickness="1" CornerRadius="10" Padding="6">
+                <Grid>
+                    <ListBox x:Name="ResultsListBox" Background="Transparent" BorderThickness="0"
+                             SelectionChanged="ResultsListBox_SelectionChanged"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="4,6">
+                                    <TextBlock Text="{Binding Display}" FontSize="11" FontWeight="SemiBold"
+                                               Foreground="{DynamicResource Text3}"/>
+                                    <TextBlock Text="{Binding Summary}" FontSize="12.5"
+                                               Foreground="{DynamicResource Text1}" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <TextBlock x:Name="NoResultsText" Text="Geen resultaten." FontSize="12"
+                               Foreground="{DynamicResource Text3}" HorizontalAlignment="Center"
+                               VerticalAlignment="Center" IsVisible="False"/>
+                </Grid>
+            </Border>
+
+            <!-- Editor -->
+            <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="EditorPanel" IsEnabled="False">
+                    <TextBlock x:Name="EditKeyText" Text="" FontSize="12" FontWeight="SemiBold"
+                               Foreground="{DynamicResource Text3}" Margin="0,0,0,10"/>
+
+                    <TextBlock x:Name="EditSummaryLabel" Text="Samenvatting" FontSize="12" FontWeight="SemiBold"
+                               Foreground="{DynamicResource Text3}" Margin="0,0,0,6"/>
+                    <TextBox x:Name="EditSummaryTextBox" Height="38" FontSize="13" MaxLength="255" Padding="12,0"
+                             Margin="0,0,0,14"
+                             Background="{DynamicResource Bg3}" Foreground="{DynamicResource Text1}"
+                             CaretBrush="{DynamicResource Accent}"
+                             BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                        
+                    </TextBox>
+
+                    <TextBlock x:Name="EditDescLabel" Text="Omschrijving" FontSize="12" FontWeight="SemiBold"
+                               Foreground="{DynamicResource Text3}" Margin="0,0,0,6"/>
+                    <TextBox x:Name="EditDescTextBox" Height="200" TextWrapping="Wrap" AcceptsReturn="True"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="12,10" FontSize="12"
+                             FontFamily="{DynamicResource FontMono}" Margin="0,0,0,10"
+                             Background="{DynamicResource Bg3}" Foreground="{DynamicResource Text1}"
+                             CaretBrush="{DynamicResource Accent}"
+                             BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                        
+                    </TextBox>
+                    <Button x:Name="SaveBtn" Content="Wijzigingen opslaan" Click="Save_Click"
+                            HorizontalAlignment="Left" Height="38" Padding="18,0" Margin="0,0,0,20"
+                            Classes="AccentButton"/>
+
+                    <Border Background="{DynamicResource Border1}" Height="1" Margin="0,0,0,16"/>
+
+                    <TextBlock x:Name="CommentLabel" Text="Reactie toevoegen" FontSize="12" FontWeight="SemiBold"
+                               Foreground="{DynamicResource Text3}" Margin="0,0,0,6"/>
+                    <TextBox x:Name="CommentTextBox" Height="90" TextWrapping="Wrap" AcceptsReturn="True"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="12,8" FontSize="12" Margin="0,0,0,10"
+                             Background="{DynamicResource Bg3}" Foreground="{DynamicResource Text1}"
+                             CaretBrush="{DynamicResource Accent}"
+                             BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                        
+                    </TextBox>
+                    <Button x:Name="CommentBtn" Content="Reactie plaatsen" Click="Comment_Click"
+                            HorizontalAlignment="Left" Height="38" Padding="18,0"
+                            Classes="GhostButton"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>

@@ -16,12 +16,11 @@ public static class PlatformServiceFactory
                 DeviceIdentifier = new macOS.MacDeviceIdentifier(),
                 TokenProtection = new macOS.MacTokenProtection(),
                 SingleInstance = new macOS.MacSingleInstance(),
-                TrayService = new macOS.MacTrayService(),
                 AutoStartService = new macOS.MacAutoStartService()
             };
         }
 
-        // Fallback for non-macOS (stub services for development on Windows)
+        // Alleen voor ontwikkelen/compileren buiten macOS: no-op services.
         return new PlatformServices
         {
             HotkeyService = new StubHotkeyService(),
@@ -29,7 +28,6 @@ public static class PlatformServiceFactory
             DeviceIdentifier = new StubDeviceIdentifier(),
             TokenProtection = new StubTokenProtection(),
             SingleInstance = new StubSingleInstance(),
-            TrayService = new StubTrayService(),
             AutoStartService = new StubAutoStartService()
         };
     }
@@ -42,14 +40,14 @@ public class PlatformServices
     public IDeviceIdentifier DeviceIdentifier { get; set; } = null!;
     public ITokenProtection TokenProtection { get; set; } = null!;
     public ISingleInstanceService SingleInstance { get; set; } = null!;
-    public ISystemTrayService TrayService { get; set; } = null!;
     public IAutoStartService AutoStartService { get; set; } = null!;
 }
 
-// Stub implementations for development/testing on non-macOS platforms
 internal class StubHotkeyService : IHotkeyService
 {
+#pragma warning disable CS0067
     public event EventHandler<HotkeyPressedEventArgs>? HotkeyPressed;
+#pragma warning restore CS0067
     public bool RegisterHotkey(int id, HotkeyModifiers modifiers, int key) => true;
     public bool UnregisterHotkey(int id) => true;
     public void UnregisterAll() { }
@@ -59,11 +57,15 @@ internal class StubHotkeyService : IHotkeyService
 
 internal class StubClipboardService : IClipboardService
 {
+    private string? _text;
+    public Task<bool> CopySelectionAsync() => Task.FromResult(false);
     public Task<string?> GetSelectedTextAsync() => Task.FromResult<string?>(null);
-    public Task SetTextAsync(string text) => Task.CompletedTask;
-    public Task ReplaceSelectedTextAsync(string newText) => Task.CompletedTask;
-    public bool ContainsImage() => false;
-    public Task<List<string>> GetImagesAsBase64Async() => Task.FromResult(new List<string>());
+    public string? GetText() => _text;
+    public string? GetHtml() => null;
+    public byte[]? GetImagePng() => null;
+    public Task SetTextAsync(string text) { _text = text; return Task.CompletedTask; }
+    public Task ReplaceSelectedTextAsync(string newText) { _text = newText; return Task.CompletedTask; }
+    public Task PasteAsync() => Task.CompletedTask;
     public IntPtr GetForegroundWindow() => IntPtr.Zero;
     public void SetForegroundWindow(IntPtr handle) { }
 }
@@ -81,17 +83,10 @@ internal class StubTokenProtection : ITokenProtection
 
 internal class StubSingleInstance : ISingleInstanceService
 {
+#pragma warning disable CS0067
     public event EventHandler? ShowRequested;
+#pragma warning restore CS0067
     public bool TryAcquire() => true;
-    public void Dispose() { }
-}
-
-internal class StubTrayService : ISystemTrayService
-{
-    public event EventHandler? Activated;
-    public event EventHandler? ExitRequested;
-    public void Show(string tooltip) { }
-    public void Hide() { }
     public void Dispose() { }
 }
 

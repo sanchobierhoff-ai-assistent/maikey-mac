@@ -1,252 +1,526 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="mAIkey.Desktop.Views.SettingsView"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
-             xmlns:loc="using:mAIkey.Desktop"
-             x:Class="mAIkey.Desktop.Views.SettingsView"
              Background="{DynamicResource Bg1}">
 
-  <UserControl.Styles>
-    <Style Selector="Border.section">
-      <Setter Property="Background" Value="{DynamicResource Bg2}"/>
-      <Setter Property="BorderBrush" Value="{DynamicResource Border1}"/>
-      <Setter Property="BorderThickness" Value="1"/>
-      <Setter Property="CornerRadius" Value="14"/>
-      <Setter Property="Margin" Value="0,0,0,16"/>
-    </Style>
-    <Style Selector="Border.section-head">
-      <Setter Property="Padding" Value="20,16"/>
-      <Setter Property="BorderBrush" Value="{DynamicResource Border1}"/>
-      <Setter Property="BorderThickness" Value="0,0,0,1"/>
-    </Style>
-    <Style Selector="TextBlock.section-title">
-      <Setter Property="FontSize" Value="14"/>
-      <Setter Property="FontWeight" Value="SemiBold"/>
-      <Setter Property="Foreground" Value="{DynamicResource Text1}"/>
-      <Setter Property="VerticalAlignment" Value="Center"/>
-    </Style>
-    <Style Selector="TextBlock.row-label">
-      <Setter Property="FontSize" Value="13"/>
-      <Setter Property="FontWeight" Value="Medium"/>
-      <Setter Property="Foreground" Value="{DynamicResource Text1}"/>
-    </Style>
-    <Style Selector="TextBlock.row-sub">
-      <Setter Property="FontSize" Value="11.5"/>
-      <Setter Property="Foreground" Value="{DynamicResource Text3}"/>
-      <Setter Property="Margin" Value="0,2,0,0"/>
-      <Setter Property="TextWrapping" Value="Wrap"/>
-    </Style>
-  </UserControl.Styles>
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="32,28,32,40">
-    <StackPanel MaxWidth="760">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="32,28,32,48">
 
-      <!-- Header -->
-      <StackPanel Spacing="4" Margin="0,0,0,24">
-        <TextBlock Classes="eyebrow" loc:Tr.Key="Settings_Title"/>
-        <TextBlock Classes="title" loc:Tr.Key="Settings_Heading"/>
-        <TextBlock loc:Tr.Key="Settings_Subtitle" FontSize="13"
-                   Foreground="{DynamicResource Text3}" Margin="0,2,0,0"/>
-      </StackPanel>
+            <!-- Page header -->
+            <TextBlock x:Name="PageEyebrow" Text="INSTELLINGEN"
+                       FontSize="11" FontWeight="SemiBold"
+                       Foreground="{DynamicResource Text3}"
+                       Margin="0,0,0,6"/>
+            <TextBlock x:Name="PageTitle" Text="Voorkeursinstellingen"
+                       FontSize="28" FontWeight="SemiBold"
+                       Foreground="{DynamicResource Text1}"
+                       Margin="0,0,0,4"/>
+            <TextBlock x:Name="PageSubtitle" Text="Pas de app naar jouw voorkeur aan."
+                       FontSize="13" Foreground="{DynamicResource Text3}"
+                       Margin="0,0,0,28"/>
 
-      <!-- Thema -->
-      <Border Classes="section">
-        <StackPanel>
-          <Border Classes="section-head">
-            <StackPanel Orientation="Horizontal">
-              <i:Icon Value="mdi-theme-light-dark" FontSize="16" Foreground="{DynamicResource Accent}"
-                      Margin="0,0,9,0" VerticalAlignment="Center"/>
-              <TextBlock Classes="section-title" loc:Tr.Key="Settings_Card_Theme"/>
-            </StackPanel>
-          </Border>
-          <StackPanel Orientation="Horizontal" Margin="20,16,20,20" Spacing="24">
-            <RadioButton Name="ThemeDarkRadio" loc:Tr.Key="Settings_Theme_Dark" GroupName="ThemeGroup"/>
-            <RadioButton Name="ThemeLightRadio" loc:Tr.Key="Settings_Theme_Light" GroupName="ThemeGroup"/>
-          </StackPanel>
-        </StackPanel>
-      </Border>
-
-      <!-- 2 kolommen: Gedrag | Taal -->
-      <Grid ColumnDefinitions="*,16,*" Margin="0,0,0,16">
-
-        <Border Grid.Column="0" Classes="section" Margin="0">
-          <StackPanel>
-            <Border Classes="section-head">
-              <StackPanel Orientation="Horizontal">
-                <i:Icon Value="mdi-tune-variant" FontSize="16" Foreground="{DynamicResource Accent}"
-                        Margin="0,0,9,0" VerticalAlignment="Center"/>
-                <TextBlock Classes="section-title" loc:Tr.Key="Settings_Card_Behavior"/>
-              </StackPanel>
-            </Border>
-            <StackPanel Margin="20,16,20,20" Spacing="16">
-              <Grid ColumnDefinitions="*,Auto">
-                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,12,0">
-                  <TextBlock Classes="row-label" loc:Tr.Key="Settings_ShowIndicator"/>
-                  <TextBlock Classes="row-sub" loc:Tr.Key="Settings_ShowIndicatorSub"/>
+            <!-- ============================================================ -->
+            <!-- THEMA-KAART: Donker / Licht                                  -->
+            <!-- ============================================================ -->
+            <Border Margin="0,0,0,16"
+                    Background="{DynamicResource Bg2}" CornerRadius="14"
+                    BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                <StackPanel>
+                    <Border Padding="20,16" BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
+                        <StackPanel Orientation="Horizontal">
+                            <i:Icon Value="mdi-theme-light-dark" FontSize="16"
+                                                     Margin="0,0,9,0" Foreground="{DynamicResource Accent}"
+                                                     VerticalAlignment="Center"/>
+                            <TextBlock x:Name="CardThemeHeader" Text="Thema"
+                                       FontSize="14" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Margin="20,16,20,20" HorizontalAlignment="Left">
+                        <RadioButton x:Name="ThemeDarkRadio" Content="Donker"
+                                     GroupName="ThemeGroup"
+                                     IsCheckedChanged="ThemeDark_Checked"
+                                     Foreground="{DynamicResource Text1}"
+                                     Margin="0,0,24,0"/>
+                        <RadioButton x:Name="ThemeLightRadio" Content="Licht (Linnen)"
+                                     GroupName="ThemeGroup"
+                                     IsCheckedChanged="ThemeLight_Checked"
+                                     Foreground="{DynamicResource Text1}"/>
+                    </StackPanel>
                 </StackPanel>
-                <CheckBox Grid.Column="1" Name="ShowIndicatorCheck" VerticalAlignment="Center"/>
-              </Grid>
-              <Grid ColumnDefinitions="*,Auto">
-                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,12,0">
-                  <TextBlock Classes="row-label" loc:Tr.Key="Settings_Sound"/>
-                  <TextBlock Classes="row-sub" loc:Tr.Key="Settings_SoundSub"/>
-                </StackPanel>
-                <CheckBox Grid.Column="1" Name="SoundCheck" VerticalAlignment="Center"/>
-              </Grid>
-            </StackPanel>
-          </StackPanel>
-        </Border>
-
-        <Border Grid.Column="2" Classes="section" Margin="0">
-          <StackPanel>
-            <Border Classes="section-head">
-              <StackPanel Orientation="Horizontal">
-                <i:Icon Value="mdi-translate" FontSize="16" Foreground="{DynamicResource Accent}"
-                        Margin="0,0,9,0" VerticalAlignment="Center"/>
-                <TextBlock Classes="section-title" loc:Tr.Key="Settings_Card_Lang"/>
-              </StackPanel>
             </Border>
-            <StackPanel Margin="20,16,20,20" Spacing="6">
-              <TextBlock Classes="row-label" loc:Tr.Key="Settings_LangInterface"/>
-              <TextBlock Classes="row-sub" loc:Tr.Key="Settings_LangSubtitle"/>
-              <ComboBox Name="LanguageComboBox" HorizontalAlignment="Stretch" FontSize="13" Margin="0,6,0,0">
-                <ComboBoxItem Content="Nederlands" Tag="nl"/>
-                <ComboBoxItem Content="English" Tag="en"/>
-                <ComboBoxItem Content="Deutsch" Tag="de"/>
-              </ComboBox>
-            </StackPanel>
-          </StackPanel>
-        </Border>
-      </Grid>
 
-      <!-- Contentlimieten -->
-      <Border Classes="section">
-        <StackPanel>
-          <Border Classes="section-head">
-            <StackPanel Orientation="Horizontal">
-              <i:Icon Value="mdi-image-multiple" FontSize="16" Foreground="{DynamicResource Accent}"
-                      Margin="0,0,9,0" VerticalAlignment="Center"/>
-              <TextBlock Classes="section-title" loc:Tr.Key="Settings_ContentLimits"/>
-            </StackPanel>
-          </Border>
-          <StackPanel Margin="20,16,20,20" Spacing="16">
-            <Grid ColumnDefinitions="*,Auto">
-              <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                <TextBlock Classes="row-label" loc:Tr.Key="Settings_MaxImages"/>
-                <TextBlock Classes="row-sub" loc:Tr.Key="Settings_MaxImagesSub"/>
-              </StackPanel>
-              <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                <Button Content="-" Width="32" Height="32" Classes="ghost" Padding="0"
-                        HorizontalContentAlignment="Center" Name="ImgMinusBtn" Click="ImgMinus_Click"/>
-                <TextBlock Name="MaxImagesText" Text="3" FontSize="14" FontWeight="SemiBold"
-                           VerticalAlignment="Center" Width="30" TextAlignment="Center"/>
-                <Button Content="+" Width="32" Height="32" Classes="ghost" Padding="0"
-                        HorizontalContentAlignment="Center" Name="ImgPlusBtn" Click="ImgPlus_Click"/>
-              </StackPanel>
+            <!-- ============================================================ -->
+            <!-- 2-KOLOM KAARTEN: Gedrag | Taal & model                       -->
+            <!-- ============================================================ -->
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- ── Gedrag-kaart ── -->
+                <Border Grid.Column="0"
+                        Background="{DynamicResource Bg2}" CornerRadius="14"
+                        BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                    <StackPanel>
+                        <Border Padding="20,16" BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
+                            <StackPanel Orientation="Horizontal">
+                                <i:Icon Value="mdi-monitor" FontSize="16"
+                                                         Margin="0,0,9,0"
+                                                         Foreground="{DynamicResource Accent}"
+                                                         VerticalAlignment="Center"/>
+                                <TextBlock x:Name="CardBehaviorHeader" Text="Gedrag"
+                                           FontSize="14" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource Text1}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <StackPanel Margin="20,16,20,20">
+
+                            <!-- Autostart bij Windows -->
+                            <Grid Margin="0,0,0,16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,12,0">
+                                    <TextBlock x:Name="AutostartLabel" Text="Autostart bij Windows"
+                                               FontSize="13" FontWeight="Medium"
+                                               Foreground="{DynamicResource Text1}"/>
+                                    <TextBlock x:Name="AutostartSubLabel" Text="Start mAIkey automatisch bij inloggen"
+                                               FontSize="11.5" Foreground="{DynamicResource Text3}"
+                                               Margin="0,2,0,0"/>
+                                </StackPanel>
+                                <CheckBox Grid.Column="1" x:Name="AutostartCheckBox"
+                                          VerticalAlignment="Center"
+                                          IsCheckedChanged="Autostart_Changed"/>
+                            </Grid>
+
+                            <!-- Toon AI-indicator -->
+                            <Grid Margin="0,0,0,16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,12,0">
+                                    <TextBlock x:Name="ShowIndicatorLabel" Text="Toon AI-indicator tijdens verwerking"
+                                               FontSize="13" FontWeight="Medium"
+                                               Foreground="{DynamicResource Text1}"/>
+                                    <TextBlock x:Name="ShowIndicatorSubLabel" Text="Laat zien dat de AI bezig is"
+                                               FontSize="11.5" Foreground="{DynamicResource Text3}"
+                                               Margin="0,2,0,0"/>
+                                </StackPanel>
+                                <CheckBox Grid.Column="1" x:Name="ShowAiIndicatorCheckBox"
+                                          VerticalAlignment="Center"
+                                          IsCheckedChanged="ShowAiIndicator_Changed"/>
+                            </Grid>
+
+                            <!-- Geluid bij voltooiing -->
+                            <Grid Margin="0,0,0,16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,12,0">
+                                    <TextBlock x:Name="SoundLabel" Text="Geluid bij voltooiing"
+                                               FontSize="13" FontWeight="Medium"
+                                               Foreground="{DynamicResource Text1}"/>
+                                    <TextBlock x:Name="SoundSubLabel" Text="Speel een geluid af als de AI klaar is"
+                                               FontSize="11.5" Foreground="{DynamicResource Text3}"
+                                               Margin="0,2,0,0"/>
+                                </StackPanel>
+                                <CheckBox Grid.Column="1" x:Name="SoundCheckBox"
+                                          VerticalAlignment="Center"
+                                          IsCheckedChanged="Sound_Changed"/>
+                            </Grid>
+
+                            <!-- Snelkoppeling op bureaublad (alleen Windows) -->
+                            <Grid Margin="0,0,0,16" IsVisible="False">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,12,0">
+                                    <TextBlock x:Name="DesktopShortcutLabel" Text="Snelkoppeling op bureaublad"
+                                               FontSize="13" FontWeight="Medium"
+                                               Foreground="{DynamicResource Text1}"/>
+                                    <TextBlock x:Name="DesktopShortcutSubLabel" Text="Plaats een mAIkey-snelkoppeling op je bureaublad"
+                                               FontSize="11.5" Foreground="{DynamicResource Text3}"
+                                               Margin="0,2,0,0"/>
+                                </StackPanel>
+                                <CheckBox Grid.Column="1" x:Name="DesktopShortcutCheckBox"
+                                          VerticalAlignment="Center"
+                                          IsCheckedChanged="DesktopShortcut_Changed"/>
+                            </Grid>
+
+                            <!-- Snelkoppeling in Startmenu (alleen Windows) -->
+                            <Grid IsVisible="False">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,12,0">
+                                    <TextBlock x:Name="StartMenuShortcutLabel" Text="Snelkoppeling in Startmenu"
+                                               FontSize="13" FontWeight="Medium"
+                                               Foreground="{DynamicResource Text1}"/>
+                                    <TextBlock x:Name="StartMenuShortcutSubLabel" Text="Toon mAIkey in het Startmenu"
+                                               FontSize="11.5" Foreground="{DynamicResource Text3}"
+                                               Margin="0,2,0,0"/>
+                                </StackPanel>
+                                <CheckBox Grid.Column="1" x:Name="StartMenuShortcutCheckBox"
+                                          VerticalAlignment="Center"
+                                          IsCheckedChanged="StartMenuShortcut_Changed"/>
+                            </Grid>
+
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- gap -->
+
+                <!-- ── Taal & model-kaart ── -->
+                <Border Grid.Column="2"
+                        Background="{DynamicResource Bg2}" CornerRadius="14"
+                        BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                    <StackPanel>
+                        <Border Padding="20,16" BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
+                            <StackPanel Orientation="Horizontal">
+                                <i:Icon Value="mdi-translate" FontSize="16"
+                                                         Margin="0,0,9,0"
+                                                         Foreground="{DynamicResource Accent}"
+                                                         VerticalAlignment="Center"/>
+                                <TextBlock x:Name="CardLangHeader" Text="Taal"
+                                           FontSize="14" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource Text1}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <StackPanel Margin="20,16,20,20">
+
+                            <!-- Taal interface -->
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="8"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0">
+                                    <TextBlock x:Name="LangInterfaceLabel" Text="Taal interface"
+                                               FontSize="13" FontWeight="Medium"
+                                               Foreground="{DynamicResource Text1}"/>
+                                    <TextBlock x:Name="LangInterfaceSubLabel" Text="Taal van menu's, labels en berichten"
+                                               FontSize="11.5" Foreground="{DynamicResource Text3}"
+                                               Margin="0,2,0,0"/>
+                                </StackPanel>
+                                <ComboBox Grid.Row="2"
+                                          x:Name="LanguageComboBox"
+                                          Classes="MkComboBox"
+                                          Height="36"
+                                          SelectionChanged="Language_Changed">
+                                    <ComboBoxItem Content="Nederlands" Tag="nl"/>
+                                    <ComboBoxItem Content="English" Tag="en"/>
+                                    <ComboBoxItem Content="Deutsch" Tag="de"/>
+                                </ComboBox>
+                            </Grid>
+
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
             </Grid>
-            <Grid ColumnDefinitions="*,Auto">
-              <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                <TextBlock Classes="row-label" loc:Tr.Key="Settings_MaxChars"/>
-                <TextBlock Classes="row-sub" loc:Tr.Key="Settings_MaxCharsSub"/>
-              </StackPanel>
-              <TextBox Grid.Column="1" Name="MaxCharsBox" Width="120" FontSize="13" VerticalAlignment="Center"/>
-            </Grid>
-          </StackPanel>
+
+            <!-- ============================================================ -->
+            <!-- CONTENTLIMIETEN (bestaand, volledige breedte)                -->
+            <!-- ============================================================ -->
+            <Border Background="{DynamicResource Bg2}" CornerRadius="14"
+                    BorderBrush="{DynamicResource Border1}" BorderThickness="1"
+                    Margin="0,0,0,16">
+                <StackPanel>
+                    <Border Padding="20,16" BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
+                        <StackPanel Orientation="Horizontal">
+                            <i:Icon Value="mdi-shield-outline" FontSize="16"
+                                                     Margin="0,0,9,0"
+                                                     Foreground="{DynamicResource Accent}"
+                                                     VerticalAlignment="Center"/>
+                            <TextBlock x:Name="CardContentLimitsHeader" Text="Contentlimieten"
+                                       FontSize="14" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource Text1}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <StackPanel Margin="20,16,20,20">
+                        <TextBlock x:Name="ContentLimitsSub" Text="Als je meer afbeeldingen of tekens verstuurt dan het ingestelde limiet, vraagt de app om bevestiging."
+                                   FontSize="12.5" Foreground="{DynamicResource Text3}"
+                                   TextWrapping="Wrap" Margin="0,0,0,18"/>
+
+                        <!-- Max Images -->
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock x:Name="MaxImagesLabel"
+                                           Text="Max. afbeeldingen"
+                                           FontSize="13" FontWeight="Medium"
+                                           Foreground="{DynamicResource Text1}"/>
+                                <TextBlock x:Name="MaxImagesSubLabel"
+                                           Text="Bevestiging vereist boven dit aantal"
+                                           FontSize="11.5" Foreground="{DynamicResource Text3}"
+                                           Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button Content="−" Width="32" Height="32"
+                                        Click="DecreaseMaxImages_Click" Classes="GhostButton" Padding="0"
+                                        Cursor="Hand"/>
+                                <TextBlock x:Name="MaxImagesText"
+                                           Width="44" TextAlignment="Center"
+                                           FontSize="15" FontWeight="Bold"
+                                           Foreground="{DynamicResource Text1}"
+                                           VerticalAlignment="Center"/>
+                                <Button Content="+" Width="32" Height="32"
+                                        Click="IncreaseMaxImages_Click" Classes="GhostButton" Padding="0"
+                                        Cursor="Hand"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Max Characters -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock x:Name="MaxCharsLabel"
+                                           Text="Max. tekens"
+                                           FontSize="13" FontWeight="Medium"
+                                           Foreground="{DynamicResource Text1}"/>
+                                <TextBlock x:Name="MaxCharsSubLabel"
+                                           Text="Bevestiging vereist boven dit aantal tekens"
+                                           FontSize="11.5" Foreground="{DynamicResource Text3}"
+                                           Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <TextBox x:Name="MaxCharsTextBox" Grid.Column="1"
+                                     Width="90" Height="36"
+                                     TextAlignment="Center"
+                                     FontSize="14" FontWeight="SemiBold"
+                                     VerticalContentAlignment="Center"
+                                     Background="{DynamicResource Bg3}"
+                                     Foreground="{DynamicResource Text1}"
+                                     CaretBrush="{DynamicResource Accent}"
+                                     BorderBrush="{DynamicResource Border1}"
+                                     BorderThickness="1"
+                                     LostFocus="MaxCharsTextBox_LostFocus"/>
+                        </Grid>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Minimaliseren naar tray -->
+            <Border Background="{DynamicResource Bg2}" CornerRadius="14"
+                    BorderBrush="{DynamicResource Border1}" BorderThickness="1"
+                    Margin="0,0,0,16">
+                <StackPanel>
+                    <Border Padding="20,16" BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
+                        <StackPanel Orientation="Horizontal">
+                            <i:Icon Value="mdi-window-minimize" FontSize="16"
+                                                     Margin="0,0,9,0"
+                                                     Foreground="{DynamicResource Accent}"
+                                                     VerticalAlignment="Center"/>
+                            <TextBlock x:Name="CardWindowHeader" Text="Venster"
+                                       FontSize="14" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource Text1}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <Grid Margin="20,16,20,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock x:Name="MinimizeToTrayLabel" Text="Minimaliseren naar system tray"
+                                       FontSize="13" FontWeight="Medium"
+                                       Foreground="{DynamicResource Text1}"/>
+                            <TextBlock x:Name="MinimizeToTraySubLabel" Text="App blijft actief in de achtergrond bij sluiten"
+                                       FontSize="11.5" Foreground="{DynamicResource Text3}"
+                                       Margin="0,2,0,0"/>
+                        </StackPanel>
+                        <CheckBox Grid.Column="1" x:Name="MinimizeToTrayCheckBox"
+                                  VerticalAlignment="Center"
+                                  IsCheckedChanged="MinimizeToTray_Changed"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- macOS-toestemmingen -->
+            <Border Background="{DynamicResource Bg2}" CornerRadius="14"
+                    BorderBrush="{DynamicResource Border1}" BorderThickness="1"
+                    Margin="0,0,0,16">
+                <StackPanel>
+                    <Border Padding="20,16" BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
+                        <StackPanel Orientation="Horizontal">
+                            <i:Icon Value="mdi-shield-check-outline" FontSize="16"
+                                    Margin="0,0,9,0"
+                                    Foreground="{DynamicResource Accent}"
+                                    VerticalAlignment="Center"/>
+                            <TextBlock x:Name="CardPermissionsHeader" Text="macOS-toestemmingen"
+                                       FontSize="14" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource Text1}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <StackPanel Margin="20,16,20,20">
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,12,0">
+                                <TextBlock x:Name="PermAccessibilityLabel" Text="Toegankelijkheid"
+                                           FontSize="13" FontWeight="Medium"
+                                           Foreground="{DynamicResource Text1}"/>
+                                <TextBlock x:Name="PermAccessibilityStatus"
+                                           FontSize="11.5" Foreground="{DynamicResource Text3}"
+                                           Margin="0,2,0,0" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Button x:Name="PermAccessibilityBtn" Grid.Column="1" Height="32" Padding="14,0"
+                                    Classes="MkSecondaryButton" Click="PermAccessibility_Click"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,12,0">
+                                <TextBlock x:Name="PermScreenLabel" Text="Schermopname"
+                                           FontSize="13" FontWeight="Medium"
+                                           Foreground="{DynamicResource Text1}"/>
+                                <TextBlock x:Name="PermScreenStatus"
+                                           FontSize="11.5" Foreground="{DynamicResource Text3}"
+                                           Margin="0,2,0,0" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Button x:Name="PermScreenBtn" Grid.Column="1" Height="32" Padding="14,0"
+                                    Classes="MkSecondaryButton" Click="PermScreen_Click"/>
+                        </Grid>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Rondleiding -->
+            <Border Background="{DynamicResource Bg2}" CornerRadius="14"
+                    BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                <StackPanel>
+                    <Border Padding="20,16" BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
+                        <StackPanel Orientation="Horizontal">
+                            <i:Icon Value="mdi-map-marker-path" FontSize="16"
+                                                     Margin="0,0,9,0"
+                                                     Foreground="{DynamicResource Accent}"
+                                                     VerticalAlignment="Center"/>
+                            <TextBlock x:Name="CardTourHeader"
+                                       Text="Rondleiding"
+                                       FontSize="14" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource Text1}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <StackPanel Margin="20,16,20,20">
+                        <TextBlock x:Name="TourSubLabel"
+                                   Text="Start een rondleiding opnieuw om een functie stap voor stap te leren kennen."
+                                   FontSize="12.5" Foreground="{DynamicResource Text3}"
+                                   TextWrapping="Wrap" Margin="0,0,0,16"/>
+
+                        <!-- mAIkeys tour -->
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock x:Name="TourHotkeyLabel"
+                                           Text="mAIkeys"
+                                           FontSize="13" FontWeight="Medium"
+                                           Foreground="{DynamicResource Text1}"/>
+                                <TextBlock x:Name="TourHotkeySubLabel"
+                                           Text="Maak je eerste mAIkey en leer alle opties kennen"
+                                           FontSize="11.5" Foreground="{DynamicResource Text3}"
+                                           Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <Button x:Name="TourHotkeyStartBtn" Grid.Column="1" Content="▶  Starten"
+                                    Height="32" Padding="14,0"
+                                    Click="TourHotkey_Click"
+                                    Classes="MkSecondaryButton"
+                                    Cursor="Hand"/>
+                        </Grid>
+
+                        <!-- Stijl Library tour -->
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock x:Name="TourStyleLabel"
+                                           Text="Stijl Library"
+                                           FontSize="13" FontWeight="Medium"
+                                           Foreground="{DynamicResource Text1}"/>
+                                <TextBlock x:Name="TourStyleSubLabel"
+                                           Text="Leer de AI jouw schrijfstijl aan"
+                                           FontSize="11.5" Foreground="{DynamicResource Text3}"
+                                           Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <Button x:Name="TourStyleStartBtn" Grid.Column="1" Content="▶  Starten"
+                                    Height="32" Padding="14,0"
+                                    Click="TourStyle_Click"
+                                    Classes="MkSecondaryButton"
+                                    Cursor="Hand"/>
+                        </Grid>
+
+                        <!-- Templates tour -->
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock x:Name="TourTemplateLabel"
+                                           Text="Templates"
+                                           FontSize="13" FontWeight="Medium"
+                                           Foreground="{DynamicResource Text1}"/>
+                                <TextBlock x:Name="TourTemplateSubLabel"
+                                           Text="Gebruik kant-en-klare AI-acties"
+                                           FontSize="11.5" Foreground="{DynamicResource Text3}"
+                                           Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <Button x:Name="TourTemplateStartBtn" Grid.Column="1" Content="▶  Starten"
+                                    Height="32" Padding="14,0"
+                                    Click="TourTemplate_Click"
+                                    Classes="MkSecondaryButton"
+                                    Cursor="Hand"/>
+                        </Grid>
+
+                        <!-- Pin tour -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock x:Name="TourPinLabel"
+                                           Text="App vastmaken aan taakbalk"
+                                           FontSize="13" FontWeight="Medium"
+                                           Foreground="{DynamicResource Text1}"/>
+                                <TextBlock x:Name="TourPinSubLabel"
+                                           Text="Open mAIkey altijd met één klik"
+                                           FontSize="11.5" Foreground="{DynamicResource Text3}"
+                                           Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <Button x:Name="TourPinStartBtn" Grid.Column="1" Content="▶  Starten"
+                                    Height="32" Padding="14,0"
+                                    Click="TourPin_Click"
+                                    Classes="MkSecondaryButton"
+                                    Cursor="Hand"/>
+                        </Grid>
+
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
         </StackPanel>
-      </Border>
-
-      <!-- Venster -->
-      <Border Classes="section">
-        <StackPanel>
-          <Border Classes="section-head">
-            <StackPanel Orientation="Horizontal">
-              <i:Icon Value="mdi-dock-window" FontSize="16" Foreground="{DynamicResource Accent}"
-                      Margin="0,0,9,0" VerticalAlignment="Center"/>
-              <TextBlock Classes="section-title" loc:Tr.Key="Settings_WindowCard"/>
-            </StackPanel>
-          </Border>
-          <Grid Margin="20,16,20,20" ColumnDefinitions="*,Auto">
-            <StackPanel Grid.Column="0" VerticalAlignment="Center">
-              <TextBlock Classes="row-label" loc:Tr.Key="Settings_MinimizeToTray"/>
-              <TextBlock Classes="row-sub" loc:Tr.Key="Settings_MinimizeToTraySub"/>
-            </StackPanel>
-            <CheckBox Grid.Column="1" Name="MinimizeToTrayCheck" VerticalAlignment="Center"/>
-          </Grid>
-        </StackPanel>
-      </Border>
-
-      <!-- Account -->
-      <Border Classes="section">
-        <StackPanel>
-          <Border Classes="section-head">
-            <StackPanel Orientation="Horizontal">
-              <i:Icon Value="mdi-account-circle" FontSize="16" Foreground="{DynamicResource Accent}"
-                      Margin="0,0,9,0" VerticalAlignment="Center"/>
-              <TextBlock Classes="section-title" Text="Account"/>
-            </StackPanel>
-          </Border>
-          <StackPanel Margin="20,16,20,20" Spacing="4">
-            <TextBlock FontSize="12" Foreground="{DynamicResource Text2}">
-              <Run Text="E-mail: "/>
-              <Run Name="AccountEmailRun" Text="laden..." Foreground="{DynamicResource Text1}"/>
-            </TextBlock>
-            <TextBlock FontSize="12" Foreground="{DynamicResource Text2}">
-              <Run Text="Abonnement: "/>
-              <Run Name="AccountTierRun" Text="laden..." Foreground="#F5A524"/>
-            </TextBlock>
-          </StackPanel>
-        </StackPanel>
-      </Border>
-
-      <!-- Rondleiding -->
-      <Border Classes="section">
-        <StackPanel>
-          <Border Classes="section-head">
-            <StackPanel Orientation="Horizontal">
-              <i:Icon Value="mdi-map-marker-path" FontSize="16" Foreground="{DynamicResource Accent}"
-                      Margin="0,0,9,0" VerticalAlignment="Center"/>
-              <TextBlock Classes="section-title" loc:Tr.Key="Settings_Card_Tour"/>
-            </StackPanel>
-          </Border>
-          <StackPanel Margin="20,16,20,20" Spacing="12">
-            <TextBlock Classes="row-sub" loc:Tr.Key="Settings_TourSub" Margin="0,0,0,4"/>
-            <Grid ColumnDefinitions="*,Auto">
-              <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,12,0">
-                <TextBlock Classes="row-label" loc:Tr.Key="Settings_Tour_Hotkey"/>
-                <TextBlock Classes="row-sub" loc:Tr.Key="Settings_Tour_HotkeySub"/>
-              </StackPanel>
-              <Button Grid.Column="1" Classes="ghost" loc:Tr.Key="Settings_Tour_Start" VerticalAlignment="Center"
-                      Click="TourHotkey_Click"/>
-            </Grid>
-            <Grid ColumnDefinitions="*,Auto">
-              <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,12,0">
-                <TextBlock Classes="row-label" loc:Tr.Key="Settings_Tour_Style"/>
-                <TextBlock Classes="row-sub" loc:Tr.Key="Settings_Tour_StyleSub"/>
-              </StackPanel>
-              <Button Grid.Column="1" Classes="ghost" loc:Tr.Key="Settings_Tour_Start" VerticalAlignment="Center"
-                      Click="TourStyle_Click"/>
-            </Grid>
-            <Grid ColumnDefinitions="*,Auto">
-              <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,12,0">
-                <TextBlock Classes="row-label" loc:Tr.Key="Settings_Tour_Template"/>
-                <TextBlock Classes="row-sub" loc:Tr.Key="Settings_Tour_TemplateSub"/>
-              </StackPanel>
-              <Button Grid.Column="1" Classes="ghost" loc:Tr.Key="Settings_Tour_Start" VerticalAlignment="Center"
-                      Click="TourTemplate_Click"/>
-            </Grid>
-            <Grid ColumnDefinitions="*,Auto">
-              <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,12,0">
-                <TextBlock Classes="row-label" loc:Tr.Key="Settings_Tour_Pin"/>
-                <TextBlock Classes="row-sub" loc:Tr.Key="Settings_Tour_PinSub"/>
-              </StackPanel>
-              <Button Grid.Column="1" Classes="ghost" loc:Tr.Key="Settings_Tour_Start" VerticalAlignment="Center"
-                      Click="TourPin_Click"/>
-            </Grid>
-          </StackPanel>
-        </StackPanel>
-      </Border>
-
-      <TextBlock Text="mAIkey Beta-v1.4-mac" FontSize="10" Foreground="{DynamicResource Text3}"
-                 HorizontalAlignment="Center" Margin="0,8"/>
-    </StackPanel>
-  </ScrollViewer>
+    </ScrollViewer>
 </UserControl>

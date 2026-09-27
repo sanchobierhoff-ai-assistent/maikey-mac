@@ -378,4 +378,69 @@
     <Setter Property="Margin" Value="0,8" />
   </Style>
 
+
+  <!-- Knopinhoud altijd gecentreerd (WPF-standaard) -->
+  <Style Selector="Button">
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+  </Style>
+
+  <!-- Aangevinkte checkbox/radio in de accentkleur i.p.v. het blauw van Fluent -->
+  <Style Selector="CheckBox:checked /template/ Border#NormalRectangle">
+    <Setter Property="Background" Value="{DynamicResource Accent}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
+  </Style>
+  <Style Selector="CheckBox:checked:pointerover /template/ Border#NormalRectangle">
+    <Setter Property="Background" Value="{DynamicResource Accent}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
+  </Style>
+  <Style Selector="RadioButton:checked /template/ Ellipse#OuterEllipse">
+    <Setter Property="Fill" Value="{DynamicResource Accent}" />
+    <Setter Property="Stroke" Value="{DynamicResource Accent}" />
+  </Style>
+  <Style Selector="ToggleSwitch:checked /template/ Border#SwitchKnobBounds">
+    <Setter Property="Background" Value="{DynamicResource Accent}" />
+  </Style>
+
+  <!-- Randloos invoerveld binnen een eigen omlijsting (WPF: BorderThickness=0, transparant) -->
+  <Style Selector="TextBox.bare">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
+  <Style Selector="TextBox.bare:pointerover /template/ Border#PART_BorderElement, TextBox.bare:focus /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
+
+  <!-- Tekstlinks (WPF: LinkButton / Hyperlink) -->
+  <Style Selector="Button.LinkButton, Button.link">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Foreground" Value="{DynamicResource Text2}" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="FontFamily" Value="{DynamicResource FontUi}" />
+  </Style>
+  <Style Selector="Button.LinkButton:pointerover /template/ ContentPresenter#PART_ContentPresenter, Button.link:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+  </Style>
+  <Style Selector="Button.LinkButton:pressed, Button.link:pressed">
+    <Setter Property="RenderTransform" Value="none" />
+  </Style>
+
+  <!-- Kleine icoonknoppen (chat-vensters) -->
+  <Style Selector="Button.IconButton">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Padding" Value="6" />
+    <Setter Property="Foreground" Value="{DynamicResource Text2}" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.IconButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource BackgroundHover}" />
+  </Style>
+
 </Styles>

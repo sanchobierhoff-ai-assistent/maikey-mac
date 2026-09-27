@@ -1,13 +1,15 @@
 name: Build macOS app
 
-# Bouwt de Mac-app (Avalonia mAIkey.Desktop) op een gratis macOS-runner en doet twee dingen:
+# Bouwt de Mac-app (Avalonia mAIkey.Desktop) op een gratis macOS-runner en:
 #  1) zet een kant-en-klare .app klaar als download-artifact (voor een snelle losse test);
-#  2) publiceert een Velopack-update-release naar de Releases van deze repo, zodat een
-#     éénmaal geïnstalleerde app zichzelf bijwerkt (install once → update).
+#  2) publiceert een Velopack-release naar de Releases van deze (openbare) repo. Gebruikers
+#     installeren met één commando (install.sh) en de app werkt zichzelf daarna bij.
 #
-# LET OP: voor auto-update moet deze repo openbaar zijn (de app leest de releases zonder
-# token). De broncode bevat geen geheimen. Zonder notarisatie (Apple Developer ID) vraagt
-# de eerste installatie nog één keer om Gatekeeper toe te staan.
+# Ondertekenen (gratis, zonder Apple Developer-account):
+#  Als de secrets MAC_CERT_P12 (base64 van een .p12) en MAC_CERT_PASSWORD bestaan, wordt elke
+#  build met hetzelfde zelfondertekende certificaat ondertekend. Daardoor ziet macOS elke update
+#  als "dezelfde app" en blijft de Toegankelijkheid-toestemming staan. Maak het certificaat met
+#  tools/make-signing-cert.sh. Zonder secrets valt de build terug op ad-hoc-ondertekening.
 
 on:
   push:
@@ -30,6 +32,10 @@ jobs:
       matrix:
         rid: [osx-arm64, osx-x64]
 
+    env:
+      VERSION: 1.0.${{ github.run_number }}
+      SIGN_NAME: mAIkey Self-Signed
+
     steps:
       - uses: actions/checkout@v4
 
@@ -44,20 +50,77 @@ jobs:
           -c Release -r ${{ matrix.rid }} --self-contained true
           -o publish -nologo
 
+      # ── App-icoon (.icns) uit het mAIkey-logo (256px, uit het Windows-icoon) ──
+      - name: Icoon maken
+        run: |
+          set -e
+          mkdir -p icon.iconset
+          cp mAIkey.Desktop/Mac/icon-256.png icon-src.png
+          for s in 16 32 128 256 512; do
+            sips -z $s $s icon-src.png --out icon.iconset/icon_${s}x${s}.png >/dev/null
+            d=$((s*2)); sips -z $d $d icon-src.png --out icon.iconset/icon_${s}x${s}@2x.png >/dev/null
+          done
+          iconutil -c icns icon.iconset -o maikey.icns
+          ls -la maikey.icns
+
+      # ── Vast zelfondertekend certificaat importeren (optioneel) ──
+      - name: Certificaat importeren
+        id: cert
+        env:
+          P12: ${{ secrets.MAC_CERT_P12 }}
+          P12_PASSWORD: ${{ secrets.MAC_CERT_PASSWORD }}
+        run: |
+          if [ -z "$P12" ]; then
+            echo "::warning::Geen MAC_CERT_P12-secret: ad-hoc ondertekenen (Toegankelijkheid-toestemming moet na elke update opnieuw)."
+            echo "identity=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          set -e
+          KC="$RUNNER_TEMP/signing.keychain-db"
+          KC_PW="$(uuidgen)"
+          echo "$P12" | base64 --decode > "$RUNNER_TEMP/cert.p12"
+          security create-keychain -p "$KC_PW" "$KC"
+          security set-keychain-settings -lut 21600 "$KC"
+          security unlock-keychain -p "$KC_PW" "$KC"
+          security import "$RUNNER_TEMP/cert.p12" -k "$KC" -P "$P12_PASSWORD" -T /usr/bin/codesign -f pkcs12
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KC_PW" "$KC" >/dev/null
+          security list-keychains -d user -s "$KC" $(security list-keychains -d user | sed 's/"//g')
+          # Zelfondertekend = niet vertrouwd; vertrouw hem alleen voor code signing op deze runner.
+          security find-certificate -c "$SIGN_NAME" -p "$KC" > "$RUNNER_TEMP/cert.pem"
+          sudo security add-trusted-cert -d -r trustRoot -p codeSign -k /Library/Keychains/System.keychain "$RUNNER_TEMP/cert.pem" || true
+          HASH="$(security find-identity -p codesigning "$KC" | grep "$SIGN_NAME" | head -n1 | awk '{print $2}')"
+          if [ -z "$HASH" ]; then
+            echo "::warning::Certificaat '$SIGN_NAME' niet gevonden in de p12 — ad-hoc ondertekenen."
+            echo "identity=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "identity=$HASH" >> "$GITHUB_OUTPUT"
+          echo "keychain=$KC" >> "$GITHUB_OUTPUT"
+
       # ── 1) Losse .app als download-artifact ──
       - name: .app-bundel maken
         run: |
           set -e
-          VERSION="1.0.${{ github.run_number }}"
           APP="mAIkey.app"
           rm -rf "$APP"
           mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
           cp -R publish/* "$APP/Contents/MacOS/"
           sed "s/__VERSION__/$VERSION/g" mAIkey.Desktop/Info.plist > "$APP/Contents/Info.plist"
+          cp maikey.icns "$APP/Contents/Resources/maikey.icns"
           chmod +x "$APP/Contents/MacOS/mAIkey.Desktop"
 
-      - name: Ad-hoc ondertekenen
-        run: codesign --force --deep --sign - "mAIkey.app"
+      - name: .app ondertekenen
+        env:
+          IDENTITY: ${{ steps.cert.outputs.identity }}
+        run: |
+          if [ -n "$IDENTITY" ] && codesign --force --deep --options runtime \
+               --entitlements mAIkey.Desktop/Mac/entitlements.plist --sign "$IDENTITY" mAIkey.app; then
+            echo "Ondertekend met vast certificaat."
+          else
+            codesign --force --deep --sign - mAIkey.app
+            echo "Ad-hoc ondertekend."
+          fi
+          codesign -dv mAIkey.app 2>&1 | head -5
 
       - name: Inpakken
         run: ditto -c -k --keepParent "mAIkey.app" "mAIkey-${{ matrix.rid }}.zip"
@@ -69,7 +132,7 @@ jobs:
           path: mAIkey-${{ matrix.rid }}.zip
           retention-days: 30
 
-      # ── 2) Velopack-update-release publiceren ──
+      # ── 2) Velopack-release publiceren ──
       - name: vpk installeren
         run: dotnet tool install -g vpk --version 1.2.0
 
@@ -82,16 +145,24 @@ jobs:
             --token ${{ secrets.GITHUB_TOKEN }} || echo "(geen vorige release — eerste voor dit kanaal)"
 
       - name: Velopack-pakket maken
+        env:
+          IDENTITY: ${{ steps.cert.outputs.identity }}
+          KEYCHAIN: ${{ steps.cert.outputs.keychain }}
         run: |
           export PATH="$PATH:$HOME/.dotnet/tools"
-          vpk pack \
-            --packId mAIkey \
-            --packVersion 1.0.${{ github.run_number }} \
-            --packDir publish \
-            --mainExe mAIkey.Desktop \
-            --packTitle mAIkey \
-            --channel ${{ matrix.rid }} \
-            --outputDir Releases
+          ARGS=(--packId mAIkey --packVersion "$VERSION" --packDir publish
+                --mainExe mAIkey.Desktop --packTitle mAIkey
+                --icon maikey.icns
+                --channel ${{ matrix.rid }} --outputDir Releases)
+          if [ -n "$IDENTITY" ]; then
+            if vpk pack "${ARGS[@]}" --signAppIdentity "$IDENTITY" --keychain "$KEYCHAIN" \
+                 --signEntitlements mAIkey.Desktop/Mac/entitlements.plist; then
+              exit 0
+            fi
+            echo "::warning::Ondertekend inpakken mislukt — opnieuw zonder vast certificaat."
+            rm -f Releases/*${VERSION}* Releases/*Portable.zip Releases/*Setup.pkg
+          fi
+          vpk pack "${ARGS[@]}"
 
       - name: Update publiceren naar Releases
         run: |
@@ -100,5 +171,11 @@ jobs:
             --channel ${{ matrix.rid }} --outputDir Releases \
             --token ${{ secrets.GITHUB_TOKEN }} \
             --publish true --merge true \
-            --releaseName "mAIkey (${{ matrix.rid }}) 1.0.${{ github.run_number }}" \
-            --tag ${{ matrix.rid }}-1.0.${{ github.run_number }}
+            --releaseName "mAIkey (${{ matrix.rid }}) $VERSION" \
+            --tag ${{ matrix.rid }}-$VERSION
+
+      - name: Opruimen
+        if: always()
+        run: |
+          [ -f "$RUNNER_TEMP/signing.keychain-db" ] && security delete-keychain "$RUNNER_TEMP/signing.keychain-db" || true
+          rm -f "$RUNNER_TEMP/cert.p12"

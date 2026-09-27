@@ -1,0 +1,208 @@
+<UserControl x:Class="mAIkey.Desktop.Views.StyleEditorView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{DynamicResource Bg1}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Crumbs bar -->
+        <Border Grid.Row="0" Height="52" Padding="28,0"
+                BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1"
+                Background="{DynamicResource Bg1}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock x:Name="WindowTitle" Text="Nieuwe stijl"
+                               FontSize="13" Foreground="{DynamicResource Text2}"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="CancelBtn" Content="Annuleren" Height="32" Padding="14,0" VerticalContentAlignment="Center"
+                            Click="Cancel_Click"
+                            Margin="0,0,8,0"
+                            Classes="GhostButton"/>
+                    <Button x:Name="SaveBtn" Content="Opslaan" Height="32" Padding="16,0" VerticalContentAlignment="Center"
+                            Click="Save_Click"
+                            Classes="AccentButton"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Scrollable content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="28,24,28,40" MaxWidth="720">
+
+                <!-- Basic Info card -->
+                <Border Background="{DynamicResource Bg2}" CornerRadius="14"
+                        BorderBrush="{DynamicResource Border1}" BorderThickness="1"
+                        Margin="0,0,0,16">
+                    <StackPanel>
+                        <Border Padding="20,16" BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
+                            <TextBlock x:Name="BasicInfoHeader" Text="Basisinformatie" FontSize="13" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource Text1}"/>
+                        </Border>
+                        <StackPanel Margin="20,16,20,20">
+                            <TextBlock x:Name="NameLabel" Text="Naam *" FontSize="12" FontWeight="Medium"
+                                       Foreground="{DynamicResource Text3}" Margin="0,0,0,6"/>
+                            <TextBox x:Name="NameTextBox"
+                                     Height="40" Padding="12,0"
+                                     VerticalContentAlignment="Center"
+                                     FontSize="14"
+                                     Background="{DynamicResource Bg3}"
+                                     Foreground="{DynamicResource Text1}"
+                                     CaretBrush="{DynamicResource Accent}"
+                                     BorderBrush="{DynamicResource Border1}"
+                                     BorderThickness="1"
+                                     Margin="0,0,0,16">
+                            </TextBox>
+
+                            <TextBlock x:Name="UsageLabel" Text="Waarvoor gebruik je deze stijl? *"
+                                       FontSize="12" FontWeight="Medium"
+                                       Foreground="{DynamicResource Text3}" Margin="0,0,0,6"/>
+                            <TextBox x:Name="UsageContextTextBox"
+                                     MinHeight="80" Padding="12,10"
+                                     FontSize="13"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                     Background="{DynamicResource Bg3}"
+                                     Foreground="{DynamicResource Text1}"
+                                     CaretBrush="{DynamicResource Accent}"
+                                     BorderBrush="{DynamicResource Border1}"
+                                     BorderThickness="1" VerticalContentAlignment="Top"
+                                     ToolTip.Tip="Beschrijf waarvoor je deze stijl wilt gebruiken, bijv: &apos;Reageren op klantmails in formele stijl&apos; of &apos;LinkedIn posts schrijven&apos;">
+                            </TextBox>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Voorbeelden card -->
+                <Border Background="{DynamicResource Bg2}" CornerRadius="14"
+                        BorderBrush="{DynamicResource Border1}" BorderThickness="1"
+                        Margin="0,0,0,16">
+                    <StackPanel>
+                        <Border Padding="20,14,20,14" BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
+                            <Grid>
+                                <TextBlock x:Name="ExamplesHeader" Text="Voorbeeldteksten"
+                                           FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource Text1}"
+                                           VerticalAlignment="Center"/>
+                                <Button x:Name="AddExampleBtn" Content="+ Toevoegen"
+                                        HorizontalAlignment="Right"
+                                        Click="AddManualExample_Click"
+                                        Height="32" Padding="12,0" VerticalContentAlignment="Center"
+                                        Classes="GhostButton"/>
+                            </Grid>
+                        </Border>
+                        <StackPanel Margin="20,14,20,16">
+                            <TextBlock x:Name="ExamplesHint" Text="Plak teksten die jij zelf geschreven hebt (minimaal 3, maximaal 15)"
+                                       FontSize="11.5" Foreground="{DynamicResource Text3}"
+                                       Margin="0,0,0,12" TextWrapping="Wrap"/>
+
+                            <ScrollViewer x:Name="TextExamplesScrollViewer"
+                                          VerticalScrollBarVisibility="Auto"
+                                          MaxHeight="300" IsVisible="False">
+                                <ItemsControl x:Name="TextExamplesList">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{DynamicResource Bg3}"
+                                                    CornerRadius="8" Padding="12"
+                                                    Margin="0,0,0,8">
+                                                <Grid>
+                                                    <TextBlock Text="{Binding Preview}"
+                                                               FontSize="12.5"
+                                                               Foreground="{DynamicResource Text1}"
+                                                               TextWrapping="Wrap"
+                                                               MaxHeight="60"
+                                                               TextTrimming="CharacterEllipsis"
+                                                               Margin="0,0,32,0"/>
+                                                    <Button Content="✕"
+                                                            Click="RemoveTextExample_Click"
+                                                            Tag="{Binding Index}"
+                                                            Background="Transparent"
+                                                            BorderThickness="0"
+                                                            Foreground="{DynamicResource Text3}"
+                                                            FontSize="13"
+                                                            Cursor="Hand"
+                                                            Padding="4"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Top"/>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+
+                            <Border x:Name="VoorbeeldenEmptyState"
+                                    Background="{DynamicResource Bg3}"
+                                    CornerRadius="8" Padding="20">
+                                <TextBlock x:Name="NoExamplesText" Text="Nog geen voorbeeldteksten toegevoegd"
+                                           FontSize="13" Foreground="{DynamicResource Text3}"
+                                           HorizontalAlignment="Center" TextAlignment="Center"/>
+                            </Border>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Style Profile card -->
+                <Border Background="{DynamicResource Bg2}" CornerRadius="14"
+                        BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                    <StackPanel>
+                        <Border Padding="20,14,20,14" BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
+                            <Grid>
+                                <TextBlock x:Name="WriteStyleHeader" Text="Jouw schrijfstijl"
+                                           FontSize="13" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource Text1}"
+                                           VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button x:Name="GenerateStyleBtn" Content="Genereer schrijfstijl"
+                                            Click="GenerateStyleProfile_Click"
+                                            Height="32" Padding="12,0" VerticalContentAlignment="Center"
+                                            Margin="0,0,8,0"
+                                            Classes="AccentButton">
+                                        <ToolTip.Tip><TextBlock Text="Laat AI je schrijfstijl analyseren op basis van voorbeelden" TextWrapping="Wrap" MaxWidth="300"/></ToolTip.Tip>
+                                    </Button>
+                                    <Button x:Name="OptimizeStyleButton"
+                                            Content="Optimaliseer schrijfstijl"
+                                            Click="OptimizeStyleProfile_Click"
+                                            Height="32" Padding="12,0" VerticalContentAlignment="Center"
+                                            IsEnabled="False"
+                                            Classes="GhostButton">
+                                        <ToolTip.Tip><TextBlock Text="Optimaliseer je schrijfstijl op basis van gebruik en feedback" TextWrapping="Wrap" MaxWidth="300"/></ToolTip.Tip>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <StackPanel Margin="20,14,20,16">
+                            <TextBlock x:Name="StyleProfileHint" Text="Beschrijf hoe je schrijft (toon, zinlengte, woordkeuze, etc.)"
+                                       FontSize="11.5" Foreground="{DynamicResource Text3}"
+                                       Margin="0,0,0,10"/>
+                            <TextBox x:Name="StyleProfileTextBox" VerticalContentAlignment="Top"
+                                     Height="260" Padding="12,10"
+                                     FontSize="13"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                     Background="{DynamicResource Bg3}"
+                                     Foreground="{DynamicResource Text1}"
+                                     CaretBrush="{DynamicResource Accent}"
+                                     BorderBrush="{DynamicResource Border1}"
+                                     BorderThickness="1">
+                            </TextBox>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

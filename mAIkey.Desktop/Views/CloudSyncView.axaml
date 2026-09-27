@@ -1,95 +1,240 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="mAIkey.Desktop.Views.CloudSyncView"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
-             xmlns:loc="using:mAIkey.Desktop"
-             x:Class="mAIkey.Desktop.Views.CloudSyncView"
              Background="{DynamicResource Bg1}">
 
-  <UserControl.Styles>
-    <Style Selector="Border.section">
-      <Setter Property="Background" Value="{DynamicResource Bg2}"/>
-      <Setter Property="BorderBrush" Value="{DynamicResource Border1}"/>
-      <Setter Property="BorderThickness" Value="1"/>
-      <Setter Property="CornerRadius" Value="14"/>
-      <Setter Property="Margin" Value="0,0,0,16"/>
-    </Style>
-    <Style Selector="Border.section-head">
-      <Setter Property="Padding" Value="20,16"/>
-      <Setter Property="BorderBrush" Value="{DynamicResource Border1}"/>
-      <Setter Property="BorderThickness" Value="0,0,0,1"/>
-    </Style>
-  </UserControl.Styles>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="36,32,36,40" MaxWidth="760">
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="32,28,32,40">
-    <StackPanel MaxWidth="760">
+            <!-- Page header -->
+            <TextBlock Text="CLOUD"
+                       FontSize="11" FontWeight="SemiBold"
+                       Foreground="{DynamicResource Text3}"
+                       Margin="0,0,0,6"
+                       Opacity="0.85"/>
+            <TextBlock x:Name="CloudSyncTitle" Text="Cloud sync"
+                       FontSize="28" FontWeight="SemiBold"
+                       Foreground="{DynamicResource Text1}"
+                       Margin="0,0,0,4"/>
+            <TextBlock x:Name="CloudSyncSubtitle" Text="Exporteer je hotkeys en stijlen naar de cloud. Importeer ze op een ander apparaat of smartphone."
+                       FontSize="13" Foreground="{DynamicResource Text3}"
+                       TextWrapping="Wrap"
+                       Margin="0,0,0,28"/>
 
-      <StackPanel Spacing="4" Margin="0,0,0,24">
-        <TextBlock Classes="title" loc:Tr.Key="CloudSync_Title"/>
-        <TextBlock Classes="subtitle" loc:Tr.Key="CloudSync_Subtitle"/>
-      </StackPanel>
+            <!-- ============================= -->
+            <!-- KAART 1: EXPORTEREN           -->
+            <!-- ============================= -->
+            <Border Background="{DynamicResource Bg2}" CornerRadius="14"
+                    BorderBrush="{DynamicResource Border1}" BorderThickness="1"
+                    Margin="0,0,0,16">
+                <StackPanel>
+                    <!-- Kaart header -->
+                    <Border Padding="20,16" BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
+                        <StackPanel Orientation="Horizontal">
+                            <i:Icon Value="mdi-cloud-upload-outline" FontSize="18"
+                                                     Margin="0,0,10,0"
+                                                     Foreground="{DynamicResource Accent}"
+                                                     VerticalAlignment="Center"/>
+                            <TextBlock x:Name="ExportCardHeader" Text="Exporteren naar cloud"
+                                       FontSize="14" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource Text1}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
 
-      <!-- Exporteren -->
-      <Border Classes="section">
-        <StackPanel>
-          <Border Classes="section-head">
-            <StackPanel Orientation="Horizontal">
-              <i:Icon Value="mdi-cloud-upload-outline" FontSize="17" Foreground="{DynamicResource Accent}"
-                      Margin="0,0,10,0" VerticalAlignment="Center"/>
-              <TextBlock loc:Tr.Key="CloudSync_ExportHeader" FontSize="14" FontWeight="SemiBold"
-                         Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
-            </StackPanel>
-          </Border>
+                    <StackPanel Margin="20,16,20,20">
 
-          <StackPanel Margin="20,16,20,20" Spacing="14">
+                        <!-- Vorige export info -->
+                        <Border x:Name="PreviousExportBorder"
+                                Background="{DynamicResource Bg3}"
+                                CornerRadius="8" Padding="12,10"
+                                Margin="0,0,0,16"
+                                IsVisible="False">
+                            <StackPanel Orientation="Horizontal">
+                                <i:Icon Value="mdi-information-outline" FontSize="14"
+                                                         Foreground="{DynamicResource Text3}"
+                                                         Margin="0,0,8,0"
+                                                         VerticalAlignment="Center"/>
+                                <TextBlock x:Name="PreviousExportText"
+                                           FontSize="12" Foreground="{DynamicResource Text3}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
 
-            <Border Background="{DynamicResource Bg3}" CornerRadius="8" Padding="12,10">
-              <StackPanel Orientation="Horizontal" Spacing="8">
-                <i:Icon Value="mdi-information-outline" FontSize="13" Foreground="{DynamicResource Text3}" VerticalAlignment="Center"/>
-                <TextBlock Name="LastExportText" Text="Nog niet geëxporteerd." FontSize="12"
-                           Foreground="{DynamicResource Text2}" VerticalAlignment="Center"/>
-              </StackPanel>
+                        <!-- Sectie: Hotkeys -->
+                        <TextBlock x:Name="ExportHotkeysLabel" Text="Hotkeys"
+                                   FontSize="12" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource Text2}"
+                                   Margin="0,0,0,8"/>
+
+                        <StackPanel x:Name="ExportHotkeysPanel" Margin="0,0,0,16"/>
+
+                        <!-- Sectie: Stijlen -->
+                        <TextBlock x:Name="ExportStylesLabel" Text="Schrijfstijlen"
+                                   FontSize="12" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource Text2}"
+                                   Margin="0,0,0,8"/>
+
+                        <StackPanel x:Name="ExportStylesPanel" Margin="0,0,0,16"/>
+
+                        <!-- Niets om te exporteren -->
+                        <Border x:Name="ExportEmptyState"
+                                Background="{DynamicResource Bg3}" CornerRadius="8"
+                                Padding="16" IsVisible="False">
+                            <TextBlock x:Name="ExportEmptyText" Text="Er zijn nog geen hotkeys of stijlen aangemaakt."
+                                       FontSize="12.5" Foreground="{DynamicResource Text3}"
+                                       HorizontalAlignment="Center"/>
+                        </Border>
+
+                        <!-- Acties -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button x:Name="SelectAllExportBtn" Content="Alles selecteren"
+                                    Click="SelectAllExport_Click"
+                                    Height="32" Padding="12,0"
+                                    Margin="0,0,8,0"
+                                    Classes="GhostButton"/>
+                            <Button Content="Exporteer naar cloud"
+                                    Click="ExportToCloud_Click"
+                                    x:Name="ExportButton"
+                                    Height="32" Padding="14,0"
+                                    Classes="AccentButton"/>
+                        </StackPanel>
+
+                        <!-- Export status -->
+                        <TextBlock x:Name="ExportStatusText"
+                                   FontSize="12" Margin="0,10,0,0"
+                                   HorizontalAlignment="Right"
+                                   IsVisible="False"/>
+
+                    </StackPanel>
+                </StackPanel>
             </Border>
 
-            <StackPanel Spacing="6">
-              <TextBlock loc:Tr.Key="CloudSync_HotkeysLabel" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Text2}"/>
-              <StackPanel Name="HotkeysPanel" Spacing="4"/>
-            </StackPanel>
+            <!-- ============================= -->
+            <!-- KAART 2: IMPORTEREN           -->
+            <!-- ============================= -->
+            <Border Background="{DynamicResource Bg2}" CornerRadius="14"
+                    BorderBrush="{DynamicResource Border1}" BorderThickness="1">
+                <StackPanel>
+                    <!-- Kaart header -->
+                    <Border Padding="20,16" BorderBrush="{DynamicResource Border1}" BorderThickness="0,0,0,1">
+                        <StackPanel Orientation="Horizontal">
+                            <i:Icon Value="mdi-cloud-download-outline" FontSize="18"
+                                                     Margin="0,0,10,0"
+                                                     Foreground="{DynamicResource Accent}"
+                                                     VerticalAlignment="Center"/>
+                            <TextBlock x:Name="ImportCardHeader" Text="Importeren vanuit cloud"
+                                       FontSize="14" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource Text1}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
 
-            <StackPanel Spacing="6">
-              <TextBlock loc:Tr.Key="CloudSync_StylesLabel" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource Text2}"/>
-              <StackPanel Name="StylesPanel" Spacing="4"/>
-            </StackPanel>
+                    <StackPanel Margin="20,16,20,20">
 
-            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
-              <Button Name="SelectAllBtn" Classes="ghost" loc:Tr.Key="CloudSync_SelectAll" Click="SelectAll_Click"/>
-              <Button Name="SyncBtn" Classes="accent" loc:Tr.Key="CloudSync_ExportBtn" Click="Sync_Click"/>
-            </StackPanel>
+                        <!-- Controleer knop (initieel zichtbaar) -->
+                        <StackPanel x:Name="ImportInitialPanel">
+                            <TextBlock x:Name="ImportCheckHint" Text="Controleer of er een cloudexport beschikbaar is voor dit account."
+                                       FontSize="12.5" Foreground="{DynamicResource Text3}"
+                                       Margin="0,0,0,14"/>
+                            <Button x:Name="CheckExportBtn" Content="Controleer beschikbare export"
+                                    Click="CheckExport_Click"
+                                    Height="36" Padding="14,0"
+                                    HorizontalAlignment="Left"
+                                    Classes="GhostButton"/>
+                        </StackPanel>
 
-            <TextBlock Name="StatusText" Classes="muted" IsVisible="False" HorizontalAlignment="Right"/>
-          </StackPanel>
+                        <!-- Geen export gevonden -->
+                        <Border x:Name="ImportNotFoundPanel"
+                                Background="{DynamicResource Bg3}" CornerRadius="8"
+                                Padding="16" IsVisible="False">
+                            <StackPanel Orientation="Horizontal">
+                                <i:Icon Value="mdi-cloud-off-outline" FontSize="15"
+                                                         Foreground="{DynamicResource Text3}"
+                                                         Margin="0,0,8,0"
+                                                         VerticalAlignment="Center"/>
+                                <TextBlock x:Name="ImportNotFoundText" Text="Geen cloudexport gevonden voor dit account. Exporteer eerst vanuit de PC-app of smartphone."
+                                           FontSize="12.5" Foreground="{DynamicResource Text3}"
+                                           TextWrapping="Wrap" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Export gevonden -->
+                        <StackPanel x:Name="ImportFoundPanel" IsVisible="False">
+
+                            <!-- Export info -->
+                            <Border Background="{DynamicResource Bg3}"
+                                    CornerRadius="8" Padding="12,10"
+                                    Margin="0,0,0,16">
+                                <StackPanel Orientation="Horizontal">
+                                    <i:Icon Value="mdi-check-circle-outline" FontSize="14"
+                                                             Foreground="{DynamicResource Accent}"
+                                                             Margin="0,0,8,0"
+                                                             VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="ImportExportInfoText"
+                                               FontSize="12" Foreground="{DynamicResource Text2}"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Sectie: Hotkeys -->
+                            <TextBlock x:Name="ImportHotkeysLabel" Text="Hotkeys om te importeren"
+                                       FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource Text2}"
+                                       Margin="0,0,0,8"/>
+
+                            <StackPanel x:Name="ImportHotkeysPanel" Margin="0,0,0,16"/>
+
+                            <!-- Sectie: Stijlen -->
+                            <TextBlock x:Name="ImportStylesLabel"
+                                       Text="Schrijfstijlen om te importeren"
+                                       FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource Text2}"
+                                       Margin="0,0,0,8"/>
+
+                            <StackPanel x:Name="ImportStylesPanel" Margin="0,0,0,16"/>
+
+                            <!-- Acties -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button x:Name="SelectAllImportBtn" Content="Alles selecteren"
+                                        Click="SelectAllImport_Click"
+                                        Height="32" Padding="12,0"
+                                        Margin="0,0,8,0"
+                                        Classes="GhostButton"/>
+                                <Button Content="Importeer geselecteerde"
+                                        Click="ImportSelected_Click"
+                                        x:Name="ImportButton"
+                                        Height="32" Padding="14,0"
+                                        Classes="AccentButton"/>
+                            </StackPanel>
+
+                            <!-- Import status -->
+                            <TextBlock x:Name="ImportStatusText"
+                                       FontSize="12" Margin="0,10,0,0"
+                                       HorizontalAlignment="Right"
+                                       IsVisible="False"/>
+
+                        </StackPanel>
+
+                        <!-- Laden indicator -->
+                        <StackPanel x:Name="ImportLoadingPanel"
+                                    Orientation="Horizontal"
+                                    IsVisible="False"
+                                    Margin="0,8,0,0">
+                            <i:Icon Value="mdi-loading" FontSize="16"
+                                                     Foreground="{DynamicResource Text3}"
+                                                     Margin="0,0,8,0"
+                                                     VerticalAlignment="Center"/>
+                            <TextBlock x:Name="ImportLoadingText" Text="Even wachten..."
+                                       FontSize="12.5" Foreground="{DynamicResource Text3}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
         </StackPanel>
-      </Border>
-
-      <!-- Importeren -->
-      <Border Classes="section">
-        <StackPanel>
-          <Border Classes="section-head">
-            <StackPanel Orientation="Horizontal">
-              <i:Icon Value="mdi-cloud-download-outline" FontSize="17" Foreground="{DynamicResource Accent}"
-                      Margin="0,0,10,0" VerticalAlignment="Center"/>
-              <TextBlock loc:Tr.Key="CloudSync_ImportHeader" FontSize="14" FontWeight="SemiBold"
-                         Foreground="{DynamicResource Text1}" VerticalAlignment="Center"/>
-            </StackPanel>
-          </Border>
-          <StackPanel Margin="20,16,20,20" Spacing="12">
-            <TextBlock Classes="muted" loc:Tr.Key="CloudSync_ImportCheckHint"/>
-            <Button Name="ImportCheckBtn" Classes="ghost" loc:Tr.Key="CloudSync_CheckBtn"
-                    HorizontalAlignment="Left" Click="ImportCheck_Click"/>
-            <TextBlock Name="ImportStatusText" Classes="muted" IsVisible="False"/>
-          </StackPanel>
-        </StackPanel>
-      </Border>
-
-    </StackPanel>
-  </ScrollViewer>
+    </ScrollViewer>
 </UserControl>

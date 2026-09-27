@@ -10,10 +10,8 @@ namespace mAIkey.Desktop;
 
 class Program
 {
-    // Pad naar een crashlog op het Bureaublad, zodat een opstartfout zichtbaar
-    // is zonder Terminal. Valt terug op de home-map als het Bureaublad ontbreekt.
-    private static readonly string CrashLog = Path.Combine(
-        GetDesktopOrHome(), "maikey-crash.log");
+    // Crashlog naast het gewone diagnoselog (~/Library/Logs/mAIkey), zichtbaar via Console.app.
+    private static readonly string CrashLog = Path.Combine(mAIkey.Core.Services.Logger.LogDirectory, "crash.log");
 
     [STAThread]
     public static void Main(string[] args)
@@ -57,17 +55,11 @@ class Program
     {
         try
         {
+            Directory.CreateDirectory(Path.GetDirectoryName(CrashLog)!);
             File.WriteAllText(CrashLog,
                 $"mAIkey crash — {DateTime.Now}\n\n{ex?.ToString() ?? "onbekende fout"}");
         }
         catch { /* logging mag nooit zelf de boel opblazen */ }
     }
 
-    private static string GetDesktopOrHome()
-    {
-        var desktop = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-        if (!string.IsNullOrEmpty(desktop) && Directory.Exists(desktop))
-            return desktop;
-        return Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-    }
 }

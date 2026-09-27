@@ -1,0 +1,43 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="https://github.com/projektanker/icons.avalonia"
+        x:Class="mAIkey.Desktop.Windows.MkDialog"
+        Title="mAIkey"
+        SystemDecorations="None"
+        Background="Transparent"
+        TransparencyLevelHint="Transparent"
+        ShowInTaskbar="False"
+        CanResize="False"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner">
+
+  <Border Name="MainBorder"
+          Margin="24"
+          CornerRadius="14"
+          BorderThickness="1"
+          BorderBrush="{DynamicResource BorderStrong}"
+          Background="{DynamicResource Bg1}"
+          MinWidth="360" MaxWidth="480"
+          Padding="28,24,28,24"
+          BoxShadow="0 10 32 0 #A6000000">
+    <StackPanel>
+      <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+        <i:Icon Name="DialogIcon" Value="mdi-information-outline" FontSize="22"
+                Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+        <TextBlock Name="DialogTitle" Text="Melding" FontSize="15" FontWeight="SemiBold"
+                   Foreground="{DynamicResource Text1}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+      </StackPanel>
+
+      <SelectableTextBlock Name="DialogBody" FontSize="12.5" Foreground="{DynamicResource Text2}"
+                           TextWrapping="Wrap" LineHeight="20" Margin="0,0,0,22"/>
+
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+        <Button Name="CancelBtn" Content="Annuleren" IsVisible="False" Click="Cancel_Click"
+                Classes="GhostButton" Height="34" Padding="16,0" Margin="0,0,8,0"
+                VerticalContentAlignment="Center"/>
+        <Button Name="OkBtn" Content="OK" Click="Ok_Click" Classes="AccentButton"
+                Height="34" Padding="20,0" VerticalContentAlignment="Center"/>
+      </StackPanel>
+    </StackPanel>
+  </Border>
+</Window>
