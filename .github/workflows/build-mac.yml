@@ -155,14 +155,34 @@ jobs:
                 --icon maikey.icns
                 --channel ${{ matrix.rid }} --outputDir Releases)
           if [ -n "$IDENTITY" ]; then
-            if vpk pack "${ARGS[@]}" --signAppIdentity "$IDENTITY" --keychain "$KEYCHAIN" \
-                 --signEntitlements mAIkey.Desktop/Mac/entitlements.plist; then
+            # vpk roept `codesign --timestamp` aan; Apples tijdstempelserver accepteert alleen
+            # Apple-certificaten. Een wrapper vóór in PATH laat --timestamp weg bij ons eigen certificaat.
+            mkdir -p "$RUNNER_TEMP/bin"
+            cat > "$RUNNER_TEMP/bin/codesign" <<'WRAP'
+          #!/bin/bash
+          args=()
+          for a in "$@"; do case "$a" in --timestamp|--timestamp=*) ;; *) args+=("$a") ;; esac; done
+          exec /usr/bin/codesign "${args[@]}"
+          WRAP
+            chmod +x "$RUNNER_TEMP/bin/codesign"
+            set -o pipefail
+            if PATH="$RUNNER_TEMP/bin:$PATH" vpk pack "${ARGS[@]}" --signAppIdentity "$IDENTITY" --keychain "$KEYCHAIN" \
+                 --signEntitlements mAIkey.Desktop/Mac/entitlements.plist 2>&1 | tee vpk-sign.log; then
+              echo "::notice::Ondertekend met vast certificaat ($IDENTITY)."
               exit 0
             fi
-            echo "::warning::Ondertekend inpakken mislukt — opnieuw zonder vast certificaat."
+            # Foutmelding zichtbaar maken als annotatie (logs zijn alleen ingelogd leesbaar).
+            echo "::warning::Ondertekend inpakken mislukt: $(tail -n 12 vpk-sign.log | tr '\n' ' ' | cut -c1-1500)"
             rm -f Releases/*${VERSION}* Releases/*Portable.zip Releases/*Setup.pkg
           fi
           vpk pack "${ARGS[@]}"
+
+      - name: Handtekening van de release controleren
+        run: |
+          rm -rf sigcheck && mkdir sigcheck
+          ditto -x -k "Releases/mAIkey-${{ matrix.rid }}-Portable.zip" sigcheck
+          INFO="$(codesign -dvv sigcheck/mAIkey.app 2>&1 | grep -E 'Authority|Signature=|Identifier=' | tr '\n' ' ')"
+          echo "::notice::${{ matrix.rid }} release-handtekening: $INFO"
 
       - name: Update publiceren naar Releases
         run: |
