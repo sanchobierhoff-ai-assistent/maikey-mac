@@ -199,7 +199,7 @@ public partial class MainWindow : Window
                 new(null, "NavHotkeys", "Tour_Hotkey_1_Title", "Tour_Hotkey_1_Body"),
                 new("hotkeys", "AddHotkeyBtn", "Tour_Hotkey_2_Title", "Tour_Hotkey_2_Body"),
                 new("hotkeys_demo", "NameTextBox", "Tour_Hotkey_3_Title", "Tour_Hotkey_3_Body"),
-                new(null, "HotkeyTextBox", "Tour_Hotkey_4_Title", "Tour_Hotkey_4_Body"),
+                new(null, "HotkeyTextBox", "Tour_Hotkey_4_Title", "Tour_Hotkey_4_Body_Mac"),
                 new(null, "CustomPromptTextBox", "Tour_Hotkey_5_Title", "Tour_Hotkey_5_Body"),
                 new(null, "ModelComboBox", "Tour_Hotkey_6_Title", "Tour_Hotkey_6_Body"),
                 new(null, "StyleComboBox", "Tour_Hotkey_7_Title", "Tour_Hotkey_7_Body"),
