@@ -114,7 +114,7 @@ jobs:
           IDENTITY: ${{ steps.cert.outputs.identity }}
         run: |
           if [ -n "$IDENTITY" ] && codesign --force --deep --options runtime \
-               --entitlements mAIkey.Desktop/Mac/entitlements.plist --sign "$IDENTITY" mAIkey.app; then
+               --entitlements mAIkey.Desktop/Mac/mAIkey.entitlements --sign "$IDENTITY" mAIkey.app; then
             echo "Ondertekend met vast certificaat."
           else
             codesign --force --deep --sign - mAIkey.app
@@ -167,7 +167,7 @@ jobs:
             chmod +x "$RUNNER_TEMP/bin/codesign"
             set -o pipefail
             if PATH="$RUNNER_TEMP/bin:$PATH" vpk pack "${ARGS[@]}" --signAppIdentity "$IDENTITY" --keychain "$KEYCHAIN" \
-                 --signEntitlements mAIkey.Desktop/Mac/entitlements.plist 2>&1 | tee vpk-sign.log; then
+                 --signEntitlements mAIkey.Desktop/Mac/mAIkey.entitlements 2>&1 | tee vpk-sign.log; then
               echo "::notice::Ondertekend met vast certificaat ($IDENTITY)."
               exit 0
             fi
