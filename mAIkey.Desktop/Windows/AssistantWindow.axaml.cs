@@ -245,7 +245,7 @@ public partial class AssistantWindow : Window
         ToolTip.SetTip(NewChatBtn, L.T("Assistant_NewChat"));
         ToolTip.SetTip(HistoryBtn, L.T("Assistant_HistoryTitle"));
         ToolTip.SetTip(MemoryBtn, L.T("Assistant_MemoryTitle"));
-        HintLabel.Text = HintLabel.Text?.Replace("Ctrl", "⌘");
+        HintLabel.Text = HintLabel.Text?.Replace("Ctrl", "Cmd");
     }
 
     private void ShowWelcome()

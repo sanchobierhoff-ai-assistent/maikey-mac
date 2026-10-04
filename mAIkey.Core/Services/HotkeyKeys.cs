@@ -58,16 +58,19 @@ public static class HotkeyKeys
     }
 
     /// <summary>
-    /// Mac-weergave van een combinatie, in de volgorde die macOS zelf gebruikt:
-    /// ⌃ (Control) ⌥ (Option) ⇧ (Shift) ⌘ (Command), bv. "⌃⌥1".
+    /// Leesbare weergave van een combinatie, met de namen die op een Mac-toetsenbord staan
+    /// en in de volgorde die macOS gebruikt: Ctrl, Option, Shift, Cmd — bv. "Ctrl + 6".
+    /// (De symbolen ⌃⌥⇧⌘ lazen als een losse ^ en waren onduidelijk.)
     /// </summary>
     public static string Format(int modifiers, int key)
     {
-        var s = "";
-        if ((modifiers & 2) != 0) s += "⌃";
-        if ((modifiers & 1) != 0) s += "⌥";
-        if ((modifiers & 4) != 0) s += "⇧";
-        if ((modifiers & 8) != 0) s += "⌘";
-        return s + KeyName(key);
+        var parts = new System.Collections.Generic.List<string>();
+        if ((modifiers & 2) != 0) parts.Add("Ctrl");
+        if ((modifiers & 1) != 0) parts.Add("Option");
+        if ((modifiers & 4) != 0) parts.Add("Shift");
+        if ((modifiers & 8) != 0) parts.Add("Cmd");
+        var name = KeyName(key);
+        if (name.Length > 0) parts.Add(name);
+        return string.Join(" + ", parts);
     }
 }

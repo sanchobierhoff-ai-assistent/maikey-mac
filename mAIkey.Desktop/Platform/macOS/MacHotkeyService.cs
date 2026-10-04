@@ -111,7 +111,7 @@ public class MacHotkeyService : IHotkeyService
         if (!_handlerInstalled)
             Initialize(IntPtr.Zero);
 
-        uint macKeyCode = WindowsVkToMacKeyCode(key);
+        uint macKeyCode = WpfKeyToMacKeyCode(key);
         if (macKeyCode == uint.MaxValue)
             return false; // niet-ondersteunde toets
 
@@ -163,64 +163,70 @@ public class MacHotkeyService : IHotkeyService
     }
 
     /// <summary>
-    /// Zet een Windows virtual-key-code (zoals opgeslagen in de config, gedeeld met de
-    /// Windows-app) om naar de macOS Carbon virtuele toetscode (kVK_*). Retourneert
-    /// uint.MaxValue als de toets niet ondersteund wordt.
+    /// Zet een toetswaarde uit de config om naar de macOS Carbon-toetscode (kVK_*).
+    /// De config gebruikt het gedeelde WPF/Avalonia Key-formaat (zie HotkeyKeys), zodat
+    /// sneltoetsen via Cloud Sync uitwisselbaar zijn met Windows. Retourneert uint.MaxValue
+    /// als de toets niet ondersteund wordt.
     /// </summary>
-    private static uint WindowsVkToMacKeyCode(int vk)
+    private static uint WpfKeyToMacKeyCode(int key)
     {
-        // Letters A-Z (VK 0x41-0x5A)
-        if (vk >= 0x41 && vk <= 0x5A)
-            return LetterKeyCodes[vk - 0x41];
-        // Cijfers 0-9 (VK 0x30-0x39)
-        if (vk >= 0x30 && vk <= 0x39)
-            return DigitKeyCodes[vk - 0x30];
-        // Functietoetsen F1-F12 (VK 0x70-0x7B)
-        if (vk >= 0x70 && vk <= 0x7B)
-            return FunctionKeyCodes[vk - 0x70];
+        if (key >= HotkeyKeys.A && key <= HotkeyKeys.Z)
+            return LetterKeyCodes[key - HotkeyKeys.A];
+        if (key >= HotkeyKeys.D0 && key <= HotkeyKeys.D9)
+            return DigitKeyCodes[key - HotkeyKeys.D0];
+        if (key >= HotkeyKeys.F1 && key <= HotkeyKeys.F12)
+            return FunctionKeyCodes[key - HotkeyKeys.F1];
+        if (key >= HotkeyKeys.NumPad0 && key <= HotkeyKeys.NumPad9)
+            return KeypadKeyCodes[key - HotkeyKeys.NumPad0];
 
-        return vk switch
+        return key switch
         {
-            0x20 => 49,  // Space
-            0x0D => 36,  // Return/Enter
-            0x1B => 53,  // Escape
-            0x09 => 48,  // Tab
-            0x08 => 51,  // Delete (Backspace)
-            0x25 => 123, // Left
-            0x27 => 124, // Right
-            0x28 => 125, // Down
-            0x26 => 126, // Up
-            0xBC => 43,  // ,
-            0xBE => 47,  // .
-            0xBF => 44,  // /
-            0xBA => 41,  // ;
-            0xDE => 39,  // '
-            0xDB => 33,  // [
-            0xDD => 30,  // ]
-            0xDC => 42,  // \
-            0xC0 => 50,  // `
-            0xBD => 27,  // -
-            0xBB => 24,  // =
+            HotkeyKeys.Space => 49,
+            HotkeyKeys.Enter => 36,
+            HotkeyKeys.Escape => 53,
+            HotkeyKeys.Tab => 48,
+            HotkeyKeys.Back => 51,
+            HotkeyKeys.Left => 123,
+            HotkeyKeys.Right => 124,
+            HotkeyKeys.Down => 125,
+            HotkeyKeys.Up => 126,
+            HotkeyKeys.OemComma => 43,
+            HotkeyKeys.OemPeriod => 47,
+            HotkeyKeys.OemQuestion => 44,
+            HotkeyKeys.OemSemicolon => 41,
+            HotkeyKeys.OemQuotes => 39,
+            HotkeyKeys.OemOpenBrackets => 33,
+            HotkeyKeys.OemCloseBrackets => 30,
+            HotkeyKeys.OemPipe => 42,
+            HotkeyKeys.OemTilde => 50,
+            HotkeyKeys.OemMinus => 27,
+            HotkeyKeys.OemPlus => 24,
             _ => uint.MaxValue
         };
     }
 
-    // kVK_ANSI_A..Z, geïndexeerd op (VK - 'A')
+    // kVK_ANSI_A..Z, geïndexeerd op (key - A)
     private static readonly uint[] LetterKeyCodes =
     {
         0,  11, 8,  2,  14, 3,  5,  4,  34, 38, 40, 37, 46, // A-M
         45, 31, 35, 12, 15, 1,  17, 32, 9,  13, 7,  16, 6   // N-Z
     };
 
-    // kVK_ANSI_0..9, geïndexeerd op (VK - '0')
+    // kVK_ANSI_0..9, geïndexeerd op (key - D0)
     private static readonly uint[] DigitKeyCodes =
     {
         29, 18, 19, 20, 21, 23, 22, 26, 28, 25 // 0-9
     };
 
-    // kVK_F1..F12, geïndexeerd op (VK - VK_F1)
+    // kVK_F1..F12, geïndexeerd op (key - F1)
     private static readonly uint[] FunctionKeyCodes =
     {
         122, 120, 99, 118, 96, 97, 98, 100, 101, 109, 103, 111 // F1-F12
+    };
+
+    // kVK_ANSI_Keypad0..9
+    private static readonly uint[] KeypadKeyCodes =
+    {
+        82, 83, 84, 85, 86, 87, 88, 89, 91, 92 // 0-9
     };
 }
