@@ -67,7 +67,7 @@ if pgrep -f "$APP_NAME/Contents/MacOS" >/dev/null 2>&1; then
   pkill -f "$APP_NAME/Contents/MacOS" >/dev/null 2>&1 || true
 fi
 
-say "Installeren in $DEST_DIR…"
+say "Installeren in ${DEST_DIR}…"
 rm -rf "$DEST"
 ditto "$SRC" "$DEST"
 # Voor de zekerheid: eventuele quarantaine-vlag weghalen (bv. bij een proxy/AV die hem zet).
