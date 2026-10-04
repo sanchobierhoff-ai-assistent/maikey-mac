@@ -980,7 +980,7 @@ public partial class BridgeHubWindow : Window
         };
 
         var review = new JiraTicketReviewWindow(_api, draft, projects);
-        await review.ShowDialog(this);
+        await review.ShowModalAsync(this);
         if (review.CreatedTicket != null)
         {
             var jira = review.CreatedTicket;

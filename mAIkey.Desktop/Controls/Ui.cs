@@ -37,7 +37,13 @@ public static class Ui
     public static Task ShowModalAsync(this Window window, Window? owner)
     {
         if (owner != null && owner.IsVisible && owner != window)
+        {
+            // Een dialoog van een "altijd bovenop"-venster (bv. een review-venster dat via een
+            // sneltoets opende) moet zelf ook bovenop staan; anders valt hij op macOS achter
+            // zijn eigenaar en lijkt die te hangen (bv. Jira blijft op "Aanmaken...").
+            if (owner.Topmost) window.Topmost = true;
             return window.ShowDialog(owner);
+        }
 
         var tcs = new TaskCompletionSource<bool>();
         window.Closed += (_, _) => tcs.TrySetResult(true);
